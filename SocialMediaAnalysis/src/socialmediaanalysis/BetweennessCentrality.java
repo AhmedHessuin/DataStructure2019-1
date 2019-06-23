@@ -19,18 +19,11 @@ public class BetweennessCentrality extends Graph implements CentralityAnalysis {
 
     @Override
     public void calculation() {
-
-        MyPair[][] array = dijkestra_for_all_H();
-        for (int i = 0; i < getNoVertices(); i++) {
-            for (int j = 0; j < getNoVertices(); j++) {
-                System.out.print("| weight = " + array[i][j].key + "  number of pathes = " + array[i][j].value + "  |  ");
-            }
-            System.out.println();
-        }
-
-        System.out.println("=====================================");
-       
-        YOU_PASS_THROW_ME( getNode(1));
+        System.out.println("Enter The Node ID you want to calculate it's Betweenness");
+        System.out.print("ID = ");
+        Scanner input = new Scanner(System.in);
+        int ID = input.nextInt();
+        System.out.println("Betweenness for Node ID = ("+ID+") =  "+YOU_PASS_THROW_ME(getNode(ID)));
     }
 //
 
@@ -113,7 +106,6 @@ public class BetweennessCentrality extends Graph implements CentralityAnalysis {
         }
     }
 
-    //
     public MyPair[] dijkestra_H(Node input) {
 
         // data section//
@@ -126,7 +118,6 @@ public class BetweennessCentrality extends Graph implements CentralityAnalysis {
         Marked_List[input.getID()] = true;
         out_put[input.getID()] = new MyPair(0.0, 1);// first time 
 
-       
         for (int i = 0; i < input.getNoChildren(); i++) {
             P_Queue.add(new Dijkestra_Data_Type(input.getChildren(i).getWeight(), input.getChildren(i).getChild().getID(), input.getID()));
         }
@@ -182,38 +173,32 @@ public class BetweennessCentrality extends Graph implements CentralityAnalysis {
 
     }
 
-    public boolean YOU_PASS_THROW_ME( Node wanted) {
+    public double YOU_PASS_THROW_ME(Node wanted) {
         MyPair[][] src_shortest_path = dijkestra_for_all_H();
         MyPair[] wanted_shortest_path = dijkestra_H(wanted);
-        double out=0.0;
-        boolean[][] marked=new boolean [getNoVertices()][getNoVertices()];
+        double out = 0.0;
+        boolean[][] marked = new boolean[getNoVertices()][getNoVertices()];
         int wanted_id = wanted.getID();
 
         for (int i = 0; i < getNoVertices(); i++) {
-            if(i==wanted_id){
+            if (i == wanted_id) {
                 continue;
             }
-            for(int j=0;j<getNoVertices();j++)
-            {
-                
+            for (int j = 0; j < getNoVertices(); j++) {
+
                 if (src_shortest_path[i][j].key() == (src_shortest_path[i][wanted_id].key() + wanted_shortest_path[j].key())
-                        && 
-                        j != wanted_id) {
-                    if(marked[j][i])
-                    {
+                        && j != wanted_id) {
+                    if (marked[j][i]) {
                         continue;
                     }
-                    marked[i][j]=true;
-                System.out.println("from src = " + i + "  " + " wanted is " + wanted_id + " the element i path throw is " + j
-                        + "  number of pathes = " + src_shortest_path[i][j].value() + " number from wanted = " + src_shortest_path[i][wanted_id].value()
-                        + "the ratio is = "+src_shortest_path[i][wanted_id].value()+"/"+src_shortest_path[i][j].value()
-                );
-                out+= (double)((double)src_shortest_path[i][wanted_id].value()/(double)src_shortest_path[i][j].value());
+                    marked[i][j] = true;
+
+                    out += (double) ((double) src_shortest_path[i][wanted_id].value() / (double) src_shortest_path[i][j].value());
+                }
             }
-            }
-            
+
         }
-        System.out.println("final answer = " +out);
-        return false;
+        return out;
+
     }
 }
