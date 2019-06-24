@@ -2,6 +2,8 @@ package socialmediaanalysis;
 
 import datastructure.Edge;
 import datastructure.Graph;
+
+import java.io.Console;
 import java.util.Scanner;
 
 public class SocialMediaAnalysis {
@@ -11,6 +13,7 @@ public class SocialMediaAnalysis {
      */
     public static void main(String[] args) {
         Scanner s = new Scanner(System.in);
+
         System.out.println("Enter the centrality algorithm [1 -> Degree Centrality, 2 -> Closeness Centrality, 3 -> BetweennessCentrality] : ");
         int algorithmType = s.nextInt();
         int n;
