@@ -1,7 +1,10 @@
 package socialmediaanalysis;
 
 import datastructure.Edge;
+import java.text.ParseException;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import test.StressTest;
 
 public class SocialMediaAnalysis {
@@ -74,6 +77,10 @@ public class SocialMediaAnalysis {
         }*/
         
         StressTest T1 = new StressTest();
-        T1.initiate(1);
+        try {
+            T1.initiate(2);
+        } catch (ParseException ex) {
+            Logger.getLogger(SocialMediaAnalysis.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

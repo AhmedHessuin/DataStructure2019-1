@@ -15,7 +15,7 @@ import java.util.Date;
 
 public class StressTest {
 
-    static int MAX_NO_NODES = 999;
+    static int MAX_NO_NODES = 10;
     double[][] Data;
     double[] nodeCentrality;
 
@@ -135,6 +135,7 @@ public class StressTest {
                 x2 = rand.nextInt(number_of_nodes);
 
                 while (x1 == x2 || inserted(x1, x2, check)) {
+                    //       System.out.println("here");
                     x1 = rand.nextInt(number_of_nodes);
                     x2 = rand.nextInt(number_of_nodes);
                 }
@@ -296,7 +297,7 @@ public class StressTest {
             }
 
             // operation section //
-            while (connected != 0) {
+            while (connected != 0 && !P_Queue.isEmpty()) {
                 // data section//
 
                 MyPair2 Out = P_Queue.poll();// got the peek 22.5  1
@@ -331,7 +332,9 @@ public class StressTest {
             }// for loop on all vertices
             double sum = 0;
             for (int z = 0; z < number_of_nodes; z++) {
-                sum += out_put[z];
+                if (out_put[z] > 0) {
+                    sum += out_put[z];
+                }
             }
 
             nodeCentrality[k] = (double) ((double) (number_of_nodes - 1) / sum);
