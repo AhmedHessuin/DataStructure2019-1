@@ -124,7 +124,7 @@ public class BetweennessCentrality extends Graph implements CentralityAnalysis {
 
         // operation section //
         while (!P_Queue.isEmpty()) {
-            // data section//
+                              // data section//
 
             Dijkestra_Data_Type Out = P_Queue.poll();// got the peek
             int Next_Mark = Out.value();// get the next to mark
