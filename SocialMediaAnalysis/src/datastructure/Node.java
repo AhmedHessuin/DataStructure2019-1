@@ -79,7 +79,7 @@ public class Node {
      * @param _children
      */
     public void addChildren(ArrayList<Edge> _children) {
-        children.addAll(children);
+        children.addAll(_children);
     }
 
     /**
