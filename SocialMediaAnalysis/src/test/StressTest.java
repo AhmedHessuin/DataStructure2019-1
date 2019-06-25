@@ -3,6 +3,7 @@ package test;
 import datastructure.Edge;
 import java.util.Random;
 import java.util.Vector;
+import java.util.*;
 import socialmediaanalysis.BetweennessCentrality;
 import socialmediaanalysis.ClosenessCentrality;
 import socialmediaanalysis.DegreeCentrality;
@@ -40,6 +41,35 @@ public class StressTest {
         }
 
         public void set(int key_, int value_) {
+            key = key_;
+            value = value_;
+        }
+
+        public int value() {
+            return value;
+        }
+    }
+
+    public class MyPair2 {
+
+        private double key;
+        private int value;
+
+        public MyPair2(Double aKey, int aValue) {
+            key = aKey;
+            value = aValue;
+        }
+
+        public MyPair2() {
+            key = 0;
+            value = 0;
+        }
+
+        public Double key() {
+            return key;
+        }
+
+        public void set(double key_, int value_) {
             key = key_;
             value = value_;
         }
@@ -190,8 +220,84 @@ public class StressTest {
 
     }
 
+    public class Compare implements Comparator<MyPair2> {
+        // Overriding compare()method of Comparator  
+        // for descending order of cgpa 
+
+        public int compare(MyPair2 s1, MyPair2 s2) {
+            if (s1.key() > s2.key()) {
+                return 1;
+            } else if (s1.key() < s2.key()) {
+                return -1;
+            }
+            return 0;
+        }
+    }
+
     private void closenessCentrality() {
 
+        // data section//
+        //========================================================================================//
+        // first time fill need optmization later//
+        for (int k = 0; k < number_of_nodes; k++) {
+            int connected = number_of_nodes;
+            boolean[] Marked_List = new boolean[number_of_nodes];
+            Double[] out_put = new Double[number_of_nodes];
+            PriorityQueue<MyPair2> P_Queue = new PriorityQueue<MyPair2>(new Compare());//priority queue
+
+            Marked_List[k] = true;
+            out_put[k] = 0.0;// first time 
+
+            for (int i = 0; i < number_of_nodes; i++) {
+                if (Data[k][i] == -1) {
+                    continue;
+                } else {
+
+                    P_Queue.add(new MyPair2(Data[k][i], i));// i is the node number 
+                }
+            }
+
+            // operation section //
+            while (connected != 0) {
+                // data section//
+
+                MyPair2 Out = P_Queue.poll();// got the peek 22.5  1
+                int Next_Mark = Out.value();// get the next to mark
+                double Next_Weight = Out.key();//get the weight
+                //================================================================//
+                if (Marked_List[Next_Mark] == false) {
+
+                    connected--;
+
+                    Marked_List[Next_Mark] = true;// mark it visited
+
+                    out_put[Next_Mark] = Next_Weight;// get the number of pathes like my parent
+
+                    // add the inserted childrens
+                    for (int i = 0; i < number_of_nodes; i++) {
+
+                        if (Data[Next_Mark][i] == -1) {
+                            continue;
+                        } else {
+                            if (Marked_List[i]) {
+                                continue;
+                            }
+
+                            P_Queue.add(new MyPair2(Data[Next_Mark][i], i));// i is the node number 
+                        }
+
+                        //}
+                    }
+
+                }
+            }// for loop on all vertices
+            double sum = 0;
+            for (int z = 0; z < number_of_nodes; z++) {
+                sum += out_put[z];
+            }
+
+            nodeCentrality[k] = (double) ((double) (number_of_nodes - 1) / sum);
+        }// k for
     }
 
     private void betweennessCentrality() {
