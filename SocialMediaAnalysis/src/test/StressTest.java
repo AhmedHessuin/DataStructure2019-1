@@ -1,15 +1,20 @@
 package test;
 
 import datastructure.Edge;
+import java.text.ParseException;
 import java.util.Random;
 import java.util.Vector;
 import socialmediaanalysis.BetweennessCentrality;
 import socialmediaanalysis.ClosenessCentrality;
 import socialmediaanalysis.DegreeCentrality;
 
+import java.time.LocalTime;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class StressTest {
 
-    static int MAX_NO_NODES = 10;
+    static int MAX_NO_NODES = 999;
     double[][] Data;
     double[] nodeCentrality;
 
@@ -60,7 +65,7 @@ public class StressTest {
         return false;
     }
 
-    public void initiate(int centralityMethod) {
+    public void initiate(int centralityMethod) throws ParseException {
         while (true) {
 
             Vector<MyPair> check = new Vector<MyPair>();
@@ -137,31 +142,56 @@ public class StressTest {
             }
 
             boolean correct = true;
+            Date t1 = null;
+            long algorithmTime = 0;
+            long testTime = 0;
+            SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
 
             switch (centralityMethod) {
                 case 1:
+                    t1 = format.parse(LocalTime.now().toString());
                     degreeCentralityGraph.calculation();
+                    testTime = format.parse(LocalTime.now().toString()).getTime() - t1.getTime();
+                    t1 = format.parse(LocalTime.now().toString());
                     degreeCebtrality();
+                    algorithmTime = format.parse(LocalTime.now().toString()).getTime() - t1.getTime();
+
                     for (int i = 0; i < number_of_nodes; i++) {
                         if (degreeCentralityGraph.getNode(i).getCentrality() != nodeCentrality[i]) {
+                            System.out.println("Wrong Answer in node: " + i);
+                            System.out.println("Algorithm Output: " + degreeCentralityGraph.getNode(i).getCentrality() + " Test Output: " + nodeCentrality[i]);
                             correct = false;
                         }
                     }
                     break;
                 case 2:
+                    t1 = format.parse(LocalTime.now().toString());
                     ClosenessCentralityGraph.calculation();
+                    testTime = format.parse(LocalTime.now().toString()).getTime() - t1.getTime();
+                    t1 = format.parse(LocalTime.now().toString());
                     closenessCentrality();
+                    algorithmTime = format.parse(LocalTime.now().toString()).getTime() - t1.getTime();
+
                     for (int i = 0; i < number_of_nodes; i++) {
                         if (ClosenessCentralityGraph.getNode(i).getCentrality() != nodeCentrality[i]) {
+                            System.out.println("Wrong Answer in node: " + i);
+                            System.out.println("Algorithm Output: " + ClosenessCentralityGraph.getNode(i).getCentrality() + " Test Output: " + nodeCentrality[i]);
                             correct = false;
                         }
                     }
                     break;
                 case 3:
+                    t1 = format.parse(LocalTime.now().toString());
                     BetweennessCentralityGraph.calculation();
+                    testTime = format.parse(LocalTime.now().toString()).getTime() - t1.getTime();
+                    t1 = format.parse(LocalTime.now().toString());
                     betweennessCentrality();
+                    algorithmTime = format.parse(LocalTime.now().toString()).getTime() - t1.getTime();
+
                     for (int i = 0; i < number_of_nodes; i++) {
                         if (BetweennessCentralityGraph.getNode(i).getCentrality() != nodeCentrality[i]) {
+                            System.out.println("Wrong Answer in node: " + i);
+                            System.out.println("Algorithm Output: " + BetweennessCentralityGraph.getNode(i).getCentrality() + " Test Output: " + nodeCentrality[i]);
                             correct = false;
                         }
                     }
@@ -179,7 +209,7 @@ public class StressTest {
                 }
                 break;
             } else {
-                System.out.println("Correct answer");
+                System.out.println("Correct Answer, Test time: " + testTime + " Algorithm time: " + algorithmTime);
             }
 
         }
@@ -187,7 +217,15 @@ public class StressTest {
     }
 
     private void degreeCebtrality() {
-
+        for (int i = 0; i < number_of_nodes; i++) {
+            double sum = 0;
+            for (int j = 0; j < number_of_nodes; j++) {
+                if (Data[i][j] != -1) {
+                    sum += 1;
+                }
+            }
+            nodeCentrality[i] = sum;
+        }
     }
 
     private void closenessCentrality() {
