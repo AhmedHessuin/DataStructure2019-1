@@ -1,7 +1,6 @@
 package socialmediaanalysis;
 
 import datastructure.Edge;
-import datastructure.Graph;
 import java.util.Scanner;
 
 public class SocialMediaAnalysis {
@@ -28,11 +27,10 @@ public class SocialMediaAnalysis {
                 for (int i = 0; i < e; i++) {
                     src = s.nextInt();
                     dest = s.nextInt();
-                    wt = s.nextDouble();
 
-                    edg = new Edge(degreeCentralityGraph.getNode(src), wt);
+                    edg = new Edge(degreeCentralityGraph.getNode(src), 1);
                     degreeCentralityGraph.getNode(dest).addChild(edg);
-                    edg = new Edge(degreeCentralityGraph.getNode(dest), wt);
+                    edg = new Edge(degreeCentralityGraph.getNode(dest), 1);
                     degreeCentralityGraph.getNode(src).addChild(edg);
                 }
                 degreeCentralityGraph.calculation();
