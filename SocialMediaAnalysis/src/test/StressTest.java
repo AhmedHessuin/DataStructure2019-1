@@ -13,6 +13,9 @@ public class StressTest {
     double[][] Data;
     double[] nodeCentrality;
 
+    int number_of_nodes;
+    int number_of_edges;
+
     DegreeCentrality degreeCentralityGraph;
     ClosenessCentrality ClosenessCentralityGraph;
     BetweennessCentrality BetweennessCentralityGraph;
@@ -64,8 +67,8 @@ public class StressTest {
 
             Random rand = new Random();
 
-            int number_of_nodes = rand.nextInt(MAX_NO_NODES) + 2;
-            int number_of_edges = rand.nextInt(number_of_nodes * (number_of_nodes - 1) / 2);
+            number_of_nodes = rand.nextInt(MAX_NO_NODES) + 2;
+            number_of_edges = rand.nextInt(number_of_nodes * (number_of_nodes - 1) / 2);
 
             Data = new double[number_of_nodes][number_of_nodes];
             nodeCentrality = new double[number_of_nodes];
