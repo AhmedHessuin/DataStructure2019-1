@@ -1,4 +1,4 @@
-package socialmediaanalysis;
+package socialmediaanalysis.utilities;
 
 import java.util.ArrayList;
 
@@ -29,3 +29,4 @@ public class dijkstra_unit {
 
 
 }
+

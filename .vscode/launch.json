@@ -1,0 +1,11 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - centralities",
+            "request": "launch",
+            "mainClass": "socialmediaanalysis.centralities",
+            "projectName": "DS  project_a3c968d2"
+        }
+    ]
+}
