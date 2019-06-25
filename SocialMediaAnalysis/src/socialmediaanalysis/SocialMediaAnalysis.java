@@ -78,7 +78,7 @@ public class SocialMediaAnalysis {
         
         StressTest T1 = new StressTest();
         try {
-            T1.initiate(2);
+            T1.initiate(1);
         } catch (ParseException ex) {
             Logger.getLogger(SocialMediaAnalysis.class.getName()).log(Level.SEVERE, null, ex);
         }

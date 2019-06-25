@@ -135,7 +135,6 @@ public class StressTest {
                 x2 = rand.nextInt(number_of_nodes);
 
                 while (x1 == x2 || inserted(x1, x2, check)) {
-                    //       System.out.println("here");
                     x1 = rand.nextInt(number_of_nodes);
                     x2 = rand.nextInt(number_of_nodes);
                 }
