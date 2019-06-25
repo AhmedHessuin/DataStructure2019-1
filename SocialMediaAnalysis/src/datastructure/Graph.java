@@ -81,4 +81,25 @@ public class Graph {
         }
     }
 
+
+
+    ////////////update /////////////////
+boolean addUndirectedEdge ( Node n1 , Node n2  , int w) {
+
+    vertices.get(n1.getID()).addChild(new Edge(vertices.get(n2.getID()) , w));
+    vertices.get(n2.getID()).addChild(new Edge(vertices.get(n1.getID()) , w));
+
+    return true ;
+}
+
+public boolean addUndirectedEdge ( int n1 , int n2  , int w) {
+
+    vertices.get(n1).addChild(new Edge(vertices.get(n2) , w));
+    vertices.get(n2).addChild(new Edge(vertices.get(n1) , w));
+
+    return true ;
+}
+
+    ////////////////////////////////////
+
 }

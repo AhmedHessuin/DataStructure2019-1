@@ -1,7 +1,7 @@
 package socialmediaanalysis;
 
-import datastructure.Graph;
-import datastructure.Node;
+import datastructure.*;
+
 import java.util.ArrayList;
 
 public class BetweennessCentrality extends Graph implements CentralityAnalysis {
