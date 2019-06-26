@@ -15,7 +15,7 @@ import java.util.Date;
 
 public class StressTest {
 
-    static int MAX_NO_NODES = 4;
+    static int MAX_NO_NODES = 200;
     double[][] Data;
     double[] nodeCentrality;
 
@@ -103,7 +103,11 @@ public class StressTest {
             Random rand = new Random();
 
             number_of_nodes = rand.nextInt(MAX_NO_NODES) + 2;
-            number_of_edges = rand.nextInt(number_of_nodes * (number_of_nodes - 1) / 2);
+            number_of_edges = rand.nextInt((number_of_nodes * (number_of_nodes - 1) / 2));
+
+            if (number_of_edges < number_of_nodes) {
+                number_of_edges = number_of_nodes;
+            }
 
             Data = new double[number_of_nodes][number_of_nodes];
             nodeCentrality = new double[number_of_nodes];
@@ -127,7 +131,49 @@ public class StressTest {
                 nodeCentrality[i] = -1;
             }
 
-            for (int i = 0; i < number_of_edges; i++) {
+            for (int i = 0; i < number_of_nodes; i++) {
+                int x2;
+                double wt;
+
+                x2 = rand.nextInt(number_of_nodes);
+
+                while (i == x2 || inserted(i, x2, check)) {
+                    x2 = rand.nextInt(number_of_nodes);
+                }
+
+                check.add(new MyPair(i, x2));
+
+                wt = rand.nextInt(100 + 1);
+
+                Data[i][x2] = wt;
+                Data[x2][i] = wt;
+
+                Edge edg;
+
+                switch (centralityMethod) {
+                    case 1:
+                        edg = new Edge(degreeCentralityGraph.getNode(i), wt);
+                        degreeCentralityGraph.getNode(x2).addChild(edg);
+                        edg = new Edge(degreeCentralityGraph.getNode(x2), wt);
+                        degreeCentralityGraph.getNode(i).addChild(edg);
+                        break;
+                    case 2:
+                        edg = new Edge(ClosenessCentralityGraph.getNode(i), wt);
+                        ClosenessCentralityGraph.getNode(x2).addChild(edg);
+                        edg = new Edge(ClosenessCentralityGraph.getNode(x2), wt);
+                        ClosenessCentralityGraph.getNode(i).addChild(edg);
+                        break;
+                    case 3:
+                        edg = new Edge(BetweennessCentralityGraph.getNode(i), wt);
+                        BetweennessCentralityGraph.getNode(x2).addChild(edg);
+                        edg = new Edge(BetweennessCentralityGraph.getNode(x2), wt);
+                        BetweennessCentralityGraph.getNode(i).addChild(edg);
+                        break;
+                }
+
+            }
+
+            for (int i = 0; i < (number_of_edges - number_of_nodes); i++) {
                 int x1, x2;
                 double wt;
 
@@ -329,10 +375,9 @@ public class StressTest {
 
                 }
             }// for loop on all vertices
-           double sum = 0;
+            double sum = 0;
             for (int z = 0; z < number_of_nodes; z++) {
-                if(out_put[z]!=null)
-                {
+                if (out_put[z] != null) {
                     sum += out_put[z];
                 }
             }
