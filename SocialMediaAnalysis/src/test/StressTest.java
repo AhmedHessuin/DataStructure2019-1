@@ -15,7 +15,7 @@ import java.util.Date;
 
 public class StressTest {
 
-    static int MAX_NO_NODES = 10;
+    static int MAX_NO_NODES = 4;
     double[][] Data;
     double[] nodeCentrality;
 
@@ -141,7 +141,7 @@ public class StressTest {
 
                 check.add(new MyPair(x1, x2));
 
-                wt = rand.nextDouble() * 100 + 1;
+                wt = rand.nextInt(100 + 1);
 
                 Data[x1][x2] = wt;
                 Data[x2][x1] = wt;

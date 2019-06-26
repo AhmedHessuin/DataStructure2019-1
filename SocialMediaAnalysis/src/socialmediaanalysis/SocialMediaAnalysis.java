@@ -13,7 +13,7 @@ public class SocialMediaAnalysis {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Scanner s = new Scanner(System.in);
+        /*Scanner s = new Scanner(System.in);
         System.out.println("Enter the centrality algorithm [1 -> Degree Centrality, 2 -> Closeness Centrality, 3 -> BetweennessCentrality] : ");
         int algorithmType = s.nextInt();
         int n;
@@ -74,13 +74,13 @@ public class SocialMediaAnalysis {
                 BetweennessCentralityGraph.calculation();
                 BetweennessCentralityGraph.print();
                 break;
-        }
+        }*/
         
-       /* StressTest T1 = new StressTest();
+        StressTest T1 = new StressTest();
         try {
-            T1.initiate(1);
+            T1.initiate(2);
         } catch (ParseException ex) {
             Logger.getLogger(SocialMediaAnalysis.class.getName()).log(Level.SEVERE, null, ex);
-        }*/
+        }
     }
 }
