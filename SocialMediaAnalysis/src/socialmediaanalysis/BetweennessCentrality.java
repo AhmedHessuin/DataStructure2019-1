@@ -23,9 +23,10 @@ public class BetweennessCentrality extends Graph implements CentralityAnalysis {
         System.out.print("ID = ");
         Scanner input = new Scanner(System.in);
         int ID = input.nextInt();
-        System.out.println("Betweenness for Node ID = ("+ID+") =  "+YOU_PASS_THROW_ME(getNode(ID)));
-        
-        
+        for (int i = 0; i < getNoVertices(); i++) {
+            getNode(i).setCentrality(YOU_PASS_THROW_ME(getNode(i)));
+        }
+
     }
 //
 
@@ -126,7 +127,7 @@ public class BetweennessCentrality extends Graph implements CentralityAnalysis {
 
         // operation section //
         while (!P_Queue.isEmpty()) {
-                              // data section//
+            // data section//
 
             Dijkestra_Data_Type Out = P_Queue.poll();// got the peek
             int Next_Mark = Out.value();// get the next to mark
