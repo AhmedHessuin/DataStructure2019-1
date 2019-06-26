@@ -19,10 +19,7 @@ public class BetweennessCentrality extends Graph implements CentralityAnalysis {
 
     @Override
     public void calculation() {
-        System.out.println("Enter The Node ID you want to calculate it's Betweenness");
-        System.out.print("ID = ");
-        Scanner input = new Scanner(System.in);
-        int ID = input.nextInt();
+       
         for (int i = 0; i < getNoVertices(); i++) {
             getNode(i).setCentrality(YOU_PASS_THROW_ME(getNode(i)));
         }
