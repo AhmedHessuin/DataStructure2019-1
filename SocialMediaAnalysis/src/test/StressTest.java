@@ -329,7 +329,7 @@ public class StressTest {
 
                 }
             }// for loop on all vertices
-            double sum = 0;
+           double sum = 0;
             for (int z = 0; z < number_of_nodes; z++) {
                 if(out_put[z]!=null)
                 {
