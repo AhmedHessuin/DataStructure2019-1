@@ -1,4 +1,4 @@
-package socialmediaanalysis;
+package socialmediaanalysisalgorithms;
 
 import datastructure.Graph;
 
