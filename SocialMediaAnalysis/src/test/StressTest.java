@@ -281,7 +281,7 @@ public class StressTest {
         for (int k = 0; k < number_of_nodes; k++) {
             int connected = number_of_nodes;
             boolean[] Marked_List = new boolean[number_of_nodes];
-            Double[] out_put = new Double[number_of_nodes];
+            Double out_put[] = new Double[number_of_nodes];
             PriorityQueue<MyPair2> P_Queue = new PriorityQueue<MyPair2>(new Compare());//priority queue
 
             Marked_List[k] = true;
@@ -332,7 +332,8 @@ public class StressTest {
             }// for loop on all vertices
             double sum = 0;
             for (int z = 0; z < number_of_nodes; z++) {
-                if (out_put[z] > 0) {
+                if(out_put[z]!=null)
+                {
                     sum += out_put[z];
                 }
             }
