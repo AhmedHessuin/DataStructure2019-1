@@ -15,7 +15,7 @@ import java.util.Date;
 
 public class StressTest {
 
-    static int MAX_NO_NODES = 200;
+    static int MAX_NO_NODES = 50;
     double[][] Data;
     double[] nodeCentrality;
 
@@ -367,7 +367,7 @@ public class StressTest {
                                 continue;
                             }
 
-                            P_Queue.add(new MyPair2(Data[Next_Mark][i], i));// i is the node number 
+                            P_Queue.add(new MyPair2(Data[Next_Mark][i]+out_put[Next_Mark], i));// i is the node number 
                         }
 
                         //}
@@ -383,7 +383,9 @@ public class StressTest {
             }
 
             nodeCentrality[k] = (double) ((double) (number_of_nodes - 1) / sum);
+            
         }// k for
+      
     }
 
     private void betweennessCentrality() {
