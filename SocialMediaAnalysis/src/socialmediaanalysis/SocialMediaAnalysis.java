@@ -15,7 +15,11 @@ public class SocialMediaAnalysis extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("FXMLDocument.fxml"));
+        Parent root = loader.load();
+
+        FXMLDocumentController myController = loader.getController();
+        myController.setfXMLDocumentController(myController);
 
         Scene scene = new Scene(root);
         stage.setTitle("Social Media Analysis");
