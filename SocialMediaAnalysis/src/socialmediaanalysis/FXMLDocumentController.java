@@ -38,6 +38,11 @@ import org.graphstream.ui.view.ViewerPipe;
  */
 public class FXMLDocumentController implements Initializable {
 
+    static Graph graph = new MultiGraph("I can see dead pixels");
+    static Viewer viewer;
+    ViewerPipe fromViewer;
+    View view;
+
     @FXML
     private Label label;
 
@@ -50,7 +55,7 @@ public class FXMLDocumentController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-       
+
         start_to_draw();
         set_stylesheet();
         Node A = graph.addNode("A");
@@ -82,23 +87,21 @@ public class FXMLDocumentController implements Initializable {
         System.out.println("C=" + C.getAttribute("Cb"));
         System.out.println("D=" + D.getAttribute("Cb"));
         System.out.println("E=" + E.getAttribute("Cb"));
+        darw_node_edge_id_weight();
 
         // TODO
     }
-    static Graph graph = new MultiGraph("I can see dead pixels");
-    static Viewer viewer;
-    ViewerPipe fromViewer;
 
     public void set_stylesheet() {
         //===================style sheet graph================================//
- System.setProperty("gs.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
+        System.setProperty("gs.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
         graph.addAttribute("ui.quality");
         graph.addAttribute("ui.antialias");
         graph.addAttribute("ui.stylesheet", "graph {  fill-color: black;}");
 
         //====================================================================//
         //=================style sheet node ==================================//
-        graph.addAttribute("ui.stylesheet", "node { "
+       graph.addAttribute("ui.stylesheet", "node { "
                 + "text-size:17px;"
                 + "size-mode: dyn-size;"
                 + "fill-mode: dyn-plain;"
@@ -152,9 +155,9 @@ public class FXMLDocumentController implements Initializable {
 
     public void start_to_draw() {
         //======================viewer========================================//
-       
+
         viewer = graph.display();
-        View view = viewer.getDefaultView();
+        view = viewer.getDefaultView();
         view.getCamera().setAutoFitView(true);
         viewer.enableAutoLayout();
     }
@@ -162,6 +165,26 @@ public class FXMLDocumentController implements Initializable {
     public int get_degree(Node node) {
 
         return node.getDegree();
+    }
+
+    public void zoom_in() {
+        view.getCamera().setViewPercent(view.getCamera().getViewPercent() - 0.1);
+
+    }
+
+    public void zoom_out() {
+        view.getCamera().setViewPercent(view.getCamera().getViewPercent() + 0.1);
+    }
+
+    public void darw_node_edge_id_weight() {
+        for (org.graphstream.graph.Node node : graph) {
+            node.addAttribute("ui.label", node.getId());
+
+        }
+        for (Edge edge : graph.getEachEdge()) {
+            edge.addAttribute("ui.label", 1);
+
+        }
     }
 
     protected void sleep(int x) {
