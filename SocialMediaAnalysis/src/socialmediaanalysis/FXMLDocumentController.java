@@ -94,14 +94,14 @@ public class FXMLDocumentController implements Initializable {
 
     public void set_stylesheet() {
         //===================style sheet graph================================//
-        System.setProperty("gs.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
+
         graph.addAttribute("ui.quality");
         graph.addAttribute("ui.antialias");
         graph.addAttribute("ui.stylesheet", "graph {  fill-color: black;}");
 
         //====================================================================//
         //=================style sheet node ==================================//
-       graph.addAttribute("ui.stylesheet", "node { "
+        graph.addAttribute("ui.stylesheet", "node { "
                 + "text-size:17px;"
                 + "size-mode: dyn-size;"
                 + "fill-mode: dyn-plain;"
@@ -155,7 +155,7 @@ public class FXMLDocumentController implements Initializable {
 
     public void start_to_draw() {
         //======================viewer========================================//
-
+        System.setProperty("gs.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
         viewer = graph.display();
         view = viewer.getDefaultView();
         view.getCamera().setAutoFitView(true);
@@ -185,6 +185,14 @@ public class FXMLDocumentController implements Initializable {
             edge.addAttribute("ui.label", 1);
 
         }
+    }
+
+    public void change_color(Node node) {
+        node.setAttribute("ui.color", Color.RED);
+    }
+
+    public void change_size(Node node) {
+        node.addAttribute("ui.size", 25 + node.getDegree() % 5);
     }
 
     protected void sleep(int x) {
