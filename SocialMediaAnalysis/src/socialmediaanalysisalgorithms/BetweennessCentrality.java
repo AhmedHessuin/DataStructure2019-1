@@ -30,7 +30,7 @@ public class BetweennessCentrality extends Graph implements CentralityAnalysis {
         for (int i = 0; i < getNoVertices(); i++) {
 
             getNode(i).setCentrality(YOU_PASS_THROW_ME(getNode(i)));
-            System.out.println(getNode(i).getCentrality());
+           
 
         }
 
