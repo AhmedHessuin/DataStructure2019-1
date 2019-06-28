@@ -27,6 +27,7 @@ public class FXMLDocumentController implements Initializable {
     static Viewer viewer;
     ViewerPipe fromViewer;
     View view;
+    JFrame frame;
 
     @FXML
     private Label label;
@@ -36,6 +37,7 @@ public class FXMLDocumentController implements Initializable {
         System.out.println("You clicked me!");
         //viewer.close();
         //zoom_in();
+        frame.dispose();
         label.setText("Hello World!");
     }
 
@@ -135,7 +137,7 @@ public class FXMLDocumentController implements Initializable {
     public void start_to_draw() {
         //======================viewer========================================//
         System.setProperty("gs.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
-        JFrame frame = new JFrame();
+        frame = new JFrame();
         frame.setResizable(true);
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         JPanel panel = new JPanel(new GridLayout()) {
