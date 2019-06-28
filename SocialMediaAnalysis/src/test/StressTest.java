@@ -5,9 +5,9 @@ import java.text.ParseException;
 import java.util.Random;
 import java.util.Vector;
 import java.util.*;
-import socialmediaanalysis.BetweennessCentrality;
-import socialmediaanalysis.ClosenessCentrality;
-import socialmediaanalysis.DegreeCentrality;
+import socialmediaanalysisalgorithms.BetweennessCentrality;
+import socialmediaanalysisalgorithms.ClosenessCentrality;
+import socialmediaanalysisalgorithms.DegreeCentrality;
 
 import java.time.LocalTime;
 import java.text.SimpleDateFormat;
@@ -15,7 +15,7 @@ import java.util.Date;
 
 public class StressTest {
 
-    static int MAX_NO_NODES = 50;
+    static int MAX_NO_NODES = 5;
     double[][] Data;
     double[] nodeCentrality;
 
@@ -96,14 +96,17 @@ public class StressTest {
     }
 
     public void initiate(int centralityMethod) throws ParseException {
+        long counter = 0;
         while (true) {
+            System.out.print("test " + counter + " : ");
+            counter++;
 
             Vector<MyPair> check = new Vector<MyPair>();
 
             Random rand = new Random();
 
-            number_of_nodes = rand.nextInt(MAX_NO_NODES) + 2;
-            number_of_edges = rand.nextInt((number_of_nodes * (number_of_nodes - 1) / 2));
+            number_of_nodes = rand.nextInt(MAX_NO_NODES) + 3;
+            number_of_edges = rand.nextInt((number_of_nodes * (number_of_nodes - 1) / 3));
 
             if (number_of_edges < number_of_nodes) {
                 number_of_edges = number_of_nodes;
@@ -216,6 +219,8 @@ public class StressTest {
                 }
 
             }
+
+            System.out.print("Running..., ");
 
             boolean correct = true;
             Date t1 = null;
@@ -367,7 +372,7 @@ public class StressTest {
                                 continue;
                             }
 
-                            P_Queue.add(new MyPair2(Data[Next_Mark][i]+out_put[Next_Mark], i));// i is the node number 
+                            P_Queue.add(new MyPair2(Data[Next_Mark][i] + out_put[Next_Mark], i));// i is the node number 
                         }
 
                         //}
@@ -383,9 +388,9 @@ public class StressTest {
             }
 
             nodeCentrality[k] = (double) ((double) (number_of_nodes - 1) / sum);
-            
+
         }// k for
-      
+
     }
 
     private void betweennessCentrality() {

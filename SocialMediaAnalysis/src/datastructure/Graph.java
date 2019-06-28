@@ -7,10 +7,12 @@ public class Graph {
     protected ArrayList<Node> vertices;
 
     public Graph() {
+        Node.setNODE_ID(0);
         vertices = new ArrayList<Node>();
     }
 
     public Graph(int noVertices) {
+        Node.setNODE_ID(0);
         vertices = new ArrayList<Node>(noVertices);
         for (int i = 0; i < noVertices; i++) {
             Node newNode = new Node(true);
