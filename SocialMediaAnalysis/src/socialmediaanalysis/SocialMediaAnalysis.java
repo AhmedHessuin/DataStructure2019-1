@@ -11,15 +11,14 @@ import socialmediaanalysisalgorithms.BetweennessCentrality;
 import socialmediaanalysisalgorithms.ClosenessCentrality;
 import socialmediaanalysisalgorithms.DegreeCentrality;
 
-
 public class SocialMediaAnalysis extends Application {
-    
+
     @Override
     public void start(Stage stage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
-        
+
         Scene scene = new Scene(root);
-        
+        stage.setTitle("Social Media Analysis");
         stage.setScene(scene);
         stage.show();
     }
@@ -30,8 +29,7 @@ public class SocialMediaAnalysis extends Application {
     public static void main(String[] args) {
         // GUI
         launch(args);
-        
-        
+
         //CL Input
         /*Scanner s = new Scanner(System.in);
         System.out.println("Enter the centrality algorithm [1 -> Degree Centrality, 2 -> Closeness Centrality, 3 -> BetweennessCentrality] : ");
@@ -95,8 +93,7 @@ public class SocialMediaAnalysis extends Application {
                 BetweennessCentralityGraph.print();
                 break;
         }
-        */
-        
+         */
         //Stress Test
         /*StressTest T1 = new StressTest();
         try {
@@ -104,7 +101,6 @@ public class SocialMediaAnalysis extends Application {
         } catch (ParseException ex) {
             Logger.getLogger(SocialMediaAnalysis.class.getName()).log(Level.SEVERE, null, ex);
         }*/
-
     }
-    
+
 }

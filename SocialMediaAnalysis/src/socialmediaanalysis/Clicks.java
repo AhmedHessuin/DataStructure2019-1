@@ -1,24 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package socialmediaanalysis;
-
-/**
- *
- * @author Ahmed
- */
 
 import org.graphstream.graph.Graph;
 import org.graphstream.ui.view.Viewer;
 import org.graphstream.ui.view.ViewerListener;
 import static socialmediaanalysis.FXMLDocumentController.graph;
 
-/**
- *
- * @author Ahmed
- */
 public class Clicks extends FXMLDocumentController implements ViewerListener {
 
     protected boolean loop = true;
