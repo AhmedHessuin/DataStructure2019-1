@@ -71,10 +71,11 @@ public class Clicks extends Thread implements ViewerListener {
 
     public void viewClosed(String id) {
         loop = false;
+       
     }
 
     public void buttonPushed(String id) {
-
+       
         mark_id_new = id;
 
         if (mark_id_new == mark_id_old) {
