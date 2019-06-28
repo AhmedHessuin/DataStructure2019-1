@@ -68,7 +68,7 @@ public class FXMLDocumentController implements Initializable {
         System.out.println("D=" + D.getAttribute("Cb"));
         System.out.println("E=" + E.getAttribute("Cb"));
         darw_node_edge_id_weight();
-        new Clicks(viewer, graph);
+
         // TODO
     }
 
@@ -174,7 +174,7 @@ public class FXMLDocumentController implements Initializable {
     }
 
     public void change_size(Node node) {
-        node.addAttribute("ui.size", 25 + node.getDegree() % 5);
+        node.addAttribute("ui.size", 26);
     }
 
     protected void sleep(int x) {
@@ -194,11 +194,18 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void reset_Zoom(MouseEvent event) {
         view.getCamera().setViewPercent(1);
+        for (org.graphstream.graph.Node node : graph) {
+          view.getCamera().resetView();
+
+            node.addAttribute("ui.size", 27);
+
+        }
     }
 
     @FXML
     private void zoom_IN(MouseEvent event) {
         zoom_in();
+
     }
 
     @FXML
@@ -214,6 +221,35 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void twoD(MouseEvent event) {
         viewer.disableAutoLayout();
+    }
+
+    @FXML
+    private void Enable_get_Edges(MouseEvent event) {
+        new Clicks(viewer, graph);
+    }
+
+    @FXML
+    private void Disable_Get_Edges(MouseEvent event) {
+    }
+
+    @FXML
+    private void Draw_on_Betweenness(MouseEvent event) {
+
+    }
+
+    @FXML
+    private void Draw_on_Degree(MouseEvent event) {
+        for (org.graphstream.graph.Node node : graph) {
+            node.addAttribute("ui.label", node.getId());
+
+            node.addAttribute("ui.size", +10 * node.getDegree());
+
+        }
+    }
+
+    @FXML
+    private void Draw_on_Closeness(MouseEvent event) {
+
     }
 
 }
