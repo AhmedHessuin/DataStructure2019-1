@@ -95,7 +95,7 @@ public class SocialMediaAnalysis extends Application {
                 BetweennessCentralityGraph.print();
                 break;
         }
-        
+          launch(args);
         
         
         //Stress Test
