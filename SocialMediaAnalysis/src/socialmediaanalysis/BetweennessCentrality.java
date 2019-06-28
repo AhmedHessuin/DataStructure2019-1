@@ -1,14 +1,19 @@
 package socialmediaanalysis;
+//============import section===============//
 
 import datastructure.Graph;
 import datastructure.Node;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.*;
-import javafx.util.Pair;
 
+//============================================================================//
 public class BetweennessCentrality extends Graph implements CentralityAnalysis {
 
+    //============data section================================================//
+    private MyPair[][] src_shortest_path;
+    //========================================================================//
+
+    //========================over write methods section======================//
     public BetweennessCentrality() {
         super();
     }
@@ -19,14 +24,18 @@ public class BetweennessCentrality extends Graph implements CentralityAnalysis {
 
     @Override
     public void calculation() {
-       
+
+        src_shortest_path = dijkestra_for_all_H();
         for (int i = 0; i < getNoVertices(); i++) {
+
             getNode(i).setCentrality(YOU_PASS_THROW_ME(getNode(i)));
+            System.out.println(getNode(i).getCentrality());
+
         }
 
     }
-//
 
+    //=========================internal class section=========================//
     public class Compare implements Comparator<Dijkestra_Data_Type> {
         // Overriding compare()method of Comparator  
         // for descending order of cgpa 
@@ -105,7 +114,9 @@ public class BetweennessCentrality extends Graph implements CentralityAnalysis {
             return parent;
         }
     }
+    //========================================================================//
 
+    //===================public methods ======================================//
     public MyPair[] dijkestra_H(Node input) {
 
         // data section//
@@ -173,31 +184,30 @@ public class BetweennessCentrality extends Graph implements CentralityAnalysis {
 
     }
 
+    //==========================main method===================================//
     public double YOU_PASS_THROW_ME(Node wanted) {
-        MyPair[][] src_shortest_path = dijkestra_for_all_H();
-        MyPair[] wanted_shortest_path = dijkestra_H(wanted);
+        //=======================data section ================================//
+        MyPair[] wanted_shortest_path = src_shortest_path[wanted.getID()];
         double out = 0.0;
         boolean[][] marked = new boolean[getNoVertices()][getNoVertices()];
         int wanted_id = wanted.getID();
+        //====================================================================//
 
         for (int i = 0; i < getNoVertices(); i++) {
             if (i == wanted_id) {
                 continue;
             }
             for (int j = 0; j < getNoVertices(); j++) {
-
-                if (src_shortest_path[i][j].key() == (src_shortest_path[i][wanted_id].key() + wanted_shortest_path[j].key())
-                        && j != wanted_id) {
+                if (src_shortest_path[i][j].key() == (src_shortest_path[i][wanted_id].key() + wanted_shortest_path[j].key()) && j != wanted_id) {
                     if (marked[j][i]) {
                         continue;
                     }
                     marked[i][j] = true;
-
-                    out += (double) ((double) src_shortest_path[i][wanted_id].value() / (double) src_shortest_path[i][j].value());
-                }
-            }
-
-        }
+                    out += (double) (((double) src_shortest_path[wanted_id][j].value() * (double) src_shortest_path[i][wanted_id].value()) / (double) src_shortest_path[i][j].value());
+                }//if
+            }//for
+        }//for
+        //==========================================//
         return out;
 
     }
