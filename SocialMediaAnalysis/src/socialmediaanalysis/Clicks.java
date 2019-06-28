@@ -36,15 +36,16 @@ public class Clicks extends FXMLDocumentController implements ViewerListener {
 
         fromViewer.addViewerListener(this);
         fromViewer.addSink(graph);
-        
+
         // Then we need a loop to do our work and to wait for events.
         // In this loop we will need to call the
         // pump() method before each use of the graph to copy back events
         // that have already occurred in the viewer thread inside
         // our thread.
-        while(loop)
-          fromViewer.pump();
-        
+        while (loop) {
+            fromViewer.pump();
+        }
+
 //  System.out.println("Button pushed on node ");
         // here your simulation code.
         // You do not necessarily need to use a loop, this is only an example.
@@ -56,10 +57,11 @@ public class Clicks extends FXMLDocumentController implements ViewerListener {
 
     public void viewClosed(String id) {
         loop = false;
+       
     }
 
     public void buttonPushed(String id) {
-
+       
         mark_id_new = id;
 
         if (mark_id_new == mark_id_old) {
@@ -88,7 +90,4 @@ public class Clicks extends FXMLDocumentController implements ViewerListener {
 
     }
 
-  
-  
 }
-
