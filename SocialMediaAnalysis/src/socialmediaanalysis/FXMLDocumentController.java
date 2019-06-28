@@ -1,6 +1,7 @@
 package socialmediaanalysis;
 
 import java.awt.*;
+import java.awt.event.WindowEvent;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -9,13 +10,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
-import javax.swing.BorderFactory;
+import javafx.scene.input.MouseEvent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import org.graphstream.algorithm.BetweennessCentrality;
 import org.graphstream.graph.*;
 import org.graphstream.graph.implementations.MultiGraph;
-import org.graphstream.graph.implementations.SingleGraph;
 import org.graphstream.ui.swingViewer.ViewPanel;
 import org.graphstream.ui.view.View;
 import org.graphstream.ui.view.Viewer;
@@ -25,19 +25,13 @@ public class FXMLDocumentController implements Initializable {
 
     static Graph graph = new MultiGraph("I can see dead pixels");
     static Viewer viewer;
+    JFrame frame;
     ViewerPipe fromViewer;
     View view;
 
-    @FXML
     private Label label;
-
     @FXML
-    private void handleButtonAction(ActionEvent event) {
-        System.out.println("You clicked me!");
-        //viewer.close();
-        //zoom_in();
-        label.setText("Hello World!");
-    }
+    private javafx.scene.control.Button button;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -74,7 +68,7 @@ public class FXMLDocumentController implements Initializable {
         System.out.println("D=" + D.getAttribute("Cb"));
         System.out.println("E=" + E.getAttribute("Cb"));
         darw_node_edge_id_weight();
-
+        new Clicks(viewer, graph);
         // TODO
     }
 
@@ -135,7 +129,7 @@ public class FXMLDocumentController implements Initializable {
     public void start_to_draw() {
         //======================viewer========================================//
         System.setProperty("gs.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
-        JFrame frame = new JFrame();
+        frame = new JFrame();
         frame.setResizable(true);
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         JPanel panel = new JPanel(new GridLayout()) {
@@ -189,6 +183,37 @@ public class FXMLDocumentController implements Initializable {
         } catch (InterruptedException ex) {
             Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    @FXML
+    private void close_view(MouseEvent event) {
+        frame.dispose();
+        viewer.close();
+    }
+
+    @FXML
+    private void reset_Zoom(MouseEvent event) {
+        view.getCamera().setViewPercent(1);
+    }
+
+    @FXML
+    private void zoom_IN(MouseEvent event) {
+        zoom_in();
+    }
+
+    @FXML
+    private void Zoom_OUT(MouseEvent event) {
+        zoom_out();
+    }
+
+    @FXML
+    private void threeD(MouseEvent event) {
+        viewer.enableAutoLayout();
+    }
+
+    @FXML
+    private void twoD(MouseEvent event) {
+        viewer.disableAutoLayout();
     }
 
 }
