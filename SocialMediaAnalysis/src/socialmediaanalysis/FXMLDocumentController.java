@@ -50,6 +50,8 @@ public class FXMLDocumentController implements Initializable {
     private void handleButtonAction(ActionEvent event) {
         System.out.println("You clicked me!");
         viewer.close();
+        //zoom_in();
+
         label.setText("Hello World!");
     }
 

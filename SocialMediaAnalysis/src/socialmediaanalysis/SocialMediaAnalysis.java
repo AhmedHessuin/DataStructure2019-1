@@ -29,11 +29,11 @@ public class SocialMediaAnalysis extends Application {
      */
     public static void main(String[] args) {
         // GUI
-        /*launch(args);*/
+        launch(args);
         
         
         //CL Input
-        Scanner s = new Scanner(System.in);
+        /*Scanner s = new Scanner(System.in);
         System.out.println("Enter the centrality algorithm [1 -> Degree Centrality, 2 -> Closeness Centrality, 3 -> BetweennessCentrality] : ");
         int algorithmType = s.nextInt();
         int n;
@@ -95,8 +95,7 @@ public class SocialMediaAnalysis extends Application {
                 BetweennessCentralityGraph.print();
                 break;
         }
-          launch(args);
-        
+        */
         
         //Stress Test
         /*StressTest T1 = new StressTest();
