@@ -4,8 +4,9 @@ import java.util.ArrayList;
 
 public class Node {
 
-    private static int NODE_ID = 0;
+    public static int NODE_ID = 0;
 
+    public float x,y ;
     private int ID;
     private double centrality;
     private ArrayList<Edge> children;

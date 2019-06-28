@@ -1,12 +1,23 @@
 package socialmediaanalysis;
 
-import datastructure.Edge;
+import datastructure.*;
 import java.util.Scanner;
+
+import javafx.scene.shape.Line;
+import javafx.scene.shape.Rectangle;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.stage.Stage;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.Group; 
+
+import java.*;
+import java.awt.Button;
+
+import javafx.stage.* ;
+
 import socialmediaanalysisalgorithms.BetweennessCentrality;
 import socialmediaanalysisalgorithms.ClosenessCentrality;
 import socialmediaanalysisalgorithms.DegreeCentrality;
@@ -18,18 +29,99 @@ public class SocialMediaAnalysis extends Application {
     public void start(Stage stage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
         
-        Scene scene = new Scene(root);
         
+      Scene scene = new Scene(root);
+        
+        
+        
+
+Graph g = new Graph(5) ;
+
+g.addUndirectedEdge(0, 1, 1) ;
+g.addUndirectedEdge(0, 2, 1) ;
+g.addUndirectedEdge(1, 3, 1) ;
+g.addUndirectedEdge(2, 3, 1) ;
+g.addUndirectedEdge(3, 4, 1) ;
+
+
+
+
+
+init(g , ((int )(   (AnchorPane) root).getWidth() / 2), ((int)(   (AnchorPane) root).getHeight() / 2 ))  ;
+
+
+
+for ( Node N : g.getVertices()) {
+	
+	Rectangle rectangle = new Rectangle(N.x, N.y, 100, 100);
+
+
+	(   (AnchorPane) root).getChildren().add(rectangle);
+
+	
+}
+
+for ( Node N : g.getVertices()) {
+	
+
+	for ( Edge E : N.getChildren()) {
+		
+		Line l = new Line(N.x, N.y, E.getChild().x , E.getChild().y) ;
+		
+		(   (AnchorPane) root).getChildren().add(l);
+	}
+	
+}
+   
+   
         stage.setScene(scene);
+        
         stage.show();
     }
 
+    
+    
+    
+    public static  boolean init (Graph G , int windowXcenter , int windowYcenter) {
+
+        int spacing = 60 ;
+        float thetaSector = (float)(2.0*Math.PI) / G.getNoVertices() ;
+
+        
+         float radius = (float) ( (spacing + 100.0) / (2.0 * Math.sin(thetaSector / 2)));
+
+
+float X = windowXcenter   ;
+float Y = windowYcenter ;
+
+float theta = 0 ;
+for ( Node N  : G.getVertices()) {
+
+N.x = X ; N.y = Y ;
+
+
+ theta += thetaSector ;
+ //newX = radius * Math.cos(theta) ;
+ //newY = radius * Math.sin(theta) ;
+
+
+ X += radius * Math.cos(theta) ;
+ Y += radius * Math.sin(theta) ;
+ 
+}
+
+return true ;
+    }
+
+    
+    
+    
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         // GUI
-        /*launch(args);*/
+        launch(args);
         
         
         //CL Input

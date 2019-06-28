@@ -83,4 +83,12 @@ public class Graph {
         }
     }
 
+    public boolean addUndirectedEdge ( int n1 , int n2  , int w) {
+
+        vertices.get(n1).addChild(new Edge(vertices.get(n2) , w));
+        vertices.get(n2).addChild(new Edge(vertices.get(n1) , w));
+    
+        return true ;
+    }
+
 }
