@@ -119,18 +119,18 @@ public class FXMLDocumentController implements Initializable {
 
     }
 
-    public void clicked_on_node(String id) {
-        graph.getNode(id).setAttribute("ui.class", "marked");
-        for (Edge edge : graph.getNode(id).getEachEdge()) {
+    public void clicked_on_node(Graph _graph, String id) {
+        _graph.getNode(id).setAttribute("ui.class", "marked");
+        for (Edge edge : _graph.getNode(id).getEachEdge()) {
             edge.setAttribute("ui.class", "marked");
             sleep(200);
         }
 
     }
 
-    public void remove_clicked(String id) {
-        graph.getNode(id).removeAttribute("ui.class");
-        for (Edge edge : graph.getNode(id).getEachEdge()) {
+    public void remove_clicked(Graph _graph, String id) {
+        _graph.getNode(id).removeAttribute("ui.class");
+        for (Edge edge : _graph.getNode(id).getEachEdge()) {
             edge.removeAttribute("ui.class");
             sleep(0);
         }
@@ -243,7 +243,7 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private void Enable_get_Edges(MouseEvent event) {
-       // new Clicks(viewer, graph);
+        // new Clicks(viewer, graph);
     }
 
     @FXML

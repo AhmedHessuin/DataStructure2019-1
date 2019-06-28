@@ -1,5 +1,8 @@
 package socialmediaanalysis;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.ui.view.Viewer;
 import org.graphstream.ui.view.ViewerListener;
@@ -71,32 +74,52 @@ public class Clicks extends Thread implements ViewerListener {
 
     public void viewClosed(String id) {
         loop = false;
-       
+
     }
 
     public void buttonPushed(String id) {
-       
+
         mark_id_new = id;
 
         if (mark_id_new == mark_id_old) {
 
             if (graph.getNode(id).getAttribute("ui.class") == "marked") {
 
-                fXMLDocumentController.remove_clicked(id);
-
+                graph.getNode(id).removeAttribute("ui.class");
+                for (Edge edge : graph.getNode(id).getEachEdge()) {
+                    edge.removeAttribute("ui.class");
+                    sleep(0);
+                }
             } else {
 
                 System.out.println("Button set  node " + id);
-                fXMLDocumentController.clicked_on_node(id);
+                graph.getNode(id).setAttribute("ui.class", "marked");
+                for (Edge edge : graph.getNode(id).getEachEdge()) {
+                    edge.setAttribute("ui.class", "marked");
+                    sleep(200);
+                }
+                //fXMLDocumentController.clicked_on_node(graph, id);
 
             }
 
         } else {
             if (!first_time) {
-                fXMLDocumentController.remove_clicked(mark_id_old);
+                graph.getNode(id).removeAttribute("ui.class");
+                for (Edge edge : graph.getNode(id).getEachEdge()) {
+                    edge.removeAttribute("ui.class");
+                    sleep(0);
+                }
             }
             first_time = false;
             mark_id_old = mark_id_new;
+        }
+    }
+
+    protected void sleep(int x) {
+        try {
+            Thread.sleep(x);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
