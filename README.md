@@ -23,7 +23,5 @@ As its deffinition varies acording to the  *__criteria__* of interest we will ge
   Start menu -> Control Panel -> System -> Advanced -> Environment Variables.
 3. Edit PATH variable and Add the path to the JRE bin folder. (ex: `C:\Program Files\Java\jre1.8.0_172\bin`)
 4. Edit System variables and add a new variable with name JAVA_HOME and value set to the path of your JDK folder (ex: `C:\Program Files\Java\jdk1.8.0_172`)
-### Java Setup:
-Download and install Java EE version 8 ![here](https://www.oracle.com/technetwork/java/javaee/downloads/index.html "Download JAVA EE").
 ## Integrated development environment (IDE):
 As For the IDE of choice it's the **Netbeans IDE 8.2** which can be downloaded at the official website's ![download page](https://netbeans.org/downloads/8.2/ "Download Netbeans 8.2").
