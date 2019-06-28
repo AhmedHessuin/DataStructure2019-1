@@ -33,47 +33,21 @@ public class SocialMediaAnalysis extends Application {
       Scene scene = new Scene(root);
         
         
-        
+        ////////testing code ///////
 
-Graph g = new Graph(5) ;
+Graph g = new Graph(10) ;
 
 g.addUndirectedEdge(0, 1, 1) ;
 g.addUndirectedEdge(0, 2, 1) ;
 g.addUndirectedEdge(1, 3, 1) ;
 g.addUndirectedEdge(2, 3, 1) ;
-g.addUndirectedEdge(3, 4, 1) ;
 
+init ( g, 500,500 , root) ;
 
-
-
-
-init(g , ((int )(   (AnchorPane) root).getWidth() / 2), ((int)(   (AnchorPane) root).getHeight() / 2 ))  ;
-
-
-
-for ( Node N : g.getVertices()) {
-	
-	Rectangle rectangle = new Rectangle(N.x, N.y, 100, 100);
-
-
-	(   (AnchorPane) root).getChildren().add(rectangle);
-
-	
-}
-
-for ( Node N : g.getVertices()) {
-	
-
-	for ( Edge E : N.getChildren()) {
-		
-		Line l = new Line(N.x, N.y, E.getChild().x , E.getChild().y) ;
-		
-		(   (AnchorPane) root).getChildren().add(l);
-	}
-	
-}
+  //////////////////////////////////// 
    
-   
+
+
         stage.setScene(scene);
         
         stage.show();
@@ -82,7 +56,7 @@ for ( Node N : g.getVertices()) {
     
     
     
-    public static  boolean init (Graph G , int windowXcenter , int windowYcenter) {
+    public   boolean init (Graph G , int windowXcenter , int windowYcenter , Parent root) {
 
         int spacing = 60 ;
         float thetaSector = (float)(2.0*Math.PI) / G.getNoVertices() ;
@@ -91,8 +65,8 @@ for ( Node N : g.getVertices()) {
          float radius = (float) ( (spacing + 100.0) / (2.0 * Math.sin(thetaSector / 2)));
 
 
-float X = windowXcenter   ;
-float Y = windowYcenter ;
+         float X = windowXcenter + (float) (radius)  ;
+         float Y = windowYcenter ;
 
 float theta = 0 ;
 for ( Node N  : G.getVertices()) {
@@ -104,12 +78,42 @@ N.x = X ; N.y = Y ;
  //newX = radius * Math.cos(theta) ;
  //newY = radius * Math.sin(theta) ;
 
-
- X += radius * Math.cos(theta) ;
- Y += radius * Math.sin(theta) ;
+X =  (float) (windowXcenter   +  radius * Math.cos(theta)) ;
+Y=  (float) (windowYcenter     +  radius * Math.sin(theta))  ;
+ //X += radius * Math.cos(theta) ;
+ //Y += radius * Math.sin(theta) ;
  
 }
 
+float maxCentrality = -1 ;
+for ( Node N : G.getVertices()) {
+	
+	if ( N.getCentrality() > maxCentrality) maxCentrality = (float) N.getCentrality() ;
+}
+
+maxCentrality = Math.abs(maxCentrality) ;
+for ( Node N : G.getVertices()) {
+	
+	
+	Rectangle rectangle = new Rectangle(N.x, N.y, 100 /maxCentrality, 100 / maxCentrality );
+
+
+	(   (AnchorPane) root).getChildren().add(rectangle);
+
+	
+}
+
+for ( Node N : G.getVertices()) {
+	
+
+	for ( Edge E : N.getChildren()) {
+		
+		Line l = new Line(N.x, N.y, E.getChild().x , E.getChild().y) ;
+		
+		(   (AnchorPane) root).getChildren().add(l);
+	}
+	
+}
 return true ;
     }
 
