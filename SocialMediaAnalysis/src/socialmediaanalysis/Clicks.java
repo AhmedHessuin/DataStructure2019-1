@@ -104,8 +104,8 @@ public class Clicks extends Thread implements ViewerListener {
 
         } else {
             if (!first_time) {
-                graph.getNode(id).removeAttribute("ui.class");
-                for (Edge edge : graph.getNode(id).getEachEdge()) {
+                graph.getNode(mark_id_old).removeAttribute("ui.class");
+                for (Edge edge : graph.getNode(mark_id_old).getEachEdge()) {
                     edge.removeAttribute("ui.class");
                     sleep(0);
                 }
