@@ -54,14 +54,14 @@ public class FXMLDocumentController implements Initializable {
             // graph.getNode(x).setAttribute(x, values);
 
         }
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < 20; i++) {
             for (int j = i; j < 20; j++) {
                 if (j == i) {
                     continue;
                 } else {
-                    // if (i == 0 && j == 1) {
-                    //   continue;
-                    //}
+                     if (i == 0 && j == 1) {
+                       continue;
+                    }
                     graph.addEdge(Integer.toString(i) + Integer.toString(j), Integer.toString(i), Integer.toString(j));
                 }
             }
