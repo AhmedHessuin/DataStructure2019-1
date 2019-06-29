@@ -2,36 +2,67 @@
 
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane id="AnchorPane" prefHeight="248.0" prefWidth="312.0" style="-fx-background-color: gray;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="socialmediaanalysis.FXMLDocumentController">
+<AnchorPane id="AnchorPane" prefHeight="248.0" prefWidth="312.0" style="-fx-border-color: gold; -fx-background-color: #000A28;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="socialmediaanalysis.FXMLDocumentController">
     <children>
-      <Button layoutX="7.0" layoutY="13.0" mnemonicParsing="false" onMouseClicked="#close_view" prefHeight="18.0" prefWidth="80.0" text="Close">
+      <Button layoutX="10.0" layoutY="12.0" mnemonicParsing="false" onMouseClicked="#close_view" prefHeight="18.0" prefWidth="80.0" text="Close">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
-      <Button layoutX="218.0" layoutY="14.0" mnemonicParsing="false" onMouseClicked="#reset_Zoom" prefHeight="26.0" prefWidth="80.0" text="Reset " textAlignment="CENTER">
-         <cursor>
-            <Cursor fx:constant="HAND" />
-         </cursor>
-      </Button>
-        <Button fx:id="button" layoutX="99.0" layoutY="13.0" minWidth="0.0" onMouseClicked="#zoom_IN" prefHeight="26.0" prefWidth="51.0" text="+">
-         <cursor>
-            <Cursor fx:constant="HAND" />
-         </cursor>
-      </Button>
-      <Button layoutX="156.0" layoutY="14.0" mnemonicParsing="false" onMouseClicked="#Zoom_OUT" prefHeight="26.0" prefWidth="51.0" text="-">
-         <cursor>
-            <Cursor fx:constant="HAND" />
-         </cursor>
-      </Button>
-      <Button layoutX="14.0" layoutY="55.0" mnemonicParsing="false" onMouseClicked="#threeD" text="3D motions" />
-      <Button layoutX="14.0" layoutY="92.0" mnemonicParsing="false" onMouseClicked="#twoD" text="2D motions" />
-      <Button layoutX="153.0" layoutY="55.0" mnemonicParsing="false" onMouseClicked="#Enable_get_Edges" text="Enable Get Edges" />
-      <Button layoutX="151.0" layoutY="92.0" mnemonicParsing="false" onMouseClicked="#Disable_Get_Edges" text="Disable Get Edges" />
-      <Button layoutX="14.0" layoutY="132.0" mnemonicParsing="false" onMouseClicked="#Draw_on_Betweenness" text="Draw on Betweenness" />
-      <Button layoutX="14.0" layoutY="204.0" mnemonicParsing="false" onMouseClicked="#Draw_on_Degree" text="Draw on Degree" />
-      <Button layoutX="14.0" layoutY="168.0" mnemonicParsing="false" onMouseClicked="#Draw_on_Closeness" text="Draw on Closeness" />
+      <VBox layoutX="179.0" layoutY="154.0" prefHeight="84.0" prefWidth="133.0">
+         <children>
+            <Button mnemonicParsing="false" onMouseClicked="#Draw_on_Degree" prefHeight="26.0" prefWidth="132.0" text="Draw on Degree" />
+            <Separator prefHeight="0.0" prefWidth="107.0" />
+            <Button mnemonicParsing="false" onMouseClicked="#Draw_on_Betweenness" text="Draw on Betweenness" />
+            <Separator prefWidth="200.0" />
+            <Button mnemonicParsing="false" onMouseClicked="#Draw_on_Closeness" prefHeight="26.0" prefWidth="134.0" text="Draw on Closeness" />
+         </children>
+      </VBox>
+      <VBox layoutX="10.0" layoutY="54.0" prefHeight="82.0" prefWidth="100.0">
+         <children>
+            <Button mnemonicParsing="false" onMouseClicked="#threeD" prefHeight="26.0" prefWidth="101.0" text="3D " />
+            <Button mnemonicParsing="false" onMouseClicked="#twoD" prefHeight="26.0" prefWidth="102.0" text="2D " />
+            <Button mnemonicParsing="false" onMouseClicked="#reset_Zoom" prefHeight="26.0" prefWidth="99.0" text="Reset " textAlignment="CENTER">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+         </children>
+      </VBox>
+      <HBox layoutX="153.0" layoutY="12.0" prefHeight="26.0" prefWidth="168.0">
+         <children>
+              <Button fx:id="button" minWidth="0.0" onMouseClicked="#zoom_IN" prefHeight="26.0" prefWidth="80.0" text="+">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <Separator orientation="VERTICAL" prefHeight="200.0" />
+            <Button mnemonicParsing="false" onMouseClicked="#Zoom_OUT" prefHeight="26.0" prefWidth="78.0" text="-">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+         </children>
+      </HBox>
+      <VBox layoutX="10.0" layoutY="180.0" prefHeight="54.0" prefWidth="124.0">
+         <children>
+            <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="126.0" text="screenshot" />
+            <Separator prefWidth="200.0" />
+            <ToggleButton mnemonicParsing="false" onMouseClicked="#VIEW_EDGE_WEIGHT" prefHeight="26.0" prefWidth="149.0" text="View Weight" />
+         </children>
+      </VBox>
+      <ImageView fitHeight="109.0" fitWidth="99.0" layoutX="190.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../../../Noxus_Crest.png" />
+         </image>
+      </ImageView>
     </children>
 </AnchorPane>

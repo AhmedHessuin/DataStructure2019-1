@@ -1,7 +1,6 @@
 package socialmediaanalysis;
 
 import java.awt.*;
-import java.awt.event.WindowEvent;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -13,9 +12,9 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import org.graphstream.algorithm.BetweennessCentrality;
 import org.graphstream.graph.*;
 import org.graphstream.graph.implementations.MultiGraph;
+import org.graphstream.ui.graphicGraph.GraphicGraph;
 import org.graphstream.ui.swingViewer.ViewPanel;
 import org.graphstream.ui.view.View;
 import org.graphstream.ui.view.Viewer;
@@ -25,6 +24,7 @@ public class FXMLDocumentController implements Initializable {
 
     public static Graph graph = new MultiGraph("I can see dead pixels");
     public static Viewer viewer;
+    boolean view_weight = false;
     JFrame frame;
     public static ViewerPipe fromViewer;
     View view;
@@ -46,35 +46,28 @@ public class FXMLDocumentController implements Initializable {
 
         start_to_draw();
         set_stylesheet();
-        Node A = graph.addNode("A");
-        Node B = graph.addNode("B");
-        Node E = graph.addNode("E");
-        Node C = graph.addNode("C");
-        Node D = graph.addNode("D");
 
-        graph.addEdge("AB", "A", "B");
-        graph.addEdge("BE", "B", "E");
-        graph.addEdge("BC", "B", "C");
-        graph.addEdge("ED", "E", "D");
-        graph.addEdge("CD", "C", "D");
-        graph.addEdge("AE", "A", "E");
+        for (int i = 0; i < 20; i++) {
+            String x = Integer.toString(i);
+            graph.addNode(x);
+            // graph.getNode(x).addAttribute("ui.stylesheet", "node { size:" +Integer.toString(i)+"px;}");
+            // graph.getNode(x).setAttribute(x, values);
 
-        BetweennessCentrality bcb = new BetweennessCentrality();
-        bcb.setWeightAttributeName("weight");
-        bcb.setWeight(A, B, 1);
-        bcb.setWeight(B, E, 6);
-        bcb.setWeight(B, C, 5);
-        bcb.setWeight(E, D, 2);
-        bcb.setWeight(C, D, 3);
-        bcb.setWeight(A, E, 4);
-        bcb.init(graph);
-        bcb.compute();
+        }
+        for (int i = 0; i < 1; i++) {
+            for (int j = i; j < 20; j++) {
+                if (j == i) {
+                    continue;
+                } else {
+                    // if (i == 0 && j == 1) {
+                    //   continue;
+                    //}
+                    graph.addEdge(Integer.toString(i) + Integer.toString(j), Integer.toString(i), Integer.toString(j));
+                }
+            }
+            //System.out.println(graph.getNode(i).getDegree());
+        }
 
-        System.out.println("A=" + A.getAttribute("Cb"));
-        System.out.println("B=" + B.getAttribute("Cb"));
-        System.out.println("C=" + C.getAttribute("Cb"));
-        System.out.println("D=" + D.getAttribute("Cb"));
-        System.out.println("E=" + E.getAttribute("Cb"));
         darw_node_edge_id_weight();
 
         Clicks ct = new Clicks(viewer, graph, fromViewer, fXMLDocumentController);
@@ -83,6 +76,7 @@ public class FXMLDocumentController implements Initializable {
     }
 
     public void set_stylesheet() {
+
         //===================style sheet graph================================//
         graph.addAttribute("ui.quality");
         graph.addAttribute("ui.antialias");
@@ -93,20 +87,21 @@ public class FXMLDocumentController implements Initializable {
                 + "text-size:17px;"
                 + "size-mode: dyn-size;"
                 + "fill-mode: dyn-plain;"
-                + "size:26px;"
+                + "size:24px;"
                 + "fill-color: #CB00F3;"
                 + "text-mode:normal;"
                 + "text-alignment:center; "
-                + "text-color:#f2f2f2;"
+                + "text-color:#4C3C57;"
                 + "shape:circle;"
                 + " }");
         //====================================================================//
         //=====================style sheet edge ==============================//
         graph.addAttribute("ui.stylesheet", "edge { "
                 + "shape:cubic-curve;"
-                + "size:3px; "
+                + "size:5px; "
                 + "fill-color: #0867A0;"
                 + "text-mode:normal;"
+                + "text-visibility-mode:hidden;"
                 + "text-size:17px;"
                 + "text-color:gold;"
                 + "text-alignment:along;"
@@ -116,6 +111,94 @@ public class FXMLDocumentController implements Initializable {
         graph.addAttribute("ui.stylesheet", " node.marked {fill-color: green;}");
         graph.addAttribute("ui.stylesheet", " edge.marked {fill-color:green;}");
         //====================================================================//
+
+    }
+
+    public static Color hex2Rgb(String colorStr) {
+        return new Color(
+                Integer.valueOf(colorStr.substring(1, 3), 16),
+                Integer.valueOf(colorStr.substring(3, 5), 16),
+                Integer.valueOf(colorStr.substring(5, 7), 16));
+    }
+
+    public void color_generator(int input, Node node) {
+        int reminder;
+        int size;
+        if (input > 0 && input < 10) {
+            reminder = input % 10;// 1 2 3 4 5 6 7 8 9
+            size = reminder * 2 + 20;
+
+            node.setAttribute("ui.color", Color.decode("#ffff00"));
+            node.addAttribute("ui.size", size);
+            //#ffff00
+        } else if ((input >= 10 && input < 20)) {
+            reminder = input % 10;// 0 1 2 3 4 5 6 7 8 9 
+            size = reminder * 2 + 20;
+
+            node.setAttribute("ui.color", Color.decode("#ffae42"));
+            node.addAttribute("ui.size", size);
+            //#ffae42 
+
+        } else if ((input >= 20 && input < 30)) {
+            reminder = input % 10;// 0 1 2 3 4 5 6 7 8 9 
+            size = reminder * 2 + 20;
+            node.setAttribute("ui.color", Color.decode("#FF7200"));
+            node.addAttribute("ui.size", size);
+            //#FFA500
+
+        } else if ((input >= 30 && input < 40)) {
+            reminder = input % 10;// 0 1 2 3 4 5 6 7 8 9 
+            size = reminder * 2 + 20;
+            node.setAttribute("ui.color", Color.decode("#ff4500"));
+            node.addAttribute("ui.size", size);
+            //#ff4500 
+
+        } else if ((input >= 40 && input < 50)) {
+            reminder = input % 10;// 0 1 2 3 4 5 6 7 8 9 
+            size = reminder * 2 + 20;
+            node.setAttribute("ui.color", Color.decode("#ff0000"));
+            node.addAttribute("ui.size", size);
+            //#ff0000  
+
+        } else if ((input >= 50 && input < 60)) {
+            reminder = input % 10;// 0 1 2 3 4 5 6 7 8 9 
+            size = reminder * 2 + 20;
+            node.setAttribute("ui.color", Color.decode("#c71585"));
+            node.addAttribute("ui.size", size);
+            //#c71585   
+
+        } else if ((input >= 60 && input < 70)) {
+            reminder = input % 10;// 0 1 2 3 4 5 6 7 8 9 
+            size = reminder * 2 + 20;
+            node.setAttribute("ui.color", Color.decode("#800080"));
+            node.addAttribute("ui.size", size);
+            //#800080   
+
+        } else if ((input >= 70 && input < 80)) {
+            reminder = input % 10;// 0 1 2 3 4 5 6 7 8 9 
+            size = reminder * 2 + 20;
+            node.setAttribute("ui.color", Color.decode("#8a2be2"));
+            node.addAttribute("ui.size", size);
+            //#8a2be2    
+
+        } else if ((input >= 80 && input < 90)) {
+            reminder = input % 10;// 0 1 2 3 4 5 6 7 8 9 
+            size = reminder * 2 + 20;
+            node.setAttribute("ui.color", Color.decode("#0000ff"));
+            node.addAttribute("ui.size", size);
+            //#0000ff     
+
+        } else if ((input >= 90 && input < 100)) {
+            reminder = input % 10;// 0 1 2 3 4 5 6 7 8 9 
+            size = reminder * 2 + 20;
+            node.setAttribute("ui.color", Color.decode("#0d98ba"));
+            node.addAttribute("ui.size", size);
+            //#0d98ba      
+
+        } else {
+
+            //error
+        }
 
     }
 
@@ -207,7 +290,8 @@ public class FXMLDocumentController implements Initializable {
         for (org.graphstream.graph.Node node : graph) {
             view.getCamera().resetView();
 
-            node.addAttribute("ui.size", 27);
+            node.addAttribute("ui.size", 24);
+            node.setAttribute("ui.color", Color.decode("#CB00F3"));
 
         }
     }
@@ -242,15 +326,6 @@ public class FXMLDocumentController implements Initializable {
     }
 
     @FXML
-    private void Enable_get_Edges(MouseEvent event) {
-        // new Clicks(viewer, graph);
-    }
-
-    @FXML
-    private void Disable_Get_Edges(MouseEvent event) {
-    }
-
-    @FXML
     private void Draw_on_Betweenness(MouseEvent event) {
 
     }
@@ -258,9 +333,8 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void Draw_on_Degree(MouseEvent event) {
         for (org.graphstream.graph.Node node : graph) {
-            node.addAttribute("ui.label", node.getId());
 
-            node.addAttribute("ui.size", +10 * node.getDegree());
+            color_generator(node.getDegree(), node);
 
         }
     }
@@ -269,5 +343,25 @@ public class FXMLDocumentController implements Initializable {
     private void Draw_on_Closeness(MouseEvent event) {
 
     }
+
+    @FXML
+    private void VIEW_EDGE_WEIGHT(MouseEvent event) {
+        graph.addAttribute("ui.screenshot", ".\\..\\GraphStream.png");
+       
+        if (!view_weight) {
+            graph.setAttribute("ui.stylesheet", "edge { "
+                    + "text-visibility-mode:normal;"
+                    + "}");
+            view_weight = true;
+        } else {
+            graph.setAttribute("ui.stylesheet", "edge { "
+                    + "text-visibility-mode:hidden;"
+                    + "}");
+            view_weight = false;
+        }
+
+    }
+
+    
 
 }
