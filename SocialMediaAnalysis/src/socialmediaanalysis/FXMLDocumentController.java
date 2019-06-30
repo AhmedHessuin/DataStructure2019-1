@@ -13,6 +13,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseEvent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -31,7 +32,7 @@ public class FXMLDocumentController implements Initializable {
     //===============static variable area ====================================//
     public static int last_id;
     public static String mode = "add_node";
-    public static boolean algroerth_on=false;
+    public static boolean algroerth_on = false;
     boolean view_weight = false;
     public static String selected_edge;
     //========================================================================//
@@ -111,7 +112,7 @@ public class FXMLDocumentController implements Initializable {
         set_stylesheet();
 
         //  star_gent();
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 1; i++) {
             String x = Integer.toString(i);
             graph.addNode(x);
             last_id = i;
@@ -119,8 +120,8 @@ public class FXMLDocumentController implements Initializable {
             // graph.getNode(x).setAttribute(x, values);
 
         }
-        for (int i = 0; i < 5; i++) {
-            for (int j = i; j < 5; j++) {
+        for (int i = 0; i < 0; i++) {
+            for (int j = i; j < 0; j++) {
                 if (j == i) {
                     continue;
                 } else {
@@ -187,71 +188,71 @@ public class FXMLDocumentController implements Initializable {
             reminder = input % 10;// 1 2 3 4 5 6 7 8 9
             size = reminder * 2 + 20;
 
-            node.setAttribute("ui.color", Color.decode("#ffff00"));
-            node.addAttribute("ui.size", size);
+            node.changeAttribute("ui.color", Color.decode("#ffff00"));
+            node.changeAttribute("ui.size", size);
             //#ffff00
         } else if ((input >= 10 && input < 20)) {
             reminder = input % 10;// 0 1 2 3 4 5 6 7 8 9 
             size = reminder * 2 + 20;
 
-            node.setAttribute("ui.color", Color.decode("#ffae42"));
-            node.addAttribute("ui.size", size);
+            node.changeAttribute("ui.color", Color.decode("#ffae42"));
+            node.changeAttribute("ui.size", size);
             //#ffae42 
 
         } else if ((input >= 20 && input < 30)) {
             reminder = input % 10;// 0 1 2 3 4 5 6 7 8 9 
             size = reminder * 2 + 20;
-            node.setAttribute("ui.color", Color.decode("#FF7200"));
-            node.addAttribute("ui.size", size);
+            node.changeAttribute("ui.color", Color.decode("#FF7200"));
+            node.changeAttribute("ui.size", size);
             //#FFA500
 
         } else if ((input >= 30 && input < 40)) {
             reminder = input % 10;// 0 1 2 3 4 5 6 7 8 9 
             size = reminder * 2 + 20;
-            node.setAttribute("ui.color", Color.decode("#ff4500"));
-            node.addAttribute("ui.size", size);
+            node.changeAttribute("ui.color", Color.decode("#ff4500"));
+            node.changeAttribute("ui.size", size);
             //#ff4500 
 
         } else if ((input >= 40 && input < 50)) {
             reminder = input % 10;// 0 1 2 3 4 5 6 7 8 9 
             size = reminder * 2 + 20;
-            node.setAttribute("ui.color", Color.decode("#ff0000"));
-            node.addAttribute("ui.size", size);
+            node.changeAttribute("ui.color", Color.decode("#ff0000"));
+            node.changeAttribute("ui.size", size);
             //#ff0000  
 
         } else if ((input >= 50 && input < 60)) {
             reminder = input % 10;// 0 1 2 3 4 5 6 7 8 9 
             size = reminder * 2 + 20;
-            node.setAttribute("ui.color", Color.decode("#c71585"));
-            node.addAttribute("ui.size", size);
+            node.changeAttribute("ui.color", Color.decode("#c71585"));
+            node.changeAttribute("ui.size", size);
             //#c71585   
 
         } else if ((input >= 60 && input < 70)) {
             reminder = input % 10;// 0 1 2 3 4 5 6 7 8 9 
             size = reminder * 2 + 20;
-            node.setAttribute("ui.color", Color.decode("#800080"));
-            node.addAttribute("ui.size", size);
+            node.changeAttribute("ui.color", Color.decode("#800080"));
+            node.changeAttribute("ui.size", size);
             //#800080   
 
         } else if ((input >= 70 && input < 80)) {
             reminder = input % 10;// 0 1 2 3 4 5 6 7 8 9 
             size = reminder * 2 + 20;
-            node.setAttribute("ui.color", Color.decode("#8a2be2"));
-            node.addAttribute("ui.size", size);
+            node.changeAttribute("ui.color", Color.decode("#8a2be2"));
+            node.changeAttribute("ui.size", size);
             //#8a2be2    
 
         } else if ((input >= 80 && input < 90)) {
             reminder = input % 10;// 0 1 2 3 4 5 6 7 8 9 
             size = reminder * 2 + 20;
-            node.setAttribute("ui.color", Color.decode("#0000ff"));
-            node.addAttribute("ui.size", size);
+            node.changeAttribute("ui.color", Color.decode("#0000ff"));
+            node.changeAttribute("ui.size", size);
             //#0000ff     
 
         } else if ((input >= 90 && input < 100)) {
             reminder = input % 10;// 0 1 2 3 4 5 6 7 8 9 
             size = reminder * 2 + 20;
-            node.setAttribute("ui.color", Color.decode("#0d98ba"));
-            node.addAttribute("ui.size", size);
+            node.changeAttribute("ui.color", Color.decode("#0d98ba"));
+            node.changeAttribute("ui.size", size);
             //#0d98ba      
 
         } else {
@@ -340,7 +341,7 @@ public class FXMLDocumentController implements Initializable {
         String e = "Free Move";
         String f = "Change Weight";
         list.removeAll(list);
-        list.addAll(a, b, c, v, d, e, f);
+        list.addAll(b, a, v, d, c, e, f);
         LISTBOX.getItems().addAll(list);
 
     }
@@ -374,14 +375,17 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void reset_Zoom(MouseEvent event) {
         view.getCamera().setViewPercent(1);
+
+        set_stylesheet();
+        view.getCamera().resetView();
+
         for (org.graphstream.graph.Node node : graph) {
-            view.getCamera().resetView();
-
             node.addAttribute("ui.size", 24);
-            node.setAttribute("ui.color", Color.decode("#CB00F3"));
 
+            node.removeAttribute("ui.color");
         }
-        algroerth_on=false;
+
+        algroerth_on = false;
     }
 
     @FXML
@@ -438,8 +442,8 @@ public class FXMLDocumentController implements Initializable {
             color_generator(node.getDegree(), node);
 
         }
-       
-        algroerth_on=true;
+
+        algroerth_on = true;
     }
 
     @FXML
@@ -466,6 +470,17 @@ public class FXMLDocumentController implements Initializable {
         //graph.getEdge(selected_edge).setAttribute("ui.label", 10);;
         new_weight_text.setText("222");
         old_weight_text.setText("jbjb");
+         System.out.println("ssd");
+        //old_weight_text.setText("123");
+    }
+
+    private void Change_weight(ContextMenuEvent event) {
+        //graph.getEdge(selected_edge).setAttribute("ui.label", 10);;
+       
+        new_weight_text.setText("s");
+        old_weight_text.setText("jbjb");
+       
+       
 
         //old_weight_text.setText("123");
     }
