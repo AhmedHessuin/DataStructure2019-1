@@ -1,20 +1,26 @@
 package socialmediaanalysis;
 
 import java.awt.*;
+import java.awt.event.MouseAdapter;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import org.graphstream.algorithm.generator.BarabasiAlbertGenerator;
+import org.graphstream.algorithm.generator.Generator;
 import org.graphstream.graph.*;
 import org.graphstream.graph.implementations.MultiGraph;
-import org.graphstream.ui.graphicGraph.GraphicGraph;
+import org.graphstream.graph.implementations.SingleGraph;
 import org.graphstream.ui.swingViewer.ViewPanel;
 import org.graphstream.ui.view.View;
 import org.graphstream.ui.view.Viewer;
@@ -22,16 +28,22 @@ import org.graphstream.ui.view.ViewerPipe;
 
 public class FXMLDocumentController implements Initializable {
 
+    public static int last_id;
     public static Graph graph = new MultiGraph("I can see dead pixels");
-    public static Viewer viewer;
+    public static Viewer viewer = new Viewer(graph, Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
+    public static String mode = "add_node";
     boolean view_weight = false;
     JFrame frame;
     public static ViewerPipe fromViewer;
-    View view;
+    public static View view;
     private FXMLDocumentController fXMLDocumentController;
     private Label label;
     @FXML
     private javafx.scene.control.Button button;
+    @FXML
+    private Label noxus_rise;
+    @FXML
+    public  ChoiceBox<?> LISTBOX;
 
     private void handleButtonAction(ActionEvent event) {
         System.out.println("You clicked me!");
@@ -41,26 +53,40 @@ public class FXMLDocumentController implements Initializable {
         label.setText("Hello World!");
     }
 
+    void star_gent() {
+        Graph graph3 = new SingleGraph("Random");
+        Generator gen = new BarabasiAlbertGenerator(3);
+        gen.addSink(graph3);
+        gen.begin();
+        for (int i = 0; i < 10; i++) {
+            gen.nextEvents();
+        }
+        gen.end();
+        graph3.display();
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
+        add_check_list_element();
         start_to_draw();
         set_stylesheet();
 
-        for (int i = 0; i < 20; i++) {
+        //  star_gent();
+        for (int i = 0; i < 5; i++) {
             String x = Integer.toString(i);
             graph.addNode(x);
+            last_id = i;
             // graph.getNode(x).addAttribute("ui.stylesheet", "node { size:" +Integer.toString(i)+"px;}");
             // graph.getNode(x).setAttribute(x, values);
 
         }
-        for (int i = 0; i < 20; i++) {
-            for (int j = i; j < 20; j++) {
+        for (int i = 0; i < 5; i++) {
+            for (int j = i; j < 5; j++) {
                 if (j == i) {
                     continue;
                 } else {
-                     if (i == 0 && j == 1) {
-                       continue;
+                    if (i == 0 && j == 1) {
+                        continue;
                     }
                     graph.addEdge(Integer.toString(i) + Integer.toString(j), Integer.toString(i), Integer.toString(j));
                 }
@@ -222,6 +248,7 @@ public class FXMLDocumentController implements Initializable {
     public void start_to_draw() {
         //======================viewer========================================//
         System.setProperty("gs.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
+
         frame = new JFrame();
         frame.setResizable(true);
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -232,6 +259,17 @@ public class FXMLDocumentController implements Initializable {
             }
         };
 
+        //==========modify=================================//
+        frame.addMouseListener(new MouseAdapter() {
+            public void buttonPushed(MouseEvent e) {
+                double x = e.getX();
+                double y = e.getY();
+                System.out.println("monster");
+
+            }
+        });
+
+        //modify=======================//
         viewer = new Viewer(graph, Viewer.ThreadingModel.GRAPH_IN_GUI_THREAD);
         ViewPanel viewPanel = viewer.addDefaultView(false);
         panel.add(viewPanel);
@@ -243,6 +281,7 @@ public class FXMLDocumentController implements Initializable {
         view = viewer.getDefaultView();
         view.getCamera().setAutoFitView(true);
         viewer.enableAutoLayout();
+
     }
 
     public void zoom_in() {
@@ -268,6 +307,19 @@ public class FXMLDocumentController implements Initializable {
 
     public void change_size(Node node) {
         node.addAttribute("ui.size", 26);
+    }
+
+    public void add_check_list_element() {
+        ObservableList list = FXCollections.observableArrayList();
+        String a="Add Edge";
+        String b="Add Node";
+        String c="Node Edges";
+         String v="Remove Node";
+         String d="Remove Edge";
+        list.removeAll(list);
+        list.addAll(a,b,c,v,d);
+        LISTBOX.getItems().addAll(list);
+        
     }
 
     protected void sleep(int x) {
@@ -309,6 +361,7 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private void threeD(MouseEvent event) {
+
         viewer.enableAutoLayout();
     }
 
@@ -347,7 +400,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void VIEW_EDGE_WEIGHT(MouseEvent event) {
         graph.addAttribute("ui.screenshot", ".\\..\\GraphStream.png");
-       
+
         if (!view_weight) {
             graph.setAttribute("ui.stylesheet", "edge { "
                     + "text-visibility-mode:normal;"
@@ -362,6 +415,16 @@ public class FXMLDocumentController implements Initializable {
 
     }
 
-    
+    @FXML
+    private void noxus(MouseEvent event) {
 
+        noxus_rise.setVisible(true);
+    }
+
+    @FXML
+    private void check_list_relase(MouseEvent event) {
+    mode=(String) LISTBOX.getValue();
+    System.out.println(mode);
+    }
+   
 }
