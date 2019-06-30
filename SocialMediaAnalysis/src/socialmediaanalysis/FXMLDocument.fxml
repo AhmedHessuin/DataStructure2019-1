@@ -5,6 +5,7 @@
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -70,7 +71,28 @@
          </cursor>
       </ImageView>
       <Label fx:id="noxus_rise" layoutX="193.0" layoutY="127.0" text="Noxus will rise" textFill="RED" visible="false" />
-      <ChoiceBox fx:id="LISTBOX" layoutX="10.0" layoutY="261.0" prefWidth="150.0" />
-      <Button layoutX="167.0" layoutY="261.0" mnemonicParsing="false" onMouseClicked="#check_list_relase" text="OK" />
+      <HBox layoutX="10.0" layoutY="260.0" prefHeight="26.0" prefWidth="185.0">
+         <children>
+            <ChoiceBox fx:id="LISTBOX" prefWidth="150.0" />
+            <Button mnemonicParsing="false" onMouseClicked="#check_list_relase" text="OK" />
+         </children>
+      </HBox>
+      <HBox layoutX="205.0" layoutY="273.0" prefHeight="102.0" prefWidth="116.0">
+         <children>
+            <VBox prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <VBox prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <Label text="Old Weight" textFill="#ea1414" />
+                        <TextField fx:id="old_weight_text" editable="false" focusTraversable="false" />
+                        <Label text="New Edge Weight " textFill="#ff0808" />
+                        <TextField fx:id="new_weight_text" focusTraversable="false" />
+                        <Button fx:id="set_button" mnemonicParsing="false" onMouseClicked="#Change_weight" text="Set" />
+                     </children>
+                  </VBox>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
     </children>
 </AnchorPane>
