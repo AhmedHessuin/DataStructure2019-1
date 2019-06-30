@@ -28,14 +28,28 @@ import org.graphstream.ui.view.ViewerPipe;
 
 public class FXMLDocumentController implements Initializable {
 
+    //===============static variable area ====================================//
     public static int last_id;
-    public static Graph graph = new MultiGraph("I can see dead pixels");
-    public static Viewer viewer = new Viewer(graph, Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
     public static String mode = "add_node";
+    public static boolean algroerth_on=false;
     boolean view_weight = false;
+    public static String selected_edge;
+    //========================================================================//
+
+    //==============================graph variable============================//
+    public static Graph graph = new MultiGraph("I can see dead pixels");//graph
+    //============================//
+    public static Viewer viewer = new Viewer(graph, Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
+    //============================//
+
     JFrame frame;
+    //============================//
     public static ViewerPipe fromViewer;
     public static View view;
+    //============================//
+    //========================================================================//
+
+    //=====================gui variable section===============================//
     private FXMLDocumentController fXMLDocumentController;
     private Label label;
     @FXML
@@ -43,14 +57,37 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private Label noxus_rise;
     @FXML
-    public  ChoiceBox<?> LISTBOX;
+    public ChoiceBox<?> LISTBOX;
+    @FXML
+    public javafx.scene.control.TextField old_weight_text;
+    @FXML
+    private javafx.scene.control.TextField new_weight_text;
+    @FXML
+    private javafx.scene.control.Button set_button;
+    //========================================================================//
 
+    //====================useless functions section===========================//
     private void handleButtonAction(ActionEvent event) {
         System.out.println("You clicked me!");
         //viewer.close();
         //zoom_in();
         frame.dispose();
         label.setText("Hello World!");
+    }
+
+    public static Color hex2Rgb(String colorStr) {
+        return new Color(
+                Integer.valueOf(colorStr.substring(1, 3), 16),
+                Integer.valueOf(colorStr.substring(3, 5), 16),
+                Integer.valueOf(colorStr.substring(5, 7), 16));
+    }
+
+    protected void sleep(int x) {
+        try {
+            Thread.sleep(x);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     void star_gent() {
@@ -64,7 +101,9 @@ public class FXMLDocumentController implements Initializable {
         gen.end();
         graph3.display();
     }
+    //========================================================================//
 
+    //========================int=============================================//
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         add_check_list_element();
@@ -101,6 +140,7 @@ public class FXMLDocumentController implements Initializable {
         // TODO
     }
 
+    //=======================style sheet======================================//
     public void set_stylesheet() {
 
         //===================style sheet graph================================//
@@ -140,14 +180,7 @@ public class FXMLDocumentController implements Initializable {
 
     }
 
-    public static Color hex2Rgb(String colorStr) {
-        return new Color(
-                Integer.valueOf(colorStr.substring(1, 3), 16),
-                Integer.valueOf(colorStr.substring(3, 5), 16),
-                Integer.valueOf(colorStr.substring(5, 7), 16));
-    }
-
-    public void color_generator(int input, Node node) {
+    public static void color_generator(int input, Node node) {
         int reminder;
         int size;
         if (input > 0 && input < 10) {
@@ -228,6 +261,8 @@ public class FXMLDocumentController implements Initializable {
 
     }
 
+    //===================clicked file functions===============================//
+    // note not used but the important 
     public void clicked_on_node(Graph _graph, String id) {
         _graph.getNode(id).setAttribute("ui.class", "marked");
         for (Edge edge : _graph.getNode(id).getEachEdge()) {
@@ -244,7 +279,9 @@ public class FXMLDocumentController implements Initializable {
             sleep(0);
         }
     }
+    //========================================================================//
 
+    //======================start the gui=====================================//
     public void start_to_draw() {
         //======================viewer========================================//
         System.setProperty("gs.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
@@ -284,14 +321,6 @@ public class FXMLDocumentController implements Initializable {
 
     }
 
-    public void zoom_in() {
-        view.getCamera().setViewPercent(view.getCamera().getViewPercent() - 0.1);
-    }
-
-    public void zoom_out() {
-        view.getCamera().setViewPercent(view.getCamera().getViewPercent() + 0.1);
-    }
-
     public void darw_node_edge_id_weight() {
         for (org.graphstream.graph.Node node : graph) {
             node.addAttribute("ui.label", node.getId());
@@ -301,35 +330,41 @@ public class FXMLDocumentController implements Initializable {
         }
     }
 
-    public void change_color(Node node) {
-        node.setAttribute("ui.color", Color.RED);
-    }
-
-    public void change_size(Node node) {
-        node.addAttribute("ui.size", 26);
-    }
-
     public void add_check_list_element() {
         ObservableList list = FXCollections.observableArrayList();
-        String a="Add Edge";
-        String b="Add Node";
-        String c="Node Edges";
-         String v="Remove Node";
-         String d="Remove Edge";
+        String a = "Add Edge";
+        String b = "Add Node";
+        String c = "Node Edges";
+        String v = "Remove Node";
+        String d = "Remove Edge";
+        String e = "Free Move";
+        String f = "Change Weight";
         list.removeAll(list);
-        list.addAll(a,b,c,v,d);
+        list.addAll(a, b, c, v, d, e, f);
         LISTBOX.getItems().addAll(list);
-        
+
     }
 
-    protected void sleep(int x) {
-        try {
-            Thread.sleep(x);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    //====================camera section======================================//
+    public void zoom_in() {
+        view.getCamera().setViewPercent(view.getCamera().getViewPercent() - 0.1);
     }
 
+    public void zoom_out() {
+        view.getCamera().setViewPercent(view.getCamera().getViewPercent() + 0.1);
+    }
+
+    //======================idk===============================================//
+    /**
+     * @param fXMLDocumentController the fXMLDocumentController to set
+     */
+    public void setfXMLDocumentController(FXMLDocumentController fXMLDocumentController) {
+        this.fXMLDocumentController = fXMLDocumentController;
+
+    }
+
+    //====================gui function section================================//
+    // camera section 
     @FXML
     private void close_view(MouseEvent event) {
         frame.dispose();
@@ -346,6 +381,7 @@ public class FXMLDocumentController implements Initializable {
             node.setAttribute("ui.color", Color.decode("#CB00F3"));
 
         }
+        algroerth_on=false;
     }
 
     @FXML
@@ -370,33 +406,6 @@ public class FXMLDocumentController implements Initializable {
         viewer.disableAutoLayout();
     }
 
-    /**
-     * @param fXMLDocumentController the fXMLDocumentController to set
-     */
-    public void setfXMLDocumentController(FXMLDocumentController fXMLDocumentController) {
-        this.fXMLDocumentController = fXMLDocumentController;
-
-    }
-
-    @FXML
-    private void Draw_on_Betweenness(MouseEvent event) {
-
-    }
-
-    @FXML
-    private void Draw_on_Degree(MouseEvent event) {
-        for (org.graphstream.graph.Node node : graph) {
-
-            color_generator(node.getDegree(), node);
-
-        }
-    }
-
-    @FXML
-    private void Draw_on_Closeness(MouseEvent event) {
-
-    }
-
     @FXML
     private void VIEW_EDGE_WEIGHT(MouseEvent event) {
         graph.addAttribute("ui.screenshot", ".\\..\\GraphStream.png");
@@ -415,16 +424,50 @@ public class FXMLDocumentController implements Initializable {
 
     }
 
+    //===============================//
+    //change the size depending on the algorethm seciton 
+    @FXML
+    private void Draw_on_Betweenness(MouseEvent event) {
+
+    }
+
+    @FXML
+    private void Draw_on_Degree(MouseEvent event) {
+        for (org.graphstream.graph.Node node : graph) {
+
+            color_generator(node.getDegree(), node);
+
+        }
+       
+        algroerth_on=true;
+    }
+
+    @FXML
+    private void Draw_on_Closeness(MouseEvent event) {
+
+    }
+
+    //===============================//
     @FXML
     private void noxus(MouseEvent event) {
 
         noxus_rise.setVisible(true);
     }
 
+    //check list
     @FXML
     private void check_list_relase(MouseEvent event) {
-    mode=(String) LISTBOX.getValue();
-    System.out.println(mode);
+        mode = (String) LISTBOX.getValue();
+        System.out.println(mode);
     }
-   
+
+    @FXML
+    private void Change_weight(MouseEvent event) {
+        //graph.getEdge(selected_edge).setAttribute("ui.label", 10);;
+        new_weight_text.setText("222");
+        old_weight_text.setText("jbjb");
+
+        //old_weight_text.setText("123");
+    }
+
 }

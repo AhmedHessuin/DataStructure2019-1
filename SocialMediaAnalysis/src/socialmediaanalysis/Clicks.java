@@ -1,6 +1,6 @@
 package socialmediaanalysis;
 
-import datastructure.Node;
+import java.awt.Color;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.graphstream.graph.Edge;
@@ -8,20 +8,23 @@ import org.graphstream.graph.Graph;
 import org.graphstream.ui.view.Viewer;
 import org.graphstream.ui.view.ViewerListener;
 import org.graphstream.ui.view.ViewerPipe;
+import static socialmediaanalysis.FXMLDocumentController.algroerth_on;
+import static socialmediaanalysis.FXMLDocumentController.color_generator;
 
 import static socialmediaanalysis.FXMLDocumentController.last_id;
 import static socialmediaanalysis.FXMLDocumentController.mode;
+import static socialmediaanalysis.FXMLDocumentController.selected_edge;
+//import static socialmediaanalysis.FXMLDocumentController.old_weight_text;
 
 public class Clicks extends Thread implements ViewerListener {
 
     protected boolean loop = true;
-    private Viewer vierer2;
-    private Graph graph2;
+
     private String mark_id_new;
     private String mark_id_old;
     private String edge_node_first = null;
     private String edge_node_second = null;
-    private int connect_times = 0;
+
     private boolean edge_connect_first_time = true;
     private boolean first_time = true;
     private FXMLDocumentController fXMLDocumentController;
@@ -30,46 +33,18 @@ public class Clicks extends Thread implements ViewerListener {
     private Viewer viewer;
 
     public Clicks(Viewer _viewer, Graph _graph, ViewerPipe _fromViewer, FXMLDocumentController controller) {
-        // We do as usual to display a graph. This
-        // connect the graph outputs to the viewer.
-        // The viewer is a sink of the graph.
+
         viewer = _viewer;
-        vierer2 = viewer;
+
         graph = _graph;
-        graph2 = graph;
 
         fXMLDocumentController = controller;
-        // The default action when closing the view is to quit
-        // the program.
-        //            viewer.setCloseFramePolicy(Viewer.CloseFramePolicy.HIDE_ONLY);
-        // We connect back the viewer to the graph,
-        // the graph becomes a sink for the viewer.
-        // We also install us as a viewer listener to
-        // intercept the graphic events.
-        // We do as usual to display a graph. This
-        // connect the graph outputs to the viewer.
-        // The viewer is a sink of the graph.
         fromViewer = _fromViewer;
         fromViewer = viewer.newViewerPipe();
 
         fromViewer.addViewerListener(this);
         fromViewer.addSink(graph);
 
-        // Then we need a loop to do our work and to wait for events.
-        // In this loop we will need to call the
-        // pump() method before each use of the graph to copy back events
-        // that have already occurred in the viewer thread inside
-        // our thread.
-        /*    while (loop) {
-            fromViewer.pump();
-        }*/
-//  System.out.println("Button pushed on node ");
-        // here your simulation code.
-        // You do not necessarily need to use a loop, this is only an example.
-        // as long as you call pump() before using the graph. pump() is non
-        // blocking.  If you only use the loop to look at event, use blockingPump()
-        // to avoid 100% CPU usage. The blockingPump() method is only available from
-        // the nightly builds.
     }
 
     @Override
@@ -94,6 +69,9 @@ public class Clicks extends Thread implements ViewerListener {
                 if (graph.getNode(id).getAttribute("ui.class") == "marked") {
 
                     graph.getNode(id).removeAttribute("ui.class");
+                    if (algroerth_on) {
+                        color_generator(graph.getNode(id).getDegree(), graph.getNode(id));
+                    }
                     for (Edge edge : graph.getNode(id).getEachEdge()) {
                         edge.removeAttribute("ui.class");
                         sleep(0);
@@ -102,6 +80,9 @@ public class Clicks extends Thread implements ViewerListener {
 
                     System.out.println("Button set  node " + id);
                     graph.getNode(id).setAttribute("ui.class", "marked");
+                    if (algroerth_on) {
+                        graph.getNode(id).setAttribute("ui.color", Color.decode("#00ff00"));
+                    }
                     for (Edge edge : graph.getNode(id).getEachEdge()) {
                         edge.setAttribute("ui.class", "marked");
                         sleep(200);
@@ -113,6 +94,10 @@ public class Clicks extends Thread implements ViewerListener {
             } else {
                 if (!first_time) {
                     graph.getNode(mark_id_old).removeAttribute("ui.class");
+                    if (algroerth_on) {
+                        color_generator(graph.getNode(mark_id_old).getDegree(), graph.getNode(mark_id_old));
+
+                    }
                     for (Edge edge : graph.getNode(mark_id_old).getEachEdge()) {
                         edge.removeAttribute("ui.class");
                         sleep(0);
@@ -155,7 +140,7 @@ public class Clicks extends Thread implements ViewerListener {
                 }
 
                 graph.getNode(edge_node_first).removeAttribute("ui.class");
-                 edge_connect_first_time = true;
+                edge_connect_first_time = true;
             }
 
         }//else if edge add
@@ -193,6 +178,36 @@ public class Clicks extends Thread implements ViewerListener {
             }
 
         }//else if remove edge
+        else if (mode == "Change Weight") {
+            if (edge_connect_first_time) {
+                edge_node_first = id;
+                graph.getNode(id).setAttribute("ui.class", "marked");//mark before remove
+                edge_connect_first_time = false;
+            } else {
+                edge_node_second = id;
+
+                for (Edge edge : graph.getEachEdge()) {
+                    if (edge.getNode0() == graph.getNode(edge_node_second) && edge.getNode1() == graph.getNode(edge_node_first)
+                            || edge.getNode0() == graph.getNode(edge_node_first) && edge.getNode1() == graph.getNode(edge_node_second)) {
+
+                        selected_edge = edge.getId();
+                        // System.out.println(selected_edge);
+                        edge.addAttribute("weight", 2);
+
+                        double v = edge.getNumber("ui.label");
+                        System.out.println(v);
+                        String z = Double.toHexString(v);
+                        // old_weight_text.setText("jbjb");
+
+                        break;
+                    }
+                }
+                graph.getNode(edge_node_first).removeAttribute("ui.class");
+                edge_connect_first_time = true;
+
+            }
+
+        }
     }
 
     protected void sleep(int x) {
