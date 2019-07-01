@@ -13,6 +13,7 @@ import static socialmediaanalysis.FXMLDocumentController.color_generator;
 
 import static socialmediaanalysis.FXMLDocumentController.last_id;
 import static socialmediaanalysis.FXMLDocumentController.mode;
+import static socialmediaanalysis.FXMLDocumentController.request_change;
 import static socialmediaanalysis.FXMLDocumentController.selected_edge;
 //import static socialmediaanalysis.FXMLDocumentController.old_weight_text;
 
@@ -50,6 +51,13 @@ public class Clicks extends Thread implements ViewerListener {
     @Override
     public void run() {
         while (loop) {
+            if (request_change) {
+            //    fromViewer = viewer.newViewerPipe();
+
+              //  fromViewer.addViewerListener(this);
+                fromViewer.clearSinks();
+                
+            }
             fromViewer.pump();
         }
     }
@@ -108,106 +116,129 @@ public class Clicks extends Thread implements ViewerListener {
             }
         }//first if 
         else if (mode == "Add Node") {
-            String x = Integer.toString(last_id + 1);
-            last_id++;
-            graph.addNode(x);
-            graph.getNode(x).addAttribute("ui.label", graph.getNode(x).getId());
+
+            if (algroerth_on) {
+
+            } else {
+                String x = Integer.toString(last_id + 1);
+                last_id++;
+                graph.addNode(x);
+                graph.getNode(x).addAttribute("ui.label", graph.getNode(x).getId());
+            }
+
         }//esle if node add
         else if (mode == "Add Edge") {
 
-            if (edge_connect_first_time) {
-                edge_node_first = id;
-                graph.getNode(id).setAttribute("ui.class", "marked");//marke the first node
-                edge_connect_first_time = false;
+            if (algroerth_on) {
+
             } else {
-                edge_node_second = id;
-                boolean i_can = true;
-                //============//
 
-                for (Edge edge : graph.getEachEdge()) {
-                    if (edge.getNode0() == graph.getNode(edge_node_second) && edge.getNode1() == graph.getNode(edge_node_first)
-                            || edge.getNode0() == graph.getNode(edge_node_first) && edge.getNode1() == graph.getNode(edge_node_second)) {
-                        i_can = false;
-                        break;
+                if (edge_connect_first_time) {
+                    edge_node_first = id;
+                    graph.getNode(id).setAttribute("ui.class", "marked");//marke the first node
+                    edge_connect_first_time = false;
+                } else {
+                    edge_node_second = id;
+                    boolean i_can = true;
+                    //============//
+
+                    for (Edge edge : graph.getEachEdge()) {
+                        if (edge.getNode0() == graph.getNode(edge_node_second) && edge.getNode1() == graph.getNode(edge_node_first)
+                                || edge.getNode0() == graph.getNode(edge_node_first) && edge.getNode1() == graph.getNode(edge_node_second)) {
+                            i_can = false;
+                            break;
+                        }
                     }
-                }
 
-                //============//
-                if (i_can) {
-                    graph.addEdge(edge_node_first + edge_node_second, edge_node_first, edge_node_second);
-                    graph.getEdge(edge_node_first + edge_node_second).addAttribute("ui.label", 1);
+                    //============//
+                    if (i_can) {
+                        graph.addEdge(edge_node_first + edge_node_second, edge_node_first, edge_node_second);
+                        graph.getEdge(edge_node_first + edge_node_second).addAttribute("ui.label", 1);
+                        edge_connect_first_time = true;
+                    }
+
+                    graph.getNode(edge_node_first).removeAttribute("ui.class");
                     edge_connect_first_time = true;
                 }
-
-                graph.getNode(edge_node_first).removeAttribute("ui.class");
-                edge_connect_first_time = true;
             }
 
         }//else if edge add
         else if (mode == "Remove Node") {
+            if (algroerth_on) {
 
-            for (Edge edge : graph.getEachEdge()) {
-                if (edge.getNode0() == graph.getNode(id) || edge.getNode1() == graph.getNode(id)) {
+            } else {
+                if (graph.getNodeCount() == 1) {
 
-                    graph.removeEdge(edge);
+                } else {
+
+                    for (Edge edge : graph.getEachEdge()) {
+                        if (edge.getNode0() == graph.getNode(id) || edge.getNode1() == graph.getNode(id)) {
+
+                            graph.removeEdge(edge);
+                        }
+                    }
+                    graph.removeNode(id);
                 }
             }
-            graph.removeNode(id);
-
         }//else if remove node
         else if (mode == "Remove Edge") {
+            if (algroerth_on) {
 
-            if (edge_connect_first_time) {
-                edge_node_first = id;
-                graph.getNode(id).setAttribute("ui.class", "marked");//mark before remove
-                edge_connect_first_time = false;
             } else {
-                edge_node_second = id;
+                if (edge_connect_first_time) {
+                    edge_node_first = id;
+                    graph.getNode(id).setAttribute("ui.class", "marked");//mark before remove
+                    edge_connect_first_time = false;
+                } else {
+                    edge_node_second = id;
 
-                for (Edge edge : graph.getEachEdge()) {
-                    if (edge.getNode0() == graph.getNode(edge_node_second) && edge.getNode1() == graph.getNode(edge_node_first)
-                            || edge.getNode0() == graph.getNode(edge_node_first) && edge.getNode1() == graph.getNode(edge_node_second)) {
-                        graph.removeEdge(edge);
+                    for (Edge edge : graph.getEachEdge()) {
+                        if (edge.getNode0() == graph.getNode(edge_node_second) && edge.getNode1() == graph.getNode(edge_node_first)
+                                || edge.getNode0() == graph.getNode(edge_node_first) && edge.getNode1() == graph.getNode(edge_node_second)) {
+                            graph.removeEdge(edge);
 
-                        break;
+                            break;
+                        }
                     }
+                    graph.getNode(edge_node_first).removeAttribute("ui.class");
+                    edge_connect_first_time = true;
+
                 }
-                graph.getNode(edge_node_first).removeAttribute("ui.class");
-                edge_connect_first_time = true;
-
             }
-
         }//else if remove edge
         else if (mode == "Change Weight") {
-            if (edge_connect_first_time) {
-                edge_node_first = id;
-                graph.getNode(id).setAttribute("ui.class", "marked");//mark before remove
-                edge_connect_first_time = false;
+            if (algroerth_on) {
+
             } else {
-                edge_node_second = id;
+                if (edge_connect_first_time) {
+                    edge_node_first = id;
+                    graph.getNode(id).setAttribute("ui.class", "marked");//mark before remove
+                    edge_connect_first_time = false;
+                } else {
+                    edge_node_second = id;
 
-                for (Edge edge : graph.getEachEdge()) {
-                    if (edge.getNode0() == graph.getNode(edge_node_second) && edge.getNode1() == graph.getNode(edge_node_first)
-                            || edge.getNode0() == graph.getNode(edge_node_first) && edge.getNode1() == graph.getNode(edge_node_second)) {
+                    for (Edge edge : graph.getEachEdge()) {
+                        if (edge.getNode0() == graph.getNode(edge_node_second) && edge.getNode1() == graph.getNode(edge_node_first)
+                                || edge.getNode0() == graph.getNode(edge_node_first) && edge.getNode1() == graph.getNode(edge_node_second)) {
 
-                        selected_edge = edge.getId();
-                        // System.out.println(selected_edge);
-                        edge.addAttribute("weight", 2);
+                            selected_edge = edge.getId();
+                            // System.out.println(selected_edge);
 
-                        double v = edge.getNumber("ui.label");
-                        System.out.println(v);
-                        String z = Double.toHexString(v);
-                        // old_weight_text.setText("jbjb");
+                            double v = edge.getNumber("ui.label");
+                            System.out.println(v);
+                            String z = Double.toHexString(v);
+                            //        old_weight_text.setText("jbjb");
 
-                        break;
+                            break;
+                        }
                     }
+                    graph.getNode(edge_node_first).removeAttribute("ui.class");
+                    edge_connect_first_time = true;
+
                 }
-                graph.getNode(edge_node_first).removeAttribute("ui.class");
-                edge_connect_first_time = true;
 
             }
-
-        }
+        }//else if change weight
     }
 
     protected void sleep(int x) {
