@@ -34,6 +34,7 @@ public class FXMLDocumentController implements Initializable {
     public static int last_id;
     public static String mode = "add_node";
     public static boolean algroerth_on = false;
+    public static boolean request_change=false;
     boolean view_weight = false;
     public static String selected_edge;
     public Viewer viewer2;
@@ -411,9 +412,10 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private void threeD(MouseEvent event) {
-        
+        request_change=true;
         viewer.enableAutoLayout();
 
+        request_change=false;
     }
 
     @FXML

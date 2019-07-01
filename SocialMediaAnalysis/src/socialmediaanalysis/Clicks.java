@@ -13,6 +13,7 @@ import static socialmediaanalysis.FXMLDocumentController.color_generator;
 
 import static socialmediaanalysis.FXMLDocumentController.last_id;
 import static socialmediaanalysis.FXMLDocumentController.mode;
+import static socialmediaanalysis.FXMLDocumentController.request_change;
 import static socialmediaanalysis.FXMLDocumentController.selected_edge;
 //import static socialmediaanalysis.FXMLDocumentController.old_weight_text;
 
@@ -50,6 +51,13 @@ public class Clicks extends Thread implements ViewerListener {
     @Override
     public void run() {
         while (loop) {
+            if (request_change) {
+            //    fromViewer = viewer.newViewerPipe();
+
+              //  fromViewer.addViewerListener(this);
+                fromViewer.clearSinks();
+                
+            }
             fromViewer.pump();
         }
     }
