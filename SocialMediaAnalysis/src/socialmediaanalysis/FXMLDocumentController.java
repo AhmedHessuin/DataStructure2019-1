@@ -11,9 +11,10 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.input.ContextMenuEvent;
+import javafx.scene.input.InputMethodEvent;
 import javafx.scene.input.MouseEvent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -35,6 +36,7 @@ public class FXMLDocumentController implements Initializable {
     public static boolean algroerth_on = false;
     boolean view_weight = false;
     public static String selected_edge;
+    public Viewer viewer2;
     //========================================================================//
 
     //==============================graph variable============================//
@@ -58,15 +60,18 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private Label noxus_rise;
     @FXML
-    public ChoiceBox<?> LISTBOX;
+    public ComboBox<?> LISTBOX;
+
     @FXML
     public javafx.scene.control.TextField old_weight_text;
     @FXML
     private javafx.scene.control.TextField new_weight_text;
     @FXML
     private javafx.scene.control.Button set_button;
-    //========================================================================//
+    @FXML
+    private javafx.scene.control.Button btnOpenNewWindow;
 
+    //========================================================================//
     //====================useless functions section===========================//
     private void handleButtonAction(ActionEvent event) {
         System.out.println("You clicked me!");
@@ -107,6 +112,7 @@ public class FXMLDocumentController implements Initializable {
     //========================int=============================================//
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+
         add_check_list_element();
         start_to_draw();
         set_stylesheet();
@@ -285,10 +291,14 @@ public class FXMLDocumentController implements Initializable {
     //======================start the gui=====================================//
     public void start_to_draw() {
         //======================viewer========================================//
-        System.setProperty("gs.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
+        System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");//gs.ui.renderer
 
         frame = new JFrame();
         frame.setResizable(true);
+        //=====================modify===================================//
+        //tester
+
+        //===============================================================//
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         JPanel panel = new JPanel(new GridLayout()) {
             @Override
@@ -298,8 +308,8 @@ public class FXMLDocumentController implements Initializable {
         };
 
         //==========modify=================================//
-        frame.addMouseListener(new MouseAdapter() {
-            public void buttonPushed(MouseEvent e) {
+        panel.addMouseListener(new MouseAdapter() {
+            public void buttonclicked(MouseEvent e) {
                 double x = e.getX();
                 double y = e.getY();
                 System.out.println("monster");
@@ -401,12 +411,14 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private void threeD(MouseEvent event) {
-
+        
         viewer.enableAutoLayout();
+
     }
 
     @FXML
     private void twoD(MouseEvent event) {
+        //viewer2 = viewer;
         viewer.disableAutoLayout();
     }
 
@@ -443,6 +455,10 @@ public class FXMLDocumentController implements Initializable {
 
         }
 
+        for (Edge edge : graph.getEachEdge()) {
+            edge.removeAttribute("ui.class");
+            sleep(0);
+        }
         algroerth_on = true;
     }
 
@@ -459,7 +475,6 @@ public class FXMLDocumentController implements Initializable {
     }
 
     //check list
-    @FXML
     private void check_list_relase(MouseEvent event) {
         mode = (String) LISTBOX.getValue();
         System.out.println(mode);
@@ -470,19 +485,31 @@ public class FXMLDocumentController implements Initializable {
         //graph.getEdge(selected_edge).setAttribute("ui.label", 10);;
         new_weight_text.setText("222");
         old_weight_text.setText("jbjb");
-         System.out.println("ssd");
+        System.out.println("ssd");
         //old_weight_text.setText("123");
     }
 
     private void Change_weight(ContextMenuEvent event) {
         //graph.getEdge(selected_edge).setAttribute("ui.label", 10);;
-       
+
         new_weight_text.setText("s");
         old_weight_text.setText("jbjb");
-       
-       
 
         //old_weight_text.setText("123");
+    }
+
+    private void Change_weight2(InputMethodEvent event) {
+        new_weight_text.setText("222");
+        old_weight_text.setText("jbjb");
+        System.out.println("ssd");
+        //old_weight_text.setText("123");
+    }
+
+    @FXML
+    public void LISTBOXChanged(ActionEvent event) {
+
+        mode = (String) LISTBOX.getValue();
+        System.out.println(mode);
     }
 
 }
