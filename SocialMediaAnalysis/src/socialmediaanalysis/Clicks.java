@@ -15,6 +15,7 @@ import static socialmediaanalysis.FXMLDocumentController.last_id;
 import static socialmediaanalysis.FXMLDocumentController.mode;
 import static socialmediaanalysis.FXMLDocumentController.request_change;
 import static socialmediaanalysis.FXMLDocumentController.selected_edge;
+import static socialmediaanalysis.FXMLDocumentController.viewer;
 //import static socialmediaanalysis.FXMLDocumentController.old_weight_text;
 
 public class Clicks extends Thread implements ViewerListener {
@@ -52,11 +53,13 @@ public class Clicks extends Thread implements ViewerListener {
     public void run() {
         while (loop) {
             if (request_change) {
-            //    fromViewer = viewer.newViewerPipe();
 
-              //  fromViewer.addViewerListener(this);
+                if (mode == "close") {
+                    viewer.close();
+                }
+
                 fromViewer.clearSinks();
-                
+
             }
             fromViewer.pump();
         }
@@ -64,6 +67,10 @@ public class Clicks extends Thread implements ViewerListener {
 
     public void viewClosed(String id) {
         loop = false;
+        System.out.println("exit failed");
+        //  frame.dispose();
+        // viewer.setCloseFramePolicy(Viewer.CloseFramePolicy.HIDE_ONLY);
+        //viewer.close();
 
     }
 

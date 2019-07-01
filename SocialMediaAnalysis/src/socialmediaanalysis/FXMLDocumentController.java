@@ -34,7 +34,7 @@ public class FXMLDocumentController implements Initializable {
     public static int last_id;
     public static String mode = "add_node";
     public static boolean algroerth_on = false;
-    public static boolean request_change=false;
+    public static boolean request_change = false;
     boolean view_weight = false;
     public static String selected_edge;
     public Viewer viewer2;
@@ -78,7 +78,7 @@ public class FXMLDocumentController implements Initializable {
         System.out.println("You clicked me!");
         //viewer.close();
         //zoom_in();
-        frame.dispose();
+
         label.setText("Hello World!");
     }
 
@@ -123,8 +123,6 @@ public class FXMLDocumentController implements Initializable {
             String x = Integer.toString(i);
             graph.addNode(x);
             last_id = i;
-            // graph.getNode(x).addAttribute("ui.stylesheet", "node { size:" +Integer.toString(i)+"px;}");
-            // graph.getNode(x).setAttribute(x, values);
 
         }
         for (int i = 0; i < 0; i++) {
@@ -379,8 +377,11 @@ public class FXMLDocumentController implements Initializable {
     // camera section 
     @FXML
     private void close_view(MouseEvent event) {
+
         frame.dispose();
-        viewer.close();
+
+        mode = "close";
+
     }
 
     @FXML
@@ -412,10 +413,10 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private void threeD(MouseEvent event) {
-        request_change=true;
+        request_change = true;
         viewer.enableAutoLayout();
 
-        request_change=false;
+        request_change = false;
     }
 
     @FXML
