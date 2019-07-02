@@ -1,8 +1,8 @@
 package socialmediaanalysisalgorithms;
 
-import datastructure.Graph;
+import datastructure.Graph_Imp;
 
-public class ClosenessCentrality extends Graph implements CentralityAnalysis {
+public class ClosenessCentrality extends Graph_Imp implements CentralityAnalysis {
 
     public ClosenessCentrality() {
         super();

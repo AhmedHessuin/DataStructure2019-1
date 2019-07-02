@@ -2,20 +2,20 @@ package datastructure;
 
 import java.util.ArrayList;
 
-public class Node {
+public class Node_Imp {
 
     private static int NODE_ID = 0;
 
     private int ID;
     private double centrality;
-    private ArrayList<Edge> children;
+    private ArrayList<Edge_Imp> children;
 
     /**
      *
      * @param isGraphNode if true,it gives the node id; else if false if gives
      * the node id equal to -1.
      */
-    public Node(boolean isGraphNode) {
+    public Node_Imp(boolean isGraphNode) {
         if (isGraphNode) {
             ID = NODE_ID;
             NODE_ID++;
@@ -23,7 +23,7 @@ public class Node {
             ID = -1;
         }
         centrality = -1;
-        children = new ArrayList<Edge>();
+        children = new ArrayList<Edge_Imp>();
     }
 
     /**
@@ -32,7 +32,7 @@ public class Node {
      * the node id equal to -1.
      * @param noChildren define initial no of children.
      */
-    public Node(boolean isGraphNode, int noChildren) {
+    public Node_Imp(boolean isGraphNode, int noChildren) {
         if (isGraphNode) {
             ID = NODE_ID;
             NODE_ID++;
@@ -40,7 +40,7 @@ public class Node {
             ID = -1;
         }
         centrality = -1;
-        children = new ArrayList<Edge>(noChildren);
+        children = new ArrayList<Edge_Imp>(noChildren);
     }
 
     /**
@@ -70,7 +70,7 @@ public class Node {
      *
      * @param _child
      */
-    public void addChild(Edge _child) {
+    public void addChild(Edge_Imp _child) {
         children.add(_child);
     }
 
@@ -78,7 +78,7 @@ public class Node {
      *
      * @param _children
      */
-    public void addChildren(ArrayList<Edge> _children) {
+    public void addChildren(ArrayList<Edge_Imp> _children) {
         children.addAll(_children);
     }
 
@@ -86,7 +86,7 @@ public class Node {
      *
      * @param _child
      */
-    public void removeChild(Edge _child) {
+    public void removeChild(Edge_Imp _child) {
         children.remove(_child);
     }
 
@@ -135,14 +135,14 @@ public class Node {
     /**
      * @return the children
      */
-    public ArrayList<Edge> getChildren() {
+    public ArrayList<Edge_Imp> getChildren() {
         return children;
     }
 
     /**
      * @param children the children to set
      */
-    public void setChildren(ArrayList<Edge> children) {
+    public void setChildren(ArrayList<Edge_Imp> children) {
         this.children = children;
     }
 
@@ -154,7 +154,7 @@ public class Node {
      * @param index
      * @return the child by index
      */
-    public Edge getChildren(int index) {
+    public Edge_Imp getChildren(int index) {
         return children.get(index);
     }
     

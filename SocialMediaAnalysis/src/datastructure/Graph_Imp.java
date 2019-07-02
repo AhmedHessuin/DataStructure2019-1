@@ -2,20 +2,20 @@ package datastructure;
 
 import java.util.ArrayList;
 
-public class Graph {
+public class Graph_Imp {
 
-    protected ArrayList<Node> vertices;
+    protected ArrayList<Node_Imp> vertices;
 
-    public Graph() {
-        Node.setNODE_ID(0);
-        vertices = new ArrayList<Node>();
+    public Graph_Imp() {
+        Node_Imp.setNODE_ID(0);
+        vertices = new ArrayList<Node_Imp>();
     }
 
-    public Graph(int noVertices) {
-        Node.setNODE_ID(0);
-        vertices = new ArrayList<Node>(noVertices);
+    public Graph_Imp(int noVertices) {
+        Node_Imp.setNODE_ID(0);
+        vertices = new ArrayList<Node_Imp>(noVertices);
         for (int i = 0; i < noVertices; i++) {
-            Node newNode = new Node(true);
+            Node_Imp newNode = new Node_Imp(true);
             vertices.add(newNode);
         }
     }
@@ -23,14 +23,14 @@ public class Graph {
     /**
      * @return the vertices
      */
-    public ArrayList<Node> getVertices() {
+    public ArrayList<Node_Imp> getVertices() {
         return vertices;
     }
 
     /**
      * @param vertices the vertices to set
      */
-    public void setVertices(ArrayList<Node> vertices) {
+    public void setVertices(ArrayList<Node_Imp> vertices) {
         this.vertices = vertices;
     }
 
@@ -47,7 +47,7 @@ public class Graph {
      * @param index
      * @return
      */
-    public Node getNode(int index) {
+    public Node_Imp getNode(int index) {
         return vertices.get(index);
     }
 
@@ -55,7 +55,7 @@ public class Graph {
      *
      * @param _node
      */
-    public void addNode(Node _node) {
+    public void addNode(Node_Imp _node) {
         vertices.add(_node);
     }
 
@@ -63,7 +63,7 @@ public class Graph {
      *
      * @param _node
      */
-    public void removeNode(Node _node) {
+    public void removeNode(Node_Imp _node) {
         vertices.remove(_node);
     }
 

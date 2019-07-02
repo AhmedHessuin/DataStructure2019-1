@@ -1,8 +1,8 @@
 package socialmediaanalysisalgorithms;
 
-import datastructure.Graph;
+import datastructure.Graph_Imp;
 
-public class DegreeCentrality extends Graph implements CentralityAnalysis {
+public class DegreeCentrality extends Graph_Imp implements CentralityAnalysis {
 
     public DegreeCentrality() {
         super();

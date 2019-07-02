@@ -1,14 +1,14 @@
 package datastructure;
 
-public class Edge {
+public class Edge_Imp {
 
-    private Node child;
+    private Node_Imp child;
     private double weight;
 
     /**
      *
      */
-    public Edge() {
+    public Edge_Imp() {
         child = null;
         weight = -1;
     }
@@ -18,7 +18,7 @@ public class Edge {
      * @param _child
      * @param _weight
      */
-    public Edge(Node _child, double _weight) {
+    public Edge_Imp(Node_Imp _child, double _weight) {
         child = _child;
         weight = _weight;
     }
@@ -26,14 +26,14 @@ public class Edge {
     /**
      * @return the child
      */
-    public Node getChild() {
+    public Node_Imp getChild() {
         return child;
     }
 
     /**
      * @param child the child to set
      */
-    public void setChild(Node child) {
+    public void setChild(Node_Imp child) {
         this.child = child;
     }
 
@@ -56,7 +56,7 @@ public class Edge {
      * @param _edge
      * @return
      */
-    public boolean equals(Edge _edge) {
+    public boolean equals(Edge_Imp _edge) {
         if (child.equals(_edge.getChild()) && weight == _edge.getWeight()) {
             return true;
         }
@@ -67,7 +67,7 @@ public class Edge {
      *
      * @param _edge
      */
-    public void copy(Edge _edge) {
+    public void copy(Edge_Imp _edge) {
         child = _edge.getChild();
         weight = _edge.getWeight();
     }

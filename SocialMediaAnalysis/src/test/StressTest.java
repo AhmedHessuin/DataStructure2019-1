@@ -1,6 +1,6 @@
 package test;
 
-import datastructure.Edge;
+import datastructure.Edge_Imp;
 import java.text.ParseException;
 import java.util.Random;
 import java.util.Vector;
@@ -151,25 +151,25 @@ public class StressTest {
                 Data[i][x2] = wt;
                 Data[x2][i] = wt;
 
-                Edge edg;
+                Edge_Imp edg;
 
                 switch (centralityMethod) {
                     case 1:
-                        edg = new Edge(degreeCentralityGraph.getNode(i), wt);
+                        edg = new Edge_Imp(degreeCentralityGraph.getNode(i), wt);
                         degreeCentralityGraph.getNode(x2).addChild(edg);
-                        edg = new Edge(degreeCentralityGraph.getNode(x2), wt);
+                        edg = new Edge_Imp(degreeCentralityGraph.getNode(x2), wt);
                         degreeCentralityGraph.getNode(i).addChild(edg);
                         break;
                     case 2:
-                        edg = new Edge(ClosenessCentralityGraph.getNode(i), wt);
+                        edg = new Edge_Imp(ClosenessCentralityGraph.getNode(i), wt);
                         ClosenessCentralityGraph.getNode(x2).addChild(edg);
-                        edg = new Edge(ClosenessCentralityGraph.getNode(x2), wt);
+                        edg = new Edge_Imp(ClosenessCentralityGraph.getNode(x2), wt);
                         ClosenessCentralityGraph.getNode(i).addChild(edg);
                         break;
                     case 3:
-                        edg = new Edge(BetweennessCentralityGraph.getNode(i), wt);
+                        edg = new Edge_Imp(BetweennessCentralityGraph.getNode(i), wt);
                         BetweennessCentralityGraph.getNode(x2).addChild(edg);
-                        edg = new Edge(BetweennessCentralityGraph.getNode(x2), wt);
+                        edg = new Edge_Imp(BetweennessCentralityGraph.getNode(x2), wt);
                         BetweennessCentralityGraph.getNode(i).addChild(edg);
                         break;
                 }
@@ -195,25 +195,25 @@ public class StressTest {
                 Data[x1][x2] = wt;
                 Data[x2][x1] = wt;
 
-                Edge edg;
+                Edge_Imp edg;
 
                 switch (centralityMethod) {
                     case 1:
-                        edg = new Edge(degreeCentralityGraph.getNode(x1), wt);
+                        edg = new Edge_Imp(degreeCentralityGraph.getNode(x1), wt);
                         degreeCentralityGraph.getNode(x2).addChild(edg);
-                        edg = new Edge(degreeCentralityGraph.getNode(x2), wt);
+                        edg = new Edge_Imp(degreeCentralityGraph.getNode(x2), wt);
                         degreeCentralityGraph.getNode(x1).addChild(edg);
                         break;
                     case 2:
-                        edg = new Edge(ClosenessCentralityGraph.getNode(x1), wt);
+                        edg = new Edge_Imp(ClosenessCentralityGraph.getNode(x1), wt);
                         ClosenessCentralityGraph.getNode(x2).addChild(edg);
-                        edg = new Edge(ClosenessCentralityGraph.getNode(x2), wt);
+                        edg = new Edge_Imp(ClosenessCentralityGraph.getNode(x2), wt);
                         ClosenessCentralityGraph.getNode(x1).addChild(edg);
                         break;
                     case 3:
-                        edg = new Edge(BetweennessCentralityGraph.getNode(x1), wt);
+                        edg = new Edge_Imp(BetweennessCentralityGraph.getNode(x1), wt);
                         BetweennessCentralityGraph.getNode(x2).addChild(edg);
-                        edg = new Edge(BetweennessCentralityGraph.getNode(x2), wt);
+                        edg = new Edge_Imp(BetweennessCentralityGraph.getNode(x2), wt);
                         BetweennessCentralityGraph.getNode(x1).addChild(edg);
                         break;
                 }

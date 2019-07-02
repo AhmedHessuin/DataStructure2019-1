@@ -1,14 +1,14 @@
 package socialmediaanalysisalgorithms;
 //============import section===============//
 
-import datastructure.Graph;
-import datastructure.Node;
+import datastructure.Graph_Imp;
+import datastructure.Node_Imp;
 import java.util.Comparator;
 import java.util.*;
 import socialmediaanalysisalgorithms.CentralityAnalysis;
 
 //============================================================================//
-public class BetweennessCentrality extends Graph implements CentralityAnalysis {
+public class BetweennessCentrality extends Graph_Imp implements CentralityAnalysis {
 
     //============data section================================================//
     private MyPair[][] src_shortest_path;
@@ -118,7 +118,7 @@ public class BetweennessCentrality extends Graph implements CentralityAnalysis {
     //========================================================================//
 
     //===================public methods ======================================//
-    public MyPair[] dijkestra_H(Node input) {
+    public MyPair[] dijkestra_H(Node_Imp input) {
 
         // data section//
         boolean[] Marked_List = new boolean[getNoVertices()];
@@ -186,7 +186,7 @@ public class BetweennessCentrality extends Graph implements CentralityAnalysis {
     }
 
     //==========================main method===================================//
-    public double YOU_PASS_THROW_ME(Node wanted) {
+    public double YOU_PASS_THROW_ME(Node_Imp wanted) {
         //=======================data section ================================//
         MyPair[] wanted_shortest_path = src_shortest_path[wanted.getID()];
         double out = 0.0;
