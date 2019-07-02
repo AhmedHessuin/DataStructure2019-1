@@ -10,11 +10,9 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.stage.FileChooser;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
@@ -25,15 +23,15 @@ import org.graphstream.ui.view.View;
 import org.graphstream.ui.view.Viewer;
 
 public class MainPlatform extends javax.swing.JFrame {
-    
+
     public static Graph graph;
     public static Graph_Imp implemented_graph;
     public static Viewer viewer;
-    
+
     private JFrame frame;
     private View view;
     private Clicks ct;
-    
+
     public static boolean request_change;
     public static String mode;
     ;
@@ -49,15 +47,15 @@ public class MainPlatform extends javax.swing.JFrame {
         initializeComboBox();
         request_change = false;
         mode = "none";
-        
+
     }
-    
-    public void darw_node_edge_id_weight() {
+
+    public void darw_node_id__edge_weight() {
         for (org.graphstream.graph.Node node : graph) {
             node.addAttribute("ui.label", node.getId());
         }
         for (Edge edge : graph.getEachEdge()) {
-            edge.addAttribute("ui.label", 1);
+            edge.addAttribute("ui.label", implemented_graph.getNode(Integer.valueOf(edge.getNode0().getId())).getChildren_byID(Integer.valueOf(edge.getNode1().getId())).getWeight());
         }
     }
 
@@ -285,64 +283,64 @@ public class MainPlatform extends javax.swing.JFrame {
             Logger.getLogger(MainPlatform.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_loadGraphFromFile
-    
+
     private void loadFromFile() throws FileNotFoundException {
         jFileChooser1.setDialogTitle("Open Source File");
-        
+
         jFileChooser1.setAcceptAllFileFilterUsed(false);
         FileNameExtensionFilter restrict = new FileNameExtensionFilter(".txt files", "txt");
         jFileChooser1.addChoosableFileFilter(restrict);
-        
+
         int r = jFileChooser1.showOpenDialog(null);
         File file = null;
         if (r == JFileChooser.APPROVE_OPTION) {
             file = jFileChooser1.getSelectedFile();
-            
+
             Scanner scanner = new Scanner(file);
             int no_nodes = 0;
             int no_edges = 0;
-            
+
             if (scanner.hasNextLine()) {
                 no_nodes = scanner.nextInt();
                 no_edges = scanner.nextInt();
             }
-            
+
             implemented_graph = new Graph_Imp(no_nodes);
             graph = new MultiGraph("Graph Visualization");
             graphVisualization();
             set_styleSheet();
             ct = new Clicks();
             ct.start();
-            
+
             for (int i = 0; i < no_nodes; i++) {
                 graph.addNode(Integer.toString(i));
             }
-            
+
             int src;
             int dest;
             double wt;
             Edge_Imp edg;
-            
+
             for (int i = 0; i < no_edges; i++) {
                 if (scanner.hasNextLine()) {
                     src = scanner.nextInt();
                     dest = scanner.nextInt();
                     wt = scanner.nextDouble();
-                    
+
                     edg = new Edge_Imp(implemented_graph.getNode(src), wt);
                     implemented_graph.getNode(dest).addChild(edg);
                     edg = new Edge_Imp(implemented_graph.getNode(dest), wt);
                     implemented_graph.getNode(src).addChild(edg);
-                    
+
                     graph.addEdge(Integer.toString(i), Integer.toString(src), Integer.toString(dest));
                 }
             }
             scanner.close();
-            darw_node_edge_id_weight();
-           
+            darw_node_id__edge_weight();
+
         }
     }
-    
+
     public static void initialize() {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -354,21 +352,21 @@ public class MainPlatform extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
-                    
+
                 }
             }
         } catch (ClassNotFoundException ex) {
             java.util.logging.Logger.getLogger(MainPlatform.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-            
+
         } catch (InstantiationException ex) {
             java.util.logging.Logger.getLogger(MainPlatform.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-            
+
         } catch (IllegalAccessException ex) {
             java.util.logging.Logger.getLogger(MainPlatform.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-            
+
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(MainPlatform.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
@@ -395,7 +393,7 @@ public class MainPlatform extends javax.swing.JFrame {
                 return new Dimension(640, 480);
             }
         };
-        
+
         viewer = new Viewer(graph, Viewer.ThreadingModel.GRAPH_IN_GUI_THREAD);
         ViewPanel viewPanel = viewer.addDefaultView(false);
         panel.add(viewPanel);
@@ -441,21 +439,21 @@ public class MainPlatform extends javax.swing.JFrame {
         graph.addAttribute("ui.stylesheet", " node.marked {fill-color: green;}");
         graph.addAttribute("ui.stylesheet", " edge.marked {fill-color:green;}");
     }
-    
+
     public static void color_generator(int input, Node node) {
         int reminder;
         int size;
         if (input > 0 && input < 10) {
             reminder = input % 10;// 1 2 3 4 5 6 7 8 9
             size = reminder * 2 + 20;
-            
+
             node.changeAttribute("ui.color", Color.decode("#ffff00"));
             node.changeAttribute("ui.size", size);
             //#ffff00
         } else if ((input >= 10 && input < 20)) {
             reminder = input % 10;// 0 1 2 3 4 5 6 7 8 9 
             size = reminder * 2 + 20;
-            
+
             node.changeAttribute("ui.color", Color.decode("#ffae42"));
             node.changeAttribute("ui.size", size);
             //#ffae42 
@@ -520,9 +518,9 @@ public class MainPlatform extends javax.swing.JFrame {
 
             //error
         }
-        
+
     }
-    
+
     public void initializeComboBox() {
         jComboBox1.removeAllItems();
         jComboBox1.addItem("Add Edge");
@@ -532,7 +530,7 @@ public class MainPlatform extends javax.swing.JFrame {
         jComboBox1.addItem("Remove Edge");
         jComboBox1.addItem("Free Move");
         jComboBox1.addItem("Change Weight");
-        
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

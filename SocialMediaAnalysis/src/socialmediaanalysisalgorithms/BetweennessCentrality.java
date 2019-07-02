@@ -131,7 +131,7 @@ public class BetweennessCentrality extends Graph_Imp implements CentralityAnalys
         out_put[input.getID()] = new MyPair(0.0, 1);// first time 
 
         for (int i = 0; i < input.getNoChildren(); i++) {
-            P_Queue.add(new Dijkestra_Data_Type(input.getChildren(i).getWeight(), input.getChildren(i).getChild().getID(), input.getID()));
+            P_Queue.add(new Dijkestra_Data_Type(input.getChildren_byIndex(i).getWeight(), input.getChildren_byIndex(i).getChild().getID(), input.getID()));
         }
 
         // operation section //
@@ -153,8 +153,8 @@ public class BetweennessCentrality extends Graph_Imp implements CentralityAnalys
                 for (int i = 0; i < getNode(Next_Mark).getNoChildren(); i++) {
 
                     P_Queue.add(new Dijkestra_Data_Type(
-                            getNode(Next_Mark).getChildren(i).getWeight() + Next_Weight,
-                            getNode(Next_Mark).getChildren(i).getChild().getID(),
+                            getNode(Next_Mark).getChildren_byIndex(i).getWeight() + Next_Weight,
+                            getNode(Next_Mark).getChildren_byIndex(i).getChild().getID(),
                             getNode(Next_Mark).getID()));
 
                     //}

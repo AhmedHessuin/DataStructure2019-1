@@ -154,8 +154,21 @@ public class Node_Imp {
      * @param index
      * @return the child by index
      */
-    public Edge_Imp getChildren(int index) {
+    public Edge_Imp getChildren_byIndex(int index) {
         return children.get(index);
     }
-    
+
+    /**
+     * @param id
+     * @return the child by index
+     */
+    public Edge_Imp getChildren_byID(int id) {
+        for (int i = 0; i < getNoChildren(); i++) {
+            if (children.get(i).getChild().getID() == id) {
+                return children.get(i);
+            }
+        }
+        return null;
+    }
+
 }

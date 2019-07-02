@@ -29,7 +29,7 @@ public class ClosenessCentrality extends Graph_Imp implements CentralityAnalysis
             visitedNodes[closestVertex] = true;
 
             for (int j = 0; j < getNode(closestVertex).getNoChildren(); j++) {
-                int childID = getNode(closestVertex).getChildren(j).getChild().getID();
+                int childID = getNode(closestVertex).getChildren_byIndex(j).getChild().getID();
                 for (int k = 0; k < getNoVertices(); k++) {
                     if (childID == getNode(k).getID()) {
                         childID = k;
@@ -37,7 +37,7 @@ public class ClosenessCentrality extends Graph_Imp implements CentralityAnalysis
                     }
                 }
                 if (!visitedNodes[childID] && distance[closestVertex] != Double.MAX_VALUE) {
-                    newDist = distance[closestVertex] + getNode(closestVertex).getChildren(j).getWeight();
+                    newDist = distance[closestVertex] + getNode(closestVertex).getChildren_byIndex(j).getWeight();
                     if (newDist < distance[childID]) {
                         distance[childID] = newDist;
                     }
