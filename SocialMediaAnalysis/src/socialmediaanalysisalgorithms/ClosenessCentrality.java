@@ -12,6 +12,10 @@ public class ClosenessCentrality extends Graph_Imp implements CentralityAnalysis
         super(noVertices);
     }
 
+    public ClosenessCentrality(Graph_Imp _graph) {
+        vertices = _graph.getVertices();
+    }
+
     private double dijkstra(int singleSourceInd) {
         double newDist = 0;
         int v = getNoVertices();

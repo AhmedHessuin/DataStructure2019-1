@@ -21,11 +21,18 @@ import org.graphstream.graph.implementations.MultiGraph;
 import org.graphstream.ui.swingViewer.ViewPanel;
 import org.graphstream.ui.view.View;
 import org.graphstream.ui.view.Viewer;
+import socialmediaanalysisalgorithms.BetweennessCentrality;
+import socialmediaanalysisalgorithms.ClosenessCentrality;
+import socialmediaanalysisalgorithms.DegreeCentrality;
 
 public class MainPlatform extends javax.swing.JFrame {
 
     public static Graph graph;
     public static Graph_Imp implemented_graph;
+    public static DegreeCentrality degreeCentralityGraph;
+    public static ClosenessCentrality closenessCentralityGraph;
+    public static BetweennessCentrality betweennessCentralityGraph;
+
     public static Viewer viewer;
 
     private JFrame frame;
@@ -34,8 +41,8 @@ public class MainPlatform extends javax.swing.JFrame {
 
     public static boolean request_change;
     public static String mode;
-    ;
-    public static boolean algorithm_on = false;
+
+    public static boolean algorithm_on;
     public static int last_id;
     public static String selected_edge;
 
@@ -45,8 +52,24 @@ public class MainPlatform extends javax.swing.JFrame {
     public MainPlatform() {
         initComponents();
         initializeComboBox();
+        InitializeFileChooser();
         request_change = false;
+        algorithm_on = false;
         mode = "none";
+    }
+
+    private void InitializeFileChooser() {
+        jFileChooser1.setDialogTitle("Open Source File");
+
+        jFileChooser1.setAcceptAllFileFilterUsed(false);
+        FileNameExtensionFilter restrict = new FileNameExtensionFilter(".txt files", "txt");
+        jFileChooser1.addChoosableFileFilter(restrict);
+
+        jFileChooser2.setDialogTitle("Save Screenshot");
+
+        jFileChooser2.setAcceptAllFileFilterUsed(false);
+        FileNameExtensionFilter restrict2 = new FileNameExtensionFilter(".png files", "png");
+        jFileChooser2.addChoosableFileFilter(restrict2);
 
     }
 
@@ -69,6 +92,7 @@ public class MainPlatform extends javax.swing.JFrame {
     private void initComponents() {
 
         jFileChooser1 = new javax.swing.JFileChooser();
+        jFileChooser2 = new javax.swing.JFileChooser();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
@@ -79,6 +103,9 @@ public class MainPlatform extends javax.swing.JFrame {
         jButton7 = new javax.swing.JButton();
         jComboBox1 = new javax.swing.JComboBox<>();
         jButton8 = new javax.swing.JButton();
+        jButton9 = new javax.swing.JButton();
+        jButton10 = new javax.swing.JButton();
+        jButton11 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -155,6 +182,27 @@ public class MainPlatform extends javax.swing.JFrame {
             }
         });
 
+        jButton9.setText("Degree Centrality");
+        jButton9.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                DegreeCentralityVisualization(evt);
+            }
+        });
+
+        jButton10.setText("Closeness Centrality");
+        jButton10.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                closenessCentralityVisualization(evt);
+            }
+        });
+
+        jButton11.setText("Betweenness Centrality");
+        jButton11.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                betweennessCentralityVisualization(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -176,17 +224,28 @@ public class MainPlatform extends javax.swing.JFrame {
                 .addComponent(jButton1)
                 .addGap(67, 67, 67))
             .addGroup(layout.createSequentialGroup()
-                .addGap(114, 114, 114)
-                .addComponent(jButton4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton5)
-                .addGap(56, 56, 56))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(63, 63, 63)
-                .addComponent(jToggleButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton6)
-                .addGap(72, 72, 72))
+                .addGap(51, 51, 51)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButton9)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton10)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton11)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jToggleButton1)
+                            .addComponent(jButton4))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButton5)
+                                .addGap(56, 56, 56))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(68, 68, 68)
+                                .addComponent(jButton6)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -205,14 +264,16 @@ public class MainPlatform extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton4)
                     .addComponent(jButton5))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(35, 35, 35)
-                        .addComponent(jToggleButton1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(47, 47, 47)
-                        .addComponent(jButton6)))
-                .addContainerGap(49, Short.MAX_VALUE))
+                    .addComponent(jButton6)
+                    .addComponent(jToggleButton1))
+                .addGap(27, 27, 27)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton9)
+                    .addComponent(jButton10)
+                    .addComponent(jButton11))
+                .addContainerGap(31, Short.MAX_VALUE))
         );
 
         pack();
@@ -257,7 +318,12 @@ public class MainPlatform extends javax.swing.JFrame {
     }//GEN-LAST:event_viewWeights
 
     private void screenshot(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_screenshot
-        graph.addAttribute("ui.screenshot", ".\\..\\GraphStream.png");
+        int r = jFileChooser2.showSaveDialog(null);
+        if (r == JFileChooser.APPROVE_OPTION) {
+            String path = jFileChooser2.getSelectedFile().getAbsolutePath();
+            path += ".png";
+            graph.addAttribute("ui.screenshot", path);
+        }
     }//GEN-LAST:event_screenshot
 
     private void zoomFit(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_zoomFit
@@ -284,13 +350,36 @@ public class MainPlatform extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_loadGraphFromFile
 
+    private void DegreeCentralityVisualization(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_DegreeCentralityVisualization
+        double maxDegree = degreeCentralityGraph.getMaxCentrality();
+        for (org.graphstream.graph.Node node : graph) {
+            double degree = (degreeCentralityGraph.getNode(Integer.valueOf(node.getId())).getCentrality() / (double) maxDegree) * 100;
+            System.out.println(degree);
+            color_generator(degree, node);
+        }
+    }//GEN-LAST:event_DegreeCentralityVisualization
+
+    private void closenessCentralityVisualization(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_closenessCentralityVisualization
+        double maxDegree = closenessCentralityGraph.getMaxCentrality();
+        for (org.graphstream.graph.Node node : graph) {
+            double degree = (closenessCentralityGraph.getNode(Integer.valueOf(node.getId())).getCentrality() / (double) maxDegree) * 100;
+            System.out.println(degree);
+
+            color_generator(degree, node);
+        }
+
+    }//GEN-LAST:event_closenessCentralityVisualization
+
+    private void betweennessCentralityVisualization(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_betweennessCentralityVisualization
+        double maxDegree = betweennessCentralityGraph.getMaxCentrality();
+        for (org.graphstream.graph.Node node : graph) {
+            double degree = (betweennessCentralityGraph.getNode(Integer.valueOf(node.getId())).getCentrality() / (double) maxDegree) * 100;
+            color_generator(degree, node);
+        }
+
+    }//GEN-LAST:event_betweennessCentralityVisualization
+
     private void loadFromFile() throws FileNotFoundException {
-        jFileChooser1.setDialogTitle("Open Source File");
-
-        jFileChooser1.setAcceptAllFileFilterUsed(false);
-        FileNameExtensionFilter restrict = new FileNameExtensionFilter(".txt files", "txt");
-        jFileChooser1.addChoosableFileFilter(restrict);
-
         int r = jFileChooser1.showOpenDialog(null);
         File file = null;
         if (r == JFileChooser.APPROVE_OPTION) {
@@ -338,6 +427,12 @@ public class MainPlatform extends javax.swing.JFrame {
             scanner.close();
             darw_node_id__edge_weight();
 
+            degreeCentralityGraph = new DegreeCentrality(implemented_graph);
+            degreeCentralityGraph.calculation();
+            closenessCentralityGraph = new ClosenessCentrality(implemented_graph);
+            closenessCentralityGraph.calculation();
+            betweennessCentralityGraph = new BetweennessCentrality(implemented_graph);
+            betweennessCentralityGraph.calculation();
         }
     }
 
@@ -421,7 +516,7 @@ public class MainPlatform extends javax.swing.JFrame {
                 + "fill-color: #CB00F3;"
                 + "text-mode:normal;"
                 + "text-alignment:center; "
-                + "text-color:#4C3C57;"
+                + "text-color:#FFFFFF;"
                 + "shape:circle;"
                 + " }");
         //=====================style sheet edge ==============================//
@@ -440,85 +535,81 @@ public class MainPlatform extends javax.swing.JFrame {
         graph.addAttribute("ui.stylesheet", " edge.marked {fill-color:green;}");
     }
 
-    public static void color_generator(int input, Node node) {
-        int reminder;
-        int size;
-        if (input > 0 && input < 10) {
-            reminder = input % 10;// 1 2 3 4 5 6 7 8 9
-            size = reminder * 2 + 20;
+    public static void color_generator(double input, Node node) {
+
+        double reminder;
+        double size;
+        if (input >= 0 && input < 10) {
+            reminder = input;//0 1 2 3 4 5 6 7 8 9
+            size = reminder * 4 + 20;
 
             node.changeAttribute("ui.color", Color.decode("#ffff00"));
             node.changeAttribute("ui.size", size);
             //#ffff00
         } else if ((input >= 10 && input < 20)) {
-            reminder = input % 10;// 0 1 2 3 4 5 6 7 8 9 
-            size = reminder * 2 + 20;
+            reminder = (input - 10);// 0 1 2 3 4 5 6 7 8 9 
+            size = reminder * 4 + 20;
 
             node.changeAttribute("ui.color", Color.decode("#ffae42"));
             node.changeAttribute("ui.size", size);
             //#ffae42 
 
         } else if ((input >= 20 && input < 30)) {
-            reminder = input % 10;// 0 1 2 3 4 5 6 7 8 9 
-            size = reminder * 2 + 20;
+            reminder = (input - 20);// 0 1 2 3 4 5 6 7 8 9 
+            size = reminder * 4 + 20;
             node.changeAttribute("ui.color", Color.decode("#FF7200"));
             node.changeAttribute("ui.size", size);
             //#FFA500
 
         } else if ((input >= 30 && input < 40)) {
-            reminder = input % 10;// 0 1 2 3 4 5 6 7 8 9 
-            size = reminder * 2 + 20;
+            reminder = (input - 30);// 0 1 2 3 4 5 6 7 8 9 
+            size = reminder * 4 + 20;
             node.changeAttribute("ui.color", Color.decode("#ff4500"));
             node.changeAttribute("ui.size", size);
             //#ff4500 
 
         } else if ((input >= 40 && input < 50)) {
-            reminder = input % 10;// 0 1 2 3 4 5 6 7 8 9 
-            size = reminder * 2 + 20;
+            reminder = (input - 40);// 0 1 2 3 4 5 6 7 8 9 
+            size = reminder * 4 + 20;
             node.changeAttribute("ui.color", Color.decode("#ff0000"));
             node.changeAttribute("ui.size", size);
             //#ff0000  
 
         } else if ((input >= 50 && input < 60)) {
-            reminder = input % 10;// 0 1 2 3 4 5 6 7 8 9 
-            size = reminder * 2 + 20;
+            reminder = (input - 50);// 0 1 2 3 4 5 6 7 8 9 
+            size = reminder * 4 + 20;
             node.changeAttribute("ui.color", Color.decode("#c71585"));
             node.changeAttribute("ui.size", size);
             //#c71585   
 
         } else if ((input >= 60 && input < 70)) {
-            reminder = input % 10;// 0 1 2 3 4 5 6 7 8 9 
-            size = reminder * 2 + 20;
+            reminder = (input - 60);// 0 1 2 3 4 5 6 7 8 9 
+            size = reminder * 4 + 20;
             node.changeAttribute("ui.color", Color.decode("#800080"));
             node.changeAttribute("ui.size", size);
             //#800080   
 
         } else if ((input >= 70 && input < 80)) {
-            reminder = input % 10;// 0 1 2 3 4 5 6 7 8 9 
-            size = reminder * 2 + 20;
+            reminder = (input - 70);// 0 1 2 3 4 5 6 7 8 9 
+            size = reminder * 4 + 20;
             node.changeAttribute("ui.color", Color.decode("#8a2be2"));
             node.changeAttribute("ui.size", size);
             //#8a2be2    
 
         } else if ((input >= 80 && input < 90)) {
-            reminder = input % 10;// 0 1 2 3 4 5 6 7 8 9 
-            size = reminder * 2 + 20;
+            reminder = (input - 80);// 0 1 2 3 4 5 6 7 8 9 
+            size = reminder * 4 + 20;
             node.changeAttribute("ui.color", Color.decode("#0000ff"));
             node.changeAttribute("ui.size", size);
             //#0000ff     
 
-        } else if ((input >= 90 && input < 100)) {
-            reminder = input % 10;// 0 1 2 3 4 5 6 7 8 9 
-            size = reminder * 2 + 20;
+        } else if ((input >= 90 && input <= 100)) {
+            reminder = (input - 90);// 0 1 2 3 4 5 6 7 8 9 
+            size = reminder * 4 + 20;
             node.changeAttribute("ui.color", Color.decode("#0d98ba"));
             node.changeAttribute("ui.size", size);
             //#0d98ba      
-
-        } else {
-
-            //error
         }
-
     }
 
     public void initializeComboBox() {
@@ -530,11 +621,12 @@ public class MainPlatform extends javax.swing.JFrame {
         jComboBox1.addItem("Remove Edge");
         jComboBox1.addItem("Free Move");
         jComboBox1.addItem("Change Weight");
-
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton10;
+    private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
@@ -542,8 +634,10 @@ public class MainPlatform extends javax.swing.JFrame {
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
+    private javax.swing.JButton jButton9;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JFileChooser jFileChooser1;
+    private javax.swing.JFileChooser jFileChooser2;
     private javax.swing.JToggleButton jToggleButton1;
     // End of variables declaration//GEN-END:variables
 }

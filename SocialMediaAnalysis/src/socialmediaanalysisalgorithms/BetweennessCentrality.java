@@ -23,6 +23,10 @@ public class BetweennessCentrality extends Graph_Imp implements CentralityAnalys
         super(noVertices);
     }
 
+    public BetweennessCentrality(Graph_Imp _graph) {
+        vertices = _graph.getVertices();
+    }
+
     @Override
     public void calculation() {
 
@@ -30,7 +34,6 @@ public class BetweennessCentrality extends Graph_Imp implements CentralityAnalys
         for (int i = 0; i < getNoVertices(); i++) {
 
             getNode(i).setCentrality(YOU_PASS_THROW_ME(getNode(i)));
-           
 
         }
 

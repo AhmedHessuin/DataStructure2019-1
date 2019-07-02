@@ -98,6 +98,13 @@ public class Node_Imp {
     }
 
     /**
+     * @return the NODE_ID
+     */
+    public static int getNODE_ID() {
+        return NODE_ID;
+    }
+
+    /**
      * @param aNODE_ID the NODE_ID to set
      */
     public static void setNODE_ID(int aNODE_ID) {

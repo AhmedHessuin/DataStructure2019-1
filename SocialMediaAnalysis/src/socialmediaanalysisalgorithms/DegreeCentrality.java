@@ -12,9 +12,13 @@ public class DegreeCentrality extends Graph_Imp implements CentralityAnalysis {
         super(noVertices);
     }
 
+    public DegreeCentrality(Graph_Imp _graph) {
+        vertices = _graph.getVertices();
+    }
+
     @Override
     public void calculation() {
-        for (int i = 0 ; i < getNoVertices() ; i++){
+        for (int i = 0; i < getNoVertices(); i++) {
             getNode(i).setCentrality(getNode(i).getNoChildren());
         }
     }

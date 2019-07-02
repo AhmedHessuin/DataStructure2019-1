@@ -74,6 +74,16 @@ public class Graph_Imp {
         vertices.clear();
     }
 
+    public double getMaxCentrality() {
+        double maxCentrality = -1;
+        for (int i = 0; i < getNoVertices(); i++) {
+            if (vertices.get(i).getCentrality() > maxCentrality) {
+                maxCentrality = vertices.get(i).getCentrality();
+            }
+        }
+        return maxCentrality;
+    }
+
     /**
      *
      */
