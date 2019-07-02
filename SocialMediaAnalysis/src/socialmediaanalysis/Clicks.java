@@ -3,88 +3,63 @@ package socialmediaanalysis;
 import java.awt.Color;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.graphstream.graph.Edge;
-import org.graphstream.graph.Graph;
-import org.graphstream.ui.view.Viewer;
 import org.graphstream.ui.view.ViewerListener;
 import org.graphstream.ui.view.ViewerPipe;
-import static socialmediaanalysis.FXMLDocumentController.algroerth_on;
-import static socialmediaanalysis.FXMLDocumentController.color_generator;
+import org.graphstream.graph.Edge;
 
-import static socialmediaanalysis.FXMLDocumentController.last_id;
-import static socialmediaanalysis.FXMLDocumentController.mode;
-import static socialmediaanalysis.FXMLDocumentController.request_change;
-import static socialmediaanalysis.FXMLDocumentController.selected_edge;
-import static socialmediaanalysis.FXMLDocumentController.viewer;
-//import static socialmediaanalysis.FXMLDocumentController.old_weight_text;
+import static socialmediaanalysis.MainPlatform.graph;
+import static socialmediaanalysis.MainPlatform.mode;
+import static socialmediaanalysis.MainPlatform.viewer;
+import static socialmediaanalysis.MainPlatform.request_change;
+import static socialmediaanalysis.MainPlatform.algorithm_on;
+import static socialmediaanalysis.MainPlatform.color_generator;
+import static socialmediaanalysis.MainPlatform.last_id;
+import static socialmediaanalysis.MainPlatform.selected_edge;
 
 public class Clicks extends Thread implements ViewerListener {
 
-    protected boolean loop = true;
+    private ViewerPipe fromViewer;
+
+    private boolean loop = true;
 
     private String mark_id_new;
     private String mark_id_old;
     private String edge_node_first = null;
     private String edge_node_second = null;
-
     private boolean edge_connect_first_time = true;
     private boolean first_time = true;
-    private FXMLDocumentController fXMLDocumentController;
-    private ViewerPipe fromViewer;
-    private Graph graph;
-    private Viewer viewer;
 
-    public Clicks(Viewer _viewer, Graph _graph, ViewerPipe _fromViewer, FXMLDocumentController controller) {
-
-        viewer = _viewer;
-
-        graph = _graph;
-
-        fXMLDocumentController = controller;
-        fromViewer = _fromViewer;
+    public Clicks() {
         fromViewer = viewer.newViewerPipe();
-
         fromViewer.addViewerListener(this);
         fromViewer.addSink(graph);
-
     }
 
     @Override
     public void run() {
         while (loop) {
             if (request_change) {
-
-                if (mode == "close") {
-                    viewer.close();
-                }
-
                 fromViewer.clearSinks();
-
+            }
+            if (mode == "close") {
+                loop = false;
             }
             fromViewer.pump();
         }
     }
 
+    @Override
     public void viewClosed(String id) {
-        loop = false;
-        System.out.println("exit failed");
-        //  frame.dispose();
-        // viewer.setCloseFramePolicy(Viewer.CloseFramePolicy.HIDE_ONLY);
-        //viewer.close();
-
     }
 
+    @Override
     public void buttonPushed(String id) {
-
         if (mode == "Node Edges") {
             mark_id_new = id;
-
             if (mark_id_new == mark_id_old) {
-
                 if (graph.getNode(id).getAttribute("ui.class") == "marked") {
-
                     graph.getNode(id).removeAttribute("ui.class");
-                    if (algroerth_on) {
+                    if (algorithm_on) {
                         color_generator(graph.getNode(id).getDegree(), graph.getNode(id));
                     }
                     for (Edge edge : graph.getNode(id).getEachEdge()) {
@@ -92,24 +67,20 @@ public class Clicks extends Thread implements ViewerListener {
                         sleep(0);
                     }
                 } else {
-
                     System.out.println("Button set  node " + id);
                     graph.getNode(id).setAttribute("ui.class", "marked");
-                    if (algroerth_on) {
+                    if (algorithm_on) {
                         graph.getNode(id).setAttribute("ui.color", Color.decode("#00ff00"));
                     }
                     for (Edge edge : graph.getNode(id).getEachEdge()) {
                         edge.setAttribute("ui.class", "marked");
                         sleep(200);
                     }
-                    //fXMLDocumentController.clicked_on_node(graph, id);
-
                 }
-
             } else {
                 if (!first_time) {
                     graph.getNode(mark_id_old).removeAttribute("ui.class");
-                    if (algroerth_on) {
+                    if (algorithm_on) {
                         color_generator(graph.getNode(mark_id_old).getDegree(), graph.getNode(mark_id_old));
 
                     }
@@ -123,8 +94,7 @@ public class Clicks extends Thread implements ViewerListener {
             }
         }//first if 
         else if (mode == "Add Node") {
-
-            if (algroerth_on) {
+            if (algorithm_on) {
 
             } else {
                 String x = Integer.toString(last_id + 1);
@@ -135,11 +105,9 @@ public class Clicks extends Thread implements ViewerListener {
 
         }//esle if node add
         else if (mode == "Add Edge") {
-
-            if (algroerth_on) {
+            if (algorithm_on) {
 
             } else {
-
                 if (edge_connect_first_time) {
                     edge_node_first = id;
                     graph.getNode(id).setAttribute("ui.class", "marked");//marke the first node
@@ -171,7 +139,7 @@ public class Clicks extends Thread implements ViewerListener {
 
         }//else if edge add
         else if (mode == "Remove Node") {
-            if (algroerth_on) {
+            if (algorithm_on) {
 
             } else {
                 if (graph.getNodeCount() == 1) {
@@ -189,7 +157,7 @@ public class Clicks extends Thread implements ViewerListener {
             }
         }//else if remove node
         else if (mode == "Remove Edge") {
-            if (algroerth_on) {
+            if (algorithm_on) {
 
             } else {
                 if (edge_connect_first_time) {
@@ -214,7 +182,7 @@ public class Clicks extends Thread implements ViewerListener {
             }
         }//else if remove edge
         else if (mode == "Change Weight") {
-            if (algroerth_on) {
+            if (algorithm_on) {
 
             } else {
                 if (edge_connect_first_time) {
@@ -252,12 +220,12 @@ public class Clicks extends Thread implements ViewerListener {
         try {
             Thread.sleep(x);
         } catch (InterruptedException ex) {
-            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Clicks.class.getName()).log(Level.SEVERE, null, ex);
         }
+
     }
 
+    @Override
     public void buttonReleased(String id) {
-
     }
-
 }

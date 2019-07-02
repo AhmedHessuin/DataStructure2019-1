@@ -1,38 +1,13 @@
 package socialmediaanalysis;
 
-import datastructure.Edge;
-import java.util.Scanner;
-import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
-import socialmediaanalysisalgorithms.BetweennessCentrality;
-import socialmediaanalysisalgorithms.ClosenessCentrality;
-import socialmediaanalysisalgorithms.DegreeCentrality;
-
-public class SocialMediaAnalysis extends Application {
-
-    @Override
-    public void start(Stage stage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("FXMLDocument.fxml"));
-        Parent root = loader.load();
-
-        FXMLDocumentController myController = loader.getController();
-        myController.setfXMLDocumentController(myController);
-
-        Scene scene = new Scene(root);
-        stage.setTitle("Social Media Analysis");
-        stage.setScene(scene);
-        stage.show();
-    }
+public class SocialMediaAnalysis {
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         // GUI
-        launch(args);
+        MainPlatform.initialize();
 
         //CL Input
         /*Scanner s = new Scanner(System.in);
