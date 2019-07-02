@@ -1,10 +1,21 @@
 package socialmediaanalysis;
 
+import datastructure.Edge_Imp;
+import datastructure.Graph_Imp;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.stage.FileChooser;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
@@ -14,14 +25,15 @@ import org.graphstream.ui.view.View;
 import org.graphstream.ui.view.Viewer;
 
 public class MainPlatform extends javax.swing.JFrame {
-
+    
     public static Graph graph;
+    public static Graph_Imp implemented_graph;
     public static Viewer viewer;
-
+    
     private JFrame frame;
     private View view;
     private Clicks ct;
-
+    
     public static boolean request_change;
     public static String mode;
     ;
@@ -37,35 +49,9 @@ public class MainPlatform extends javax.swing.JFrame {
         initializeComboBox();
         request_change = false;
         mode = "none";
-
-        graph = new MultiGraph("Graph Visualization");
-        graphVisualization();
-        set_styleSheet();
-
-        for (int i = 0; i < 10; i++) {
-            String x = Integer.toString(i);
-            graph.addNode(x);
-            last_id = i;
-
-        }
-        for (int i = 0; i < 5; i++) {
-            for (int j = i; j < 5; j++) {
-                if (j == i) {
-                    continue;
-                } else {
-                    if (i == 0 && j == 1) {
-                        continue;
-                    }
-                    graph.addEdge(Integer.toString(i) + Integer.toString(j), Integer.toString(i), Integer.toString(j));
-                }
-            }
-            //System.out.println(graph.getNode(i).getDegree());
-        }
-        darw_node_edge_id_weight();
-        ct = new Clicks();
-        ct.start();
+        
     }
-
+    
     public void darw_node_edge_id_weight() {
         for (org.graphstream.graph.Node node : graph) {
             node.addAttribute("ui.label", node.getId());
@@ -84,6 +70,7 @@ public class MainPlatform extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jFileChooser1 = new javax.swing.JFileChooser();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
@@ -93,6 +80,7 @@ public class MainPlatform extends javax.swing.JFrame {
         jButton6 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
         jComboBox1 = new javax.swing.JComboBox<>();
+        jButton8 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -162,12 +150,21 @@ public class MainPlatform extends javax.swing.JFrame {
             }
         });
 
+        jButton8.setText("Load graph from file");
+        jButton8.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                loadGraphFromFile(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(128, 128, 128)
+                .addGap(33, 33, 33)
+                .addComponent(jButton8)
+                .addGap(18, 18, 18)
                 .addComponent(jButton2)
                 .addGap(57, 57, 57)
                 .addComponent(jButton7)
@@ -189,7 +186,7 @@ public class MainPlatform extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(63, 63, 63)
                 .addComponent(jToggleButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton6)
                 .addGap(72, 72, 72))
         );
@@ -204,7 +201,8 @@ public class MainPlatform extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2)
                     .addComponent(jButton3)
-                    .addComponent(jButton7))
+                    .addComponent(jButton7)
+                    .addComponent(jButton8))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton4)
@@ -280,6 +278,71 @@ public class MainPlatform extends javax.swing.JFrame {
         mode = (String) jComboBox1.getSelectedItem();
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
+    private void loadGraphFromFile(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loadGraphFromFile
+        try {
+            loadFromFile();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(MainPlatform.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_loadGraphFromFile
+    
+    private void loadFromFile() throws FileNotFoundException {
+        jFileChooser1.setDialogTitle("Open Source File");
+        
+        jFileChooser1.setAcceptAllFileFilterUsed(false);
+        FileNameExtensionFilter restrict = new FileNameExtensionFilter(".txt files", "txt");
+        jFileChooser1.addChoosableFileFilter(restrict);
+        
+        int r = jFileChooser1.showOpenDialog(null);
+        File file = null;
+        if (r == JFileChooser.APPROVE_OPTION) {
+            file = jFileChooser1.getSelectedFile();
+            
+            Scanner scanner = new Scanner(file);
+            int no_nodes = 0;
+            int no_edges = 0;
+            
+            if (scanner.hasNextLine()) {
+                no_nodes = scanner.nextInt();
+                no_edges = scanner.nextInt();
+            }
+            
+            implemented_graph = new Graph_Imp(no_nodes);
+            graph = new MultiGraph("Graph Visualization");
+            graphVisualization();
+            set_styleSheet();
+            ct = new Clicks();
+            ct.start();
+            
+            for (int i = 0; i < no_nodes; i++) {
+                graph.addNode(Integer.toString(i));
+            }
+            
+            int src;
+            int dest;
+            double wt;
+            Edge_Imp edg;
+            
+            for (int i = 0; i < no_edges; i++) {
+                if (scanner.hasNextLine()) {
+                    src = scanner.nextInt();
+                    dest = scanner.nextInt();
+                    wt = scanner.nextDouble();
+                    
+                    edg = new Edge_Imp(implemented_graph.getNode(src), wt);
+                    implemented_graph.getNode(dest).addChild(edg);
+                    edg = new Edge_Imp(implemented_graph.getNode(dest), wt);
+                    implemented_graph.getNode(src).addChild(edg);
+                    
+                    graph.addEdge(Integer.toString(i), Integer.toString(src), Integer.toString(dest));
+                }
+            }
+            scanner.close();
+            darw_node_edge_id_weight();
+           
+        }
+    }
+    
     public static void initialize() {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -291,16 +354,24 @@ public class MainPlatform extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+                    
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MainPlatform.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainPlatform.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MainPlatform.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainPlatform.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MainPlatform.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainPlatform.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MainPlatform.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainPlatform.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
@@ -324,7 +395,7 @@ public class MainPlatform extends javax.swing.JFrame {
                 return new Dimension(640, 480);
             }
         };
-
+        
         viewer = new Viewer(graph, Viewer.ThreadingModel.GRAPH_IN_GUI_THREAD);
         ViewPanel viewPanel = viewer.addDefaultView(false);
         panel.add(viewPanel);
@@ -370,21 +441,21 @@ public class MainPlatform extends javax.swing.JFrame {
         graph.addAttribute("ui.stylesheet", " node.marked {fill-color: green;}");
         graph.addAttribute("ui.stylesheet", " edge.marked {fill-color:green;}");
     }
-
+    
     public static void color_generator(int input, Node node) {
         int reminder;
         int size;
         if (input > 0 && input < 10) {
             reminder = input % 10;// 1 2 3 4 5 6 7 8 9
             size = reminder * 2 + 20;
-
+            
             node.changeAttribute("ui.color", Color.decode("#ffff00"));
             node.changeAttribute("ui.size", size);
             //#ffff00
         } else if ((input >= 10 && input < 20)) {
             reminder = input % 10;// 0 1 2 3 4 5 6 7 8 9 
             size = reminder * 2 + 20;
-
+            
             node.changeAttribute("ui.color", Color.decode("#ffae42"));
             node.changeAttribute("ui.size", size);
             //#ffae42 
@@ -449,9 +520,9 @@ public class MainPlatform extends javax.swing.JFrame {
 
             //error
         }
-
+        
     }
-
+    
     public void initializeComboBox() {
         jComboBox1.removeAllItems();
         jComboBox1.addItem("Add Edge");
@@ -461,7 +532,7 @@ public class MainPlatform extends javax.swing.JFrame {
         jComboBox1.addItem("Remove Edge");
         jComboBox1.addItem("Free Move");
         jComboBox1.addItem("Change Weight");
-
+        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -472,7 +543,9 @@ public class MainPlatform extends javax.swing.JFrame {
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
+    private javax.swing.JButton jButton8;
     private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JToggleButton jToggleButton1;
     // End of variables declaration//GEN-END:variables
 }
