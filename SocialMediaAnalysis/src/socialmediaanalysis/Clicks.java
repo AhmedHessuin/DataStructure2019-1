@@ -13,6 +13,7 @@ import static socialmediaanalysis.MainPlatform.viewer;
 import static socialmediaanalysis.MainPlatform.request_change;
 import static socialmediaanalysis.MainPlatform.algorithm_on;
 import static socialmediaanalysis.MainPlatform.color_generator;
+import static socialmediaanalysis.MainPlatform.jTextField1;
 import static socialmediaanalysis.MainPlatform.last_id;
 import static socialmediaanalysis.MainPlatform.selected_edge;
 
@@ -23,6 +24,7 @@ public class Clicks extends Thread implements ViewerListener {
     private boolean loop = true;
 
     private String mark_id_new;
+    private Edge old_edge;
     private String mark_id_old;
     private String edge_node_first = null;
     private String edge_node_second = null;
@@ -54,6 +56,10 @@ public class Clicks extends Thread implements ViewerListener {
 
     @Override
     public void buttonPushed(String id) {
+        
+    
+        
+        
         if (mode == "Node Edges") {
             mark_id_new = id;
             if (mark_id_new == mark_id_old) {
@@ -185,9 +191,15 @@ public class Clicks extends Thread implements ViewerListener {
             if (algorithm_on) {
 
             } else {
+             
                 if (edge_connect_first_time) {
+
                     edge_node_first = id;
                     graph.getNode(id).setAttribute("ui.class", "marked");//mark before remove
+                    if (old_edge != null) {
+                        old_edge.removeAttribute("ui.class");
+                    }
+
                     edge_connect_first_time = false;
                 } else {
                     edge_node_second = id;
@@ -201,9 +213,11 @@ public class Clicks extends Thread implements ViewerListener {
 
                             double v = edge.getNumber("ui.label");
                             System.out.println(v);
-                            String z = Double.toHexString(v);
-                            //        old_weight_text.setText("jbjb");
+                            jTextField1.setText(Double.toString(v));
 
+                            //        old_weight_text.setText("jbjb");
+                            edge.setAttribute("ui.class", "marked");
+                            old_edge = edge;
                             break;
                         }
                     }
