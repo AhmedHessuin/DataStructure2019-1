@@ -89,6 +89,7 @@ public class MainPlatform extends javax.swing.JFrame {
         }
         
         for (Edge edge : graph.getEachEdge()) {
+            
             edge.addAttribute("ui.label", implemented_graph.getNode(Integer.valueOf(edge.getNode0().getId())).getChildren_byID(Integer.valueOf(edge.getNode1().getId())).getWeight());
         }
     }
@@ -340,7 +341,7 @@ public class MainPlatform extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGap(0, 13, Short.MAX_VALUE)
+                .addGap(0, 0, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -389,7 +390,7 @@ public class MainPlatform extends javax.swing.JFrame {
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(16, Short.MAX_VALUE)
+                .addContainerGap(17, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton3)
                     .addComponent(jButton7)
@@ -431,9 +432,7 @@ public class MainPlatform extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -598,7 +597,7 @@ public class MainPlatform extends javax.swing.JFrame {
         double new_weight;
         System.out.println(selected_edge);
         new_weight = Double.parseDouble(jTextField2.getText());
-        graph.getEdge(selected_edge).setAttribute("ui.label", new_weight);
+        graph.getEdge(selected_edge).setAttribute("ui.label", new_weight);//request change in the main graph
         graph.getEdge(selected_edge).removeAttribute("ui.class");
     }//GEN-LAST:event_jTextField2ActionPerformed
 
@@ -739,7 +738,7 @@ public class MainPlatform extends javax.swing.JFrame {
                 + "fill-color: #CB00F3;"
                 + "text-mode:normal;"
                 + "text-alignment:center; "
-                + "text-color:#FFFFFF;"
+                + "text-color:#2B1C1A;"
                 + "shape:circle;"
                 + " }");
         //=====================style sheet edge ==============================//
