@@ -133,7 +133,7 @@ public class MainPlatform extends javax.swing.JFrame {
         setForeground(new java.awt.Color(255, 51, 102));
         setResizable(false);
 
-        jPanel2.setBackground(java.awt.Color.darkGray);
+        jPanel2.setBackground(new java.awt.Color(0, 0, 51));
 
         jButton3.setBackground(new java.awt.Color(38, 35, 114));
         jButton3.setForeground(new java.awt.Color(255, 255, 255));
