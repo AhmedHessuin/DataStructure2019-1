@@ -41,14 +41,13 @@ public class MainPlatform extends javax.swing.JFrame {
     private View view;
     private Clicks ct;
     //=====modify==========//
-    
-    
+
     //==================================//
     public static boolean request_change;
     public static String mode;
     public static boolean ON_OFF = false;
     public static boolean algorithm_on;
-    public static int last_id=-1;
+    public static int last_id = -1;
     public static String selected_edge;
     public String alogrethm;
 
@@ -82,14 +81,14 @@ public class MainPlatform extends javax.swing.JFrame {
     }
 
     public void darw_node_id__edge_weight() {
-        
+
         for (org.graphstream.graph.Node node : graph) {
             node.addAttribute("ui.label", node.getId());
-           last_id++;
+            last_id++;
         }
-        
+
         for (Edge edge : graph.getEachEdge()) {
-            
+
             edge.addAttribute("ui.label", implemented_graph.getNode(Integer.valueOf(edge.getNode0().getId())).getChildren_byID(Integer.valueOf(edge.getNode1().getId())).getWeight());
         }
     }
@@ -123,9 +122,8 @@ public class MainPlatform extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jComboBox2 = new javax.swing.JComboBox<>();
         jButton12 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
+        jToggleButton2 = new javax.swing.JToggleButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(0, 255, 255));
@@ -136,6 +134,7 @@ public class MainPlatform extends javax.swing.JFrame {
         jPanel2.setBackground(new java.awt.Color(0, 0, 51));
 
         jButton3.setBackground(new java.awt.Color(38, 35, 114));
+        jButton3.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jButton3.setForeground(new java.awt.Color(255, 255, 255));
         jButton3.setText("-");
         jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -157,6 +156,7 @@ public class MainPlatform extends javax.swing.JFrame {
         });
 
         jButton2.setBackground(new java.awt.Color(38, 35, 114));
+        jButton2.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jButton2.setForeground(new java.awt.Color(255, 255, 255));
         jButton2.setText("+");
         jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -197,13 +197,16 @@ public class MainPlatform extends javax.swing.JFrame {
         jButton6.setForeground(new java.awt.Color(255, 255, 255));
         jButton6.setText("Screenshot");
         jButton6.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton6.setMaximumSize(new java.awt.Dimension(144, 32));
+        jButton6.setMinimumSize(new java.awt.Dimension(144, 32));
+        jButton6.setPreferredSize(new java.awt.Dimension(144, 32));
         jButton6.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 screenshot(evt);
             }
         });
 
-        jPanel1.setBackground(java.awt.Color.darkGray);
+        jPanel1.setBackground(new java.awt.Color(0, 0, 51));
 
         jLabel1.setBackground(new java.awt.Color(255, 255, 255));
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
@@ -280,6 +283,8 @@ public class MainPlatform extends javax.swing.JFrame {
         jToggleButton1.setForeground(new java.awt.Color(255, 255, 255));
         jToggleButton1.setText("View Weights");
         jToggleButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jToggleButton1.setMaximumSize(new java.awt.Dimension(144, 32));
+        jToggleButton1.setMinimumSize(new java.awt.Dimension(144, 32));
         jToggleButton1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 viewWeights(evt);
@@ -313,28 +318,25 @@ public class MainPlatform extends javax.swing.JFrame {
             }
         });
 
-        jButton5.setBackground(new java.awt.Color(38, 35, 114));
-        jButton5.setForeground(new java.awt.Color(255, 255, 255));
-        jButton5.setText("3D");
-        jButton5.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton5.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                _3D(evt);
-            }
-        });
-
-        jButton4.setBackground(new java.awt.Color(38, 35, 114));
-        jButton4.setForeground(new java.awt.Color(255, 255, 255));
-        jButton4.setText("2D");
-        jButton4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton4.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                _2D(evt);
-            }
-        });
-
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Algorithm");
+
+        jToggleButton2.setBackground(new java.awt.Color(38, 35, 114));
+        jToggleButton2.setForeground(new java.awt.Color(255, 255, 255));
+        jToggleButton2.setText("Manual Layout");
+        jToggleButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jToggleButton2.setMaximumSize(new java.awt.Dimension(144, 32));
+        jToggleButton2.setMinimumSize(new java.awt.Dimension(144, 32));
+        jToggleButton2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                change_layout(evt);
+            }
+        });
+        jToggleButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jToggleButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -344,19 +346,17 @@ public class MainPlatform extends javax.swing.JFrame {
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(53, 53, 53)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jToggleButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jButton8)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -390,25 +390,24 @@ public class MainPlatform extends javax.swing.JFrame {
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(17, Short.MAX_VALUE)
+                .addGap(17, 17, 17)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton3)
+                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton7)
-                    .addComponent(jButton2)
-                    .addComponent(jButton1))
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jToggleButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(4, 4, 4)
@@ -460,23 +459,6 @@ public class MainPlatform extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_ZoomOut
 
-    private void _3D(java.awt.event.MouseEvent evt) {//GEN-FIRST:event__3D
-
-        if (ON_OFF) {
-            request_change = true;
-            viewer.enableAutoLayout();
-            request_change = false;
-        }
-    }//GEN-LAST:event__3D
-
-    private void _2D(java.awt.event.MouseEvent evt) {//GEN-FIRST:event__2D
-        if (ON_OFF) {
-            request_change = true;
-            viewer.disableAutoLayout();
-            request_change = false;
-        }
-    }//GEN-LAST:event__2D
-
     private void viewWeights(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_viewWeights
         if (ON_OFF) {
             if (jToggleButton1.isSelected()) {
@@ -518,15 +500,12 @@ public class MainPlatform extends javax.swing.JFrame {
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         mode = (String) jComboBox1.getSelectedItem();
-        if (mode =="Change Weight")
-        {
-             jPanel1.setVisible(true);
+        if (mode == "Change Weight") {
+            jPanel1.setVisible(true);
+        } else {
+            jPanel1.setVisible(false);
         }
-        else
-             {
-             jPanel1.setVisible(false);
-        }
-            
+
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void loadGraphFromFile(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loadGraphFromFile
@@ -550,7 +529,17 @@ public class MainPlatform extends javax.swing.JFrame {
         // TODO add your handling code here:
         alogrethm = (String) jComboBox2.getSelectedItem();
         if (ON_OFF) {
+            //degreeCentralityGraph = new DegreeCentrality(implemented_graph);
+            // degreeCentralityGraph.calculation();
+            //    closenessCentralityGraph = new ClosenessCentrality(implemented_graph);
+            //  closenessCentralityGraph.calculation();
+            //betweennessCentralityGraph = new BetweennessCentrality(implemented_graph);
+            //betweennessCentralityGraph.calculation();
+
             if (alogrethm == "Degree Centrality") {
+
+                degreeCentralityGraph = new DegreeCentrality(implemented_graph);
+                degreeCentralityGraph.calculation();
                 double maxDegree = degreeCentralityGraph.getMaxCentrality();
                 for (org.graphstream.graph.Node node : graph) {
 
@@ -561,6 +550,8 @@ public class MainPlatform extends javax.swing.JFrame {
                 }
             }//degree
             else if (alogrethm == "Betweenness Centrality") {
+                betweennessCentralityGraph = new BetweennessCentrality(implemented_graph);
+                betweennessCentralityGraph.calculation();
                 double maxDegree = betweennessCentralityGraph.getMaxCentrality();
                 for (org.graphstream.graph.Node node : graph) {
                     double degree = (betweennessCentralityGraph.getNode(Integer.valueOf(node.getId())).getCentrality() / (double) maxDegree) * 100;
@@ -570,6 +561,8 @@ public class MainPlatform extends javax.swing.JFrame {
 
             } else if (alogrethm == "Closeness Centrality") {
 
+                closenessCentralityGraph = new ClosenessCentrality(implemented_graph);
+                closenessCentralityGraph.calculation();
                 double maxDegree = closenessCentralityGraph.getMaxCentrality();
                 for (org.graphstream.graph.Node node : graph) {
                     double degree = (closenessCentralityGraph.getNode(Integer.valueOf(node.getId())).getCentrality() / (double) maxDegree) * 100;
@@ -593,13 +586,32 @@ public class MainPlatform extends javax.swing.JFrame {
 
     private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
         // TODO add your handling code here:
-       
+
         double new_weight;
         System.out.println(selected_edge);
         new_weight = Double.parseDouble(jTextField2.getText());
         graph.getEdge(selected_edge).setAttribute("ui.label", new_weight);//request change in the main graph
         graph.getEdge(selected_edge).removeAttribute("ui.class");
     }//GEN-LAST:event_jTextField2ActionPerformed
+
+    private void change_layout(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_change_layout
+        // TODO add your handling code here:
+        if (ON_OFF) {
+            if (jToggleButton2.isSelected()) {
+                request_change = true;
+                viewer.disableAutoLayout();
+                request_change = false;
+            } else {
+                request_change = true;
+                viewer.enableAutoLayout();
+                request_change = false;
+            }
+        }
+    }//GEN-LAST:event_change_layout
+
+    private void jToggleButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jToggleButton2ActionPerformed
 
     private void loadFromFile() throws FileNotFoundException {
         int r = jFileChooser1.showOpenDialog(null);
@@ -649,12 +661,12 @@ public class MainPlatform extends javax.swing.JFrame {
             scanner.close();
             darw_node_id__edge_weight();
 
-            degreeCentralityGraph = new DegreeCentrality(implemented_graph);
-            degreeCentralityGraph.calculation();
-            closenessCentralityGraph = new ClosenessCentrality(implemented_graph);
-            closenessCentralityGraph.calculation();
-            betweennessCentralityGraph = new BetweennessCentrality(implemented_graph);
-            betweennessCentralityGraph.calculation();
+            //degreeCentralityGraph = new DegreeCentrality(implemented_graph);
+            // degreeCentralityGraph.calculation();
+            //    closenessCentralityGraph = new ClosenessCentrality(implemented_graph);
+            //  closenessCentralityGraph.calculation();
+            //betweennessCentralityGraph = new BetweennessCentrality(implemented_graph);
+            //betweennessCentralityGraph.calculation();
         }
     }
 
@@ -859,8 +871,6 @@ public class MainPlatform extends javax.swing.JFrame {
     private javax.swing.JButton jButton12;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
@@ -878,5 +888,6 @@ public class MainPlatform extends javax.swing.JFrame {
     public static javax.swing.JTextField jTextField1;
     public static javax.swing.JTextField jTextField2;
     private javax.swing.JToggleButton jToggleButton1;
+    private javax.swing.JToggleButton jToggleButton2;
     // End of variables declaration//GEN-END:variables
 }
