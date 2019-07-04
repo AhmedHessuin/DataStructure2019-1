@@ -111,9 +111,8 @@ public class Clicks extends Thread implements ViewerListener {
                 Node_Imp _node = new Node_Imp(true);
                 _node.setID(last_id);
                 implemented_graph.addNode(_node);
-               
-                //===================================================//
 
+                //===================================================//
             }
 
         }//esle if node add
@@ -155,7 +154,6 @@ public class Clicks extends Thread implements ViewerListener {
                         edg = new Edge_Imp(implemented_graph.getNode(dest), wt);
                         implemented_graph.getNode(src).addChild(edg);
 
-                        
                         //=================================================================//
                     }
 
@@ -173,13 +171,41 @@ public class Clicks extends Thread implements ViewerListener {
 
                 } else {
 
-                    for (Edge edge : graph.getEachEdge()) {
-                        if (edge.getNode0() == graph.getNode(id) || edge.getNode1() == graph.getNode(id)) {
+                    //==========modify remove  node =============//
+                    for (Edge edge : graph.getNode(id).getEachEdge()) {
 
-                            graph.removeEdge(edge);
+                        String src = edge.getNode0().getId();
+                        String des = edge.getNode1().getId();
+                        int src_index = Integer.parseInt(src);
+
+                        for (int i = 0; i < implemented_graph.getNode(src_index).getNoChildren(); i++) {
+                            int idd = implemented_graph.getNode(src_index).getChildren_byIndex(i).getChild().getID();
+                            if (idd == Integer.parseInt(edge.getNode1().getId())) {
+                                Edge_Imp remove_edge = implemented_graph.getNode(src_index).getChildren_byIndex(i);
+                                implemented_graph.getNode(src_index).removeChild(remove_edge);
+                                break;
+                            }
                         }
+                        des = edge.getNode0().getId();
+                        src = edge.getNode1().getId();
+                        src_index = Integer.parseInt(src);
+                        for (int i = 0; i < implemented_graph.getNode(src_index).getNoChildren(); i++) {
+                            int idd = implemented_graph.getNode(src_index).getChildren_byIndex(i).getChild().getID();
+                            if (idd == Integer.parseInt(edge.getNode0().getId())) {
+                                Edge_Imp remove_edge = implemented_graph.getNode(src_index).getChildren_byIndex(i);
+                                implemented_graph.getNode(src_index).removeChild(remove_edge);
+
+                                break;
+                            }
+                        }
+
+                        //================================================//
                     }
                     graph.removeNode(id);
+                    Node_Imp remove_node = implemented_graph.getNode(Integer.parseInt(id));
+                    implemented_graph.removeNode(remove_node);
+                    System.out.println(implemented_graph.getNoVertices());
+                    implemented_graph.print();
                 }
             }
         }//else if remove node
@@ -198,7 +224,34 @@ public class Clicks extends Thread implements ViewerListener {
                         if (edge.getNode0() == graph.getNode(edge_node_second) && edge.getNode1() == graph.getNode(edge_node_first)
                                 || edge.getNode0() == graph.getNode(edge_node_first) && edge.getNode1() == graph.getNode(edge_node_second)) {
                             graph.removeEdge(edge);
+                            //==========remove edge =============//
+                            String src = edge.getNode0().getId();
+                            String des = edge.getNode1().getId();
+                            int src_index = Integer.parseInt(src);
 
+                            for (int i = 0; i < implemented_graph.getNode(src_index).getNoChildren(); i++) {
+                                int idd = implemented_graph.getNode(src_index).getChildren_byIndex(i).getChild().getID();
+                                if (idd == Integer.parseInt(edge.getNode1().getId())) {
+                                    Edge_Imp remove_edge = implemented_graph.getNode(src_index).getChildren_byIndex(i);
+                                    implemented_graph.getNode(src_index).removeChild(remove_edge);
+
+                                    break;
+                                }
+                            }
+                            des = edge.getNode0().getId();
+                            src = edge.getNode1().getId();
+                            src_index = Integer.parseInt(src);
+                            for (int i = 0; i < implemented_graph.getNode(src_index).getNoChildren(); i++) {
+                                int idd = implemented_graph.getNode(src_index).getChildren_byIndex(i).getChild().getID();
+                                if (idd == Integer.parseInt(edge.getNode0().getId())) {
+                                    Edge_Imp remove_edge = implemented_graph.getNode(src_index).getChildren_byIndex(i);
+                                    implemented_graph.getNode(src_index).removeChild(remove_edge);
+
+                                    break;
+                                }
+                            }
+
+                            //================================================//
                             break;
                         }
                     }
