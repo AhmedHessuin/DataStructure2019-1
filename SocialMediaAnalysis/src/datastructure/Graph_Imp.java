@@ -84,6 +84,15 @@ public class Graph_Imp {
         return maxCentrality;
     }
 
+    public int get_node_index(Node_Imp node) {
+        for (int i = 0; i < vertices.size(); i++) {
+            if (vertices.get(i).getID() == node.getID()) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     /**
      *
      */

@@ -561,7 +561,7 @@ public class MainPlatform extends javax.swing.JFrame {
                     
                     double degree = (betweennessCentralityGraph.getNode(i).getCentrality() / (double) maxDegree) * 100;
                     
-                    color_generator(degree, graph.getNode(Integer.toString(degreeCentralityGraph.getNode(i).getID())));
+                    color_generator(degree, graph.getNode(Integer.toString(betweennessCentralityGraph.getNode(i).getID())));
                     
                     System.out.println(degree);
                     
@@ -576,7 +576,7 @@ public class MainPlatform extends javax.swing.JFrame {
                     
                     double degree = (closenessCentralityGraph.getNode(i).getCentrality() / (double) maxDegree) * 100;
                     
-                    color_generator(degree, graph.getNode(Integer.toString(degreeCentralityGraph.getNode(i).getID())));
+                    color_generator(degree, graph.getNode(Integer.toString(closenessCentralityGraph.getNode(i).getID())));
                     
                     System.out.println(degree);
                     
