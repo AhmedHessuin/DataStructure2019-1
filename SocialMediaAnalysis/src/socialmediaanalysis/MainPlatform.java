@@ -23,6 +23,7 @@ import org.graphstream.graph.implementations.MultiGraph;
 import org.graphstream.ui.swingViewer.ViewPanel;
 import org.graphstream.ui.view.View;
 import org.graphstream.ui.view.Viewer;
+import static socialmediaanalysis.Clicks.old_edge;
 import socialmediaanalysisalgorithms.BetweennessCentrality;
 import socialmediaanalysisalgorithms.ClosenessCentrality;
 import socialmediaanalysisalgorithms.DegreeCentrality;
@@ -586,12 +587,40 @@ public class MainPlatform extends javax.swing.JFrame {
 
     private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
         // TODO add your handling code here:
-
+        // change weight
         double new_weight;
         System.out.println(selected_edge);
         new_weight = Double.parseDouble(jTextField2.getText());
         graph.getEdge(selected_edge).setAttribute("ui.label", new_weight);//request change in the main graph
         graph.getEdge(selected_edge).removeAttribute("ui.class");
+        //========================change weight===============================//
+      
+        String src = old_edge.getNode0().getId();
+        String des = old_edge.getNode1().getId();
+        int src_index = Integer.parseInt(src);
+      
+        
+        for (int i = 0; i < implemented_graph.getNode(src_index).getNoChildren(); i++) {
+            int id = implemented_graph.getNode(src_index).getChildren_byIndex(i).getChild().getID();
+            if (id == Integer.parseInt(old_edge.getNode1().getId())) {
+                implemented_graph.getNode(src_index).getChildren_byIndex(i).setWeight(new_weight);
+                break;
+            }
+        }
+        des = old_edge.getNode0().getId();
+        src = old_edge.getNode1().getId();
+        src_index = Integer.parseInt(src);
+        for (int i = 0; i < implemented_graph.getNode(src_index).getNoChildren(); i++) {
+            int id = implemented_graph.getNode(src_index).getChildren_byIndex(i).getChild().getID();
+            if (id == Integer.parseInt(old_edge.getNode0().getId())) {
+                implemented_graph.getNode(src_index).getChildren_byIndex(i).setWeight(new_weight);
+                break;
+            }
+        }
+        
+      
+
+        //====================================================================//
     }//GEN-LAST:event_jTextField2ActionPerformed
 
     private void change_layout(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_change_layout
