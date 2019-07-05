@@ -15,7 +15,7 @@ import java.util.Date;
 
 public class StressTest {
 
-    static int MAX_NO_NODES = 10;
+    static int MAX_NO_NODES = 100;
     double[][] Data;
     double[] nodeCentrality;
 

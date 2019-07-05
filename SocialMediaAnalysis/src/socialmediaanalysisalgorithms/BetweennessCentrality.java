@@ -5,7 +5,6 @@ import datastructure.Graph_Imp;
 import datastructure.Node_Imp;
 import java.util.Comparator;
 import java.util.*;
-import socialmediaanalysisalgorithms.CentralityAnalysis;
 
 //============================================================================//
 public class BetweennessCentrality extends Graph_Imp implements CentralityAnalysis {
@@ -29,14 +28,10 @@ public class BetweennessCentrality extends Graph_Imp implements CentralityAnalys
 
     @Override
     public void calculation() {
-
         src_shortest_path = dijkestra_for_all_H();
         for (int i = 0; i < getNoVertices(); i++) {
-
             getNode(i).setCentrality(YOU_PASS_THROW_ME(getNode(i)));
-
         }
-
     }
 
     //=========================internal class section=========================//
@@ -159,10 +154,9 @@ public class BetweennessCentrality extends Graph_Imp implements CentralityAnalys
 
                     P_Queue.add(new Dijkestra_Data_Type(
                             getNode(Next_Mark).getChildren_byIndex(i).getWeight() + Next_Weight,
-                           get_node_index( getNode(Next_Mark).getChildren_byIndex(i).getChild()),
+                            get_node_index(getNode(Next_Mark).getChildren_byIndex(i).getChild()),
                             get_node_index(getNode(Next_Mark))));
 
-                    //}
                 }
 
             } else {
@@ -196,7 +190,7 @@ public class BetweennessCentrality extends Graph_Imp implements CentralityAnalys
         MyPair[] wanted_shortest_path = src_shortest_path[get_node_index(wanted)];
         double out = 0.0;
         boolean[][] marked = new boolean[getNoVertices()][getNoVertices()];
-        int wanted_id =get_node_index(wanted);
+        int wanted_id = get_node_index(wanted);
         //====================================================================//
 
         for (int i = 0; i < getNoVertices(); i++) {

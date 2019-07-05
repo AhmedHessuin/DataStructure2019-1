@@ -73,7 +73,6 @@ public class Clicks extends Thread implements ViewerListener {
                         sleep(0);
                     }
                 } else {
-                    System.out.println("Button set  node " + id);
                     graph.getNode(id).setAttribute("ui.class", "marked");
                     if (algorithm_on) {
                         graph.getNode(id).setAttribute("ui.color", Color.decode("#00ff00"));
@@ -111,7 +110,6 @@ public class Clicks extends Thread implements ViewerListener {
                 Node_Imp _node = new Node_Imp(true);
                 _node.setID(last_id);
                 implemented_graph.addNode(_node);
-
                 //===================================================//
             }
 
@@ -170,10 +168,8 @@ public class Clicks extends Thread implements ViewerListener {
                 if (graph.getNodeCount() == 1) {
 
                 } else {
-
                     //==========modify remove  node =============//
                     for (Edge edge : graph.getNode(id).getEachEdge()) {
-
                         String src = edge.getNode0().getId();
                         String des = edge.getNode1().getId();
                         int src_index = Integer.parseInt(src);
@@ -194,7 +190,6 @@ public class Clicks extends Thread implements ViewerListener {
                             if (idd == Integer.parseInt(edge.getNode0().getId())) {
                                 Edge_Imp remove_edge = implemented_graph.getNode(src_index).getChildren_byIndex(i);
                                 implemented_graph.getNode(src_index).removeChild(remove_edge);
-
                                 break;
                             }
                         }
@@ -204,8 +199,6 @@ public class Clicks extends Thread implements ViewerListener {
                     graph.removeNode(id);
                     Node_Imp remove_node = implemented_graph.getNode(Integer.parseInt(id));
                     implemented_graph.removeNode(remove_node);
-                    System.out.println(implemented_graph.getNoVertices());
-                    implemented_graph.print();
                 }
             }
         }//else if remove node
@@ -285,7 +278,6 @@ public class Clicks extends Thread implements ViewerListener {
                             selected_edge = edge.getId();
 
                             double v = edge.getNumber("ui.label");
-                            System.out.println(v);
                             jTextField1.setText(Double.toString(v));
 
                             edge.setAttribute("ui.class", "marked");
@@ -311,27 +303,6 @@ public class Clicks extends Thread implements ViewerListener {
 
     }
 
-    /*
-        int src;
-            int dest;
-            double wt;
-            Edge_Imp edg;
-
-            for (int i = 0; i < no_edges; i++) {
-                if (scanner.hasNextLine()) {
-                    src = scanner.nextInt();
-                    dest = scanner.nextInt();
-                    wt = scanner.nextDouble();
-
-                    edg = new Edge_Imp(implemented_graph.getNode(src), wt);
-                    implemented_graph.getNode(dest).addChild(edg);
-                    edg = new Edge_Imp(implemented_graph.getNode(dest), wt);
-                    implemented_graph.getNode(src).addChild(edg);
-
-                    graph.addEdge(Integer.toString(i), Integer.toString(src), Integer.toString(dest));
-                }
-            }
-     */
     @Override
     public void buttonReleased(String id) {
     }

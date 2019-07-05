@@ -1,5 +1,15 @@
 package socialmediaanalysis;
 
+import datastructure.Edge_Imp;
+import java.text.ParseException;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import socialmediaanalysisalgorithms.BetweennessCentrality;
+import socialmediaanalysisalgorithms.ClosenessCentrality;
+import socialmediaanalysisalgorithms.DegreeCentrality;
+import test.StressTest;
+
 public class SocialMediaAnalysis {
 
     /**
@@ -15,7 +25,7 @@ public class SocialMediaAnalysis {
         int algorithmType = s.nextInt();
         int n;
         int e;
-        Edge edg;
+        Edge_Imp edg;
         int src;
         int dest;
         double wt;
@@ -29,9 +39,9 @@ public class SocialMediaAnalysis {
                     src = s.nextInt();
                     dest = s.nextInt();
 
-                    edg = new Edge(degreeCentralityGraph.getNode(src), 1);
+                    edg = new Edge_Imp(degreeCentralityGraph.getNode(src), 1);
                     degreeCentralityGraph.getNode(dest).addChild(edg);
-                    edg = new Edge(degreeCentralityGraph.getNode(dest), 1);
+                    edg = new Edge_Imp(degreeCentralityGraph.getNode(dest), 1);
                     degreeCentralityGraph.getNode(src).addChild(edg);
                 }
                 degreeCentralityGraph.calculation();
@@ -46,9 +56,9 @@ public class SocialMediaAnalysis {
                     dest = s.nextInt();
                     wt = s.nextDouble();
 
-                    edg = new Edge(ClosenessCentralityGraph.getNode(src), wt);
+                    edg = new Edge_Imp(ClosenessCentralityGraph.getNode(src), wt);
                     ClosenessCentralityGraph.getNode(dest).addChild(edg);
-                    edg = new Edge(ClosenessCentralityGraph.getNode(dest), wt);
+                    edg = new Edge_Imp(ClosenessCentralityGraph.getNode(dest), wt);
                     ClosenessCentralityGraph.getNode(src).addChild(edg);
                 }
                 ClosenessCentralityGraph.calculation();
@@ -63,20 +73,24 @@ public class SocialMediaAnalysis {
                     dest = s.nextInt();
                     wt = s.nextDouble();
 
-                    edg = new Edge(BetweennessCentralityGraph.getNode(src), wt);
+                    edg = new Edge_Imp(BetweennessCentralityGraph.getNode(src), wt);
                     BetweennessCentralityGraph.getNode(dest).addChild(edg);
-                    edg = new Edge(BetweennessCentralityGraph.getNode(dest), wt);
+                    edg = new Edge_Imp(BetweennessCentralityGraph.getNode(dest), wt);
                     BetweennessCentralityGraph.getNode(src).addChild(edg);
                 }
                 BetweennessCentralityGraph.calculation();
                 BetweennessCentralityGraph.print();
                 break;
-        }
-         */
+        }*/
+        
+        
         //Stress Test
         /*StressTest T1 = new StressTest();
+        Scanner s = new Scanner(System.in);
+        System.out.println("Enter the centrality algorithm [1 -> Degree Centrality, 2 -> Closeness Centrality, 3 -> BetweennessCentrality] : ");
         try {
-            T1.initiate(2);
+            int i = s.nextInt();
+            T1.initiate(i);
         } catch (ParseException ex) {
             Logger.getLogger(SocialMediaAnalysis.class.getName()).log(Level.SEVERE, null, ex);
         }*/
