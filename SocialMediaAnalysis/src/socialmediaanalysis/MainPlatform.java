@@ -1,6 +1,5 @@
 package socialmediaanalysis;
 
-import static com.sun.xml.internal.fastinfoset.alphabet.BuiltInRestrictedAlphabets.table;
 import datastructure.Edge_Imp;
 import datastructure.Graph_Imp;
 import java.awt.Color;
