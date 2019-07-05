@@ -1,5 +1,6 @@
 package socialmediaanalysis;
 
+import static com.sun.xml.internal.fastinfoset.alphabet.BuiltInRestrictedAlphabets.table;
 import datastructure.Edge_Imp;
 import datastructure.Graph_Imp;
 import java.awt.Color;
@@ -10,12 +11,11 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableModel;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
@@ -29,15 +29,15 @@ import socialmediaanalysisalgorithms.ClosenessCentrality;
 import socialmediaanalysisalgorithms.DegreeCentrality;
 
 public class MainPlatform extends javax.swing.JFrame {
-    
+
     public static Graph graph;
     public static Graph_Imp implemented_graph;
     public static DegreeCentrality degreeCentralityGraph;
     public static ClosenessCentrality closenessCentralityGraph;
     public static BetweennessCentrality betweennessCentralityGraph;
-    
+
     public static Viewer viewer;
-    
+
     private JFrame frame;
     private View view;
     private Clicks ct;
@@ -65,33 +65,46 @@ public class MainPlatform extends javax.swing.JFrame {
         algorithm_on = false;
         mode = "none";
     }
-    
+
     private void InitializeFileChooser() {
         jFileChooser1.setDialogTitle("Open Source File");
-        
+
         jFileChooser1.setAcceptAllFileFilterUsed(false);
         FileNameExtensionFilter restrict = new FileNameExtensionFilter(".txt files", "txt");
         jFileChooser1.addChoosableFileFilter(restrict);
-        
+
         jFileChooser2.setDialogTitle("Save Screenshot");
-        
+
         jFileChooser2.setAcceptAllFileFilterUsed(false);
         FileNameExtensionFilter restrict2 = new FileNameExtensionFilter(".png files", "png");
         jFileChooser2.addChoosableFileFilter(restrict2);
-        
+
     }
-    
+
     public void darw_node_id__edge_weight() {
-        
+
         for (org.graphstream.graph.Node node : graph) {
             node.addAttribute("ui.label", node.getId());
             last_id++;
         }
-        
+
         for (Edge edge : graph.getEachEdge()) {
-            
+
             edge.addAttribute("ui.label", implemented_graph.getNode(Integer.valueOf(edge.getNode0().getId())).getChildren_byID(Integer.valueOf(edge.getNode1().getId())).getWeight());
         }
+    }
+
+    public void clear_the_table() {
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        int rowCount = model.getRowCount();
+        for (int i = rowCount - 1; i >= 0; i--) {
+            model.removeRow(i);
+        }
+    }
+
+    public void add_in_table_new_row(int _id, double cent) {
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.addRow(new String[]{Integer.toString(_id), Double.toString(cent)});
     }
 
     /**
@@ -125,6 +138,8 @@ public class MainPlatform extends javax.swing.JFrame {
         jButton12 = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         jToggleButton2 = new javax.swing.JToggleButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(0, 255, 255));
@@ -339,41 +354,53 @@ public class MainPlatform extends javax.swing.JFrame {
             }
         });
 
+        jTable1.setBorder(new javax.swing.border.MatteBorder(null));
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Node ID", "Centrality"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jTable1.setGridColor(new java.awt.Color(255, 51, 0));
+        jScrollPane1.setViewportView(jTable1);
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(53, 53, 53)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jToggleButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(20, 20, 20))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(33, 33, 33)
-                        .addComponent(jLabel3))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(29, 29, 29)
-                        .addComponent(jLabel5))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(12, 12, 12)
+                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(53, 53, 53)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jToggleButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(354, 354, 354))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -382,39 +409,53 @@ public class MainPlatform extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jLabel4))
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton12, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addGap(27, 27, 27)
+                                        .addComponent(jLabel3))
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addGap(23, 23, 23)
+                                        .addComponent(jLabel5))
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jButton12, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(106, 106, 106)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 348, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton7)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jToggleButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(4, 4, 4)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton12, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton7)
+                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(52, 52, 52)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jToggleButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(4, 4, 4)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton12, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 403, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(28, 28, 28)
@@ -428,7 +469,10 @@ public class MainPlatform extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -440,7 +484,7 @@ public class MainPlatform extends javax.swing.JFrame {
 
     private void graphFrameClose(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_graphFrameClose
         if (ON_OFF) {
-            
+
             frame.dispose();
             mode = "close";
             viewer.close();
@@ -529,6 +573,7 @@ public class MainPlatform extends javax.swing.JFrame {
     private void Start(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Start
         // TODO add your handling code here:
         alogrethm = (String) jComboBox2.getSelectedItem();
+
         if (ON_OFF) {
             //degreeCentralityGraph = new DegreeCentrality(implemented_graph);
             // degreeCentralityGraph.calculation();
@@ -538,51 +583,55 @@ public class MainPlatform extends javax.swing.JFrame {
             //betweennessCentralityGraph.calculation();
 
             if (alogrethm == "Degree Centrality") {
-                
+
+                clear_the_table();
                 degreeCentralityGraph = new DegreeCentrality(implemented_graph);
                 degreeCentralityGraph.calculation();
                 double maxDegree = degreeCentralityGraph.getMaxCentrality();
                 for (int i = 0; i < implemented_graph.getNoVertices(); i++) {
-                    
+
                     double degree = (degreeCentralityGraph.getNode(i).getCentrality() / (double) maxDegree) * 100;
-                    
+
                     color_generator(degree, graph.getNode(Integer.toString(degreeCentralityGraph.getNode(i).getID())));
-                    
+                    add_in_table_new_row(degreeCentralityGraph.getNode(i).getID(), degreeCentralityGraph.getNode(i).getCentrality());
                     System.out.println(degree);
-                    
+
                 }
-                
+
             }//degree
             else if (alogrethm == "Betweenness Centrality") {
+                clear_the_table();
                 betweennessCentralityGraph = new BetweennessCentrality(implemented_graph);
                 betweennessCentralityGraph.calculation();
                 double maxDegree = betweennessCentralityGraph.getMaxCentrality();
                 for (int i = 0; i < implemented_graph.getNoVertices(); i++) {
-                    
+
                     double degree = (betweennessCentralityGraph.getNode(i).getCentrality() / (double) maxDegree) * 100;
-                    
+
                     color_generator(degree, graph.getNode(Integer.toString(betweennessCentralityGraph.getNode(i).getID())));
-                    
+
+                    add_in_table_new_row(betweennessCentralityGraph.getNode(i).getID(), betweennessCentralityGraph.getNode(i).getCentrality());
                     System.out.println(degree);
-                    
+
                 }
-                
+
             } else if (alogrethm == "Closeness Centrality") {
-                
+                clear_the_table();
                 closenessCentralityGraph = new ClosenessCentrality(implemented_graph);
                 closenessCentralityGraph.calculation();
                 double maxDegree = closenessCentralityGraph.getMaxCentrality();
                 for (int i = 0; i < implemented_graph.getNoVertices(); i++) {
-                    
+
                     double degree = (closenessCentralityGraph.getNode(i).getCentrality() / (double) maxDegree) * 100;
-                    
+
                     color_generator(degree, graph.getNode(Integer.toString(closenessCentralityGraph.getNode(i).getID())));
-                    
+
+                    add_in_table_new_row(closenessCentralityGraph.getNode(i).getID(), closenessCentralityGraph.getNode(i).getCentrality());
                     System.out.println(degree);
-                    
+
                 }
             }
-            
+
         }
 
     }//GEN-LAST:event_Start
@@ -608,7 +657,7 @@ public class MainPlatform extends javax.swing.JFrame {
         String src = old_edge.getNode0().getId();
         String des = old_edge.getNode1().getId();
         int src_index = Integer.parseInt(src);
-        
+
         for (int i = 0; i < implemented_graph.getNode(src_index).getNoChildren(); i++) {
             int id = implemented_graph.getNode(src_index).getChildren_byIndex(i).getChild().getID();
             if (id == Integer.parseInt(old_edge.getNode1().getId())) {
@@ -648,49 +697,49 @@ public class MainPlatform extends javax.swing.JFrame {
     private void jToggleButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton2ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jToggleButton2ActionPerformed
-    
+
     private void loadFromFile() throws FileNotFoundException {
         int r = jFileChooser1.showOpenDialog(null);
         File file = null;
         if (r == JFileChooser.APPROVE_OPTION) {
             file = jFileChooser1.getSelectedFile();
-            
+
             Scanner scanner = new Scanner(file);
             int no_nodes = 0;
             int no_edges = 0;
-            
+
             if (scanner.hasNextLine()) {
                 no_nodes = scanner.nextInt();
                 no_edges = scanner.nextInt();
             }
-            
+
             implemented_graph = new Graph_Imp(no_nodes);
             graph = new MultiGraph("Graph Visualization");
             graphVisualization();
             set_styleSheet();
             ct = new Clicks();
             ct.start();
-            
+
             for (int i = 0; i < no_nodes; i++) {
                 graph.addNode(Integer.toString(i));
             }
-            
+
             int src;
             int dest;
             double wt;
             Edge_Imp edg;
-            
+
             for (int i = 0; i < no_edges; i++) {
                 if (scanner.hasNextLine()) {
                     src = scanner.nextInt();
                     dest = scanner.nextInt();
                     wt = scanner.nextDouble();
-                    
+
                     edg = new Edge_Imp(implemented_graph.getNode(src), wt);
                     implemented_graph.getNode(dest).addChild(edg);
                     edg = new Edge_Imp(implemented_graph.getNode(dest), wt);
                     implemented_graph.getNode(src).addChild(edg);
-                    
+
                     graph.addEdge(Integer.toString(i), Integer.toString(src), Integer.toString(dest));
                 }
             }
@@ -705,7 +754,7 @@ public class MainPlatform extends javax.swing.JFrame {
             //betweennessCentralityGraph.calculation();
         }
     }
-    
+
     public static void initialize() {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -717,21 +766,21 @@ public class MainPlatform extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
-                    
+
                 }
             }
         } catch (ClassNotFoundException ex) {
             java.util.logging.Logger.getLogger(MainPlatform.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-            
+
         } catch (InstantiationException ex) {
             java.util.logging.Logger.getLogger(MainPlatform.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-            
+
         } catch (IllegalAccessException ex) {
             java.util.logging.Logger.getLogger(MainPlatform.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-            
+
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(MainPlatform.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
@@ -758,7 +807,7 @@ public class MainPlatform extends javax.swing.JFrame {
                 return new Dimension(640, 480);
             }
         };
-        
+
         viewer = new Viewer(graph, Viewer.ThreadingModel.GRAPH_IN_GUI_THREAD);
         ViewPanel viewPanel = viewer.addDefaultView(false);
         panel.add(viewPanel);
@@ -804,22 +853,22 @@ public class MainPlatform extends javax.swing.JFrame {
         graph.addAttribute("ui.stylesheet", " node.marked {fill-color: green;}");
         graph.addAttribute("ui.stylesheet", " edge.marked {fill-color:green;}");
     }
-    
+
     public static void color_generator(double input, Node node) {
-        
+
         double reminder;
         double size;
         if (input >= 0 && input < 10) {
             reminder = input;//0 1 2 3 4 5 6 7 8 9
             size = reminder * 4 + 20;
-            
+
             node.changeAttribute("ui.color", Color.decode("#ffff00"));
             node.changeAttribute("ui.size", size);
             //#ffff00
         } else if ((input >= 10 && input < 20)) {
             reminder = (input - 10);// 0 1 2 3 4 5 6 7 8 9 
             size = reminder * 4 + 20;
-            
+
             node.changeAttribute("ui.color", Color.decode("#ffae42"));
             node.changeAttribute("ui.size", size);
             //#ffae42 
@@ -881,7 +930,7 @@ public class MainPlatform extends javax.swing.JFrame {
             //#0d98ba      
         }
     }
-    
+
     public void initializeComboBox() {
         jComboBox1.removeAllItems();
         jComboBox1.addItem("Free Move");
@@ -891,15 +940,15 @@ public class MainPlatform extends javax.swing.JFrame {
         jComboBox1.addItem("Remove Node");
         jComboBox1.addItem("Remove Edge");
         jComboBox1.addItem("Change Weight");
-        
+
     }
-    
+
     public void initializeComboBox2() {
         jComboBox2.removeAllItems();
         jComboBox2.addItem("Degree Centrality");
         jComboBox2.addItem("Betweenness Centrality");
         jComboBox2.addItem("Closeness Centrality");
-        
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -921,6 +970,8 @@ public class MainPlatform extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTable1;
     public static javax.swing.JTextField jTextField1;
     public static javax.swing.JTextField jTextField2;
     private javax.swing.JToggleButton jToggleButton1;
