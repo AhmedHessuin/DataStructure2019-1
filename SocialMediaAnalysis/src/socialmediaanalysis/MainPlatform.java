@@ -2,6 +2,7 @@ package socialmediaanalysis;
 
 import datastructure.Edge_Imp;
 import datastructure.Graph_Imp;
+import datastructure.Node_Imp;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -28,19 +29,19 @@ import socialmediaanalysisalgorithms.ClosenessCentrality;
 import socialmediaanalysisalgorithms.DegreeCentrality;
 
 public class MainPlatform extends javax.swing.JFrame {
-
+    
     public static Graph graph;
     public static Graph_Imp implemented_graph;
     public static DegreeCentrality degreeCentralityGraph;
     public static ClosenessCentrality closenessCentralityGraph;
     public static BetweennessCentrality betweennessCentralityGraph;
-
+    
     public static Viewer viewer;
-
+    
     private JFrame frame;
     private View view;
     private Clicks ct;
-
+    
     public static boolean request_change;
     public static String mode;
     public static boolean ON_OFF;
@@ -64,22 +65,22 @@ public class MainPlatform extends javax.swing.JFrame {
         last_id = -1;
         mode = "none";
     }
-
+    
     private void InitializeFileChooser() {
         jFileChooser1.setDialogTitle("Open Source File");
-
+        
         jFileChooser1.setAcceptAllFileFilterUsed(false);
         FileNameExtensionFilter restrict = new FileNameExtensionFilter(".txt files", "txt");
         jFileChooser1.addChoosableFileFilter(restrict);
-
+        
         jFileChooser2.setDialogTitle("Save Screenshot");
-
+        
         jFileChooser2.setAcceptAllFileFilterUsed(false);
         FileNameExtensionFilter restrict2 = new FileNameExtensionFilter(".png files", "png");
         jFileChooser2.addChoosableFileFilter(restrict2);
-
+        
     }
-
+    
     private void initializeComboBox() {
         jComboBox1.removeAllItems();
         jComboBox1.addItem("Free Move");
@@ -89,30 +90,30 @@ public class MainPlatform extends javax.swing.JFrame {
         jComboBox1.addItem("Remove Node");
         jComboBox1.addItem("Remove Edge");
         jComboBox1.addItem("Change Weight");
-
+        
     }
-
+    
     private void initializeComboBox2() {
         jComboBox2.removeAllItems();
         jComboBox2.addItem("None");
         jComboBox2.addItem("Degree Centrality");
         jComboBox2.addItem("Betweenness Centrality");
         jComboBox2.addItem("Closeness Centrality");
-
+        
     }
-
+    
     public void darw_node_id__edge_weight() {
-
+        
         for (org.graphstream.graph.Node node : graph) {
             node.addAttribute("ui.label", node.getId());
             last_id++;
         }
-
+        
         for (Edge edge : graph.getEachEdge()) {
             edge.addAttribute("ui.label", implemented_graph.getNode(Integer.valueOf(edge.getNode0().getId())).getChildren_byID(Integer.valueOf(edge.getNode1().getId())).getWeight());
         }
     }
-
+    
     public void clear_the_table() {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         int rowCount = model.getRowCount();
@@ -120,61 +121,61 @@ public class MainPlatform extends javax.swing.JFrame {
             model.removeRow(i);
         }
     }
-
+    
     public void add_in_table_new_row(int _id, double cent) {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         model.addRow(new String[]{Integer.toString(_id), Double.toString(cent)});
     }
-
+    
     private void loadFromFile() throws FileNotFoundException {
         int r = jFileChooser1.showOpenDialog(null);
         File file = null;
         if (r == JFileChooser.APPROVE_OPTION) {
             file = jFileChooser1.getSelectedFile();
-
+            
             Scanner scanner = new Scanner(file);
             int no_nodes = 0;
             int no_edges = 0;
-
+            
             if (scanner.hasNextLine()) {
                 no_nodes = scanner.nextInt();
                 no_edges = scanner.nextInt();
             }
-
+            
             implemented_graph = new Graph_Imp(no_nodes);
             graph = new MultiGraph("Graph Visualization");
             graphVisualization();
             set_styleSheet();
             ct = new Clicks();
             ct.start();
-
+            
             for (int i = 0; i < no_nodes; i++) {
                 graph.addNode(Integer.toString(i));
             }
-
+            
             int src;
             int dest;
             double wt;
             Edge_Imp edg;
-
+            
             for (int i = 0; i < no_edges; i++) {
                 if (scanner.hasNextLine()) {
                     src = scanner.nextInt();
                     dest = scanner.nextInt();
                     wt = scanner.nextDouble();
-
+                    
                     edg = new Edge_Imp(implemented_graph.getNode(src), wt);
                     implemented_graph.getNode(dest).addChild(edg);
                     edg = new Edge_Imp(implemented_graph.getNode(dest), wt);
                     implemented_graph.getNode(src).addChild(edg);
-
+                    
                     graph.addEdge(Integer.toString(i), Integer.toString(src), Integer.toString(dest));
                 }
             }
             scanner.close();
             darw_node_id__edge_weight();
             ON_OFF = true;
-
+            
         }
     }
 
@@ -190,7 +191,7 @@ public class MainPlatform extends javax.swing.JFrame {
                 return new Dimension(640, 480);
             }
         };
-
+        
         viewer = new Viewer(graph, Viewer.ThreadingModel.GRAPH_IN_GUI_THREAD);
         ViewPanel viewPanel = viewer.addDefaultView(false);
         panel.add(viewPanel);
@@ -236,22 +237,22 @@ public class MainPlatform extends javax.swing.JFrame {
         graph.addAttribute("ui.stylesheet", " node.marked {fill-color: green;}");
         graph.addAttribute("ui.stylesheet", " edge.marked {fill-color:green;}");
     }
-
+    
     public static void color_generator(double input, Node node) {
-
+        
         double reminder;
         double size;
         if (input >= 0 && input < 10) {
             reminder = input;//0 1 2 3 4 5 6 7 8 9
             size = reminder * 4 + 20;
-
+            
             node.changeAttribute("ui.color", Color.decode("#ffff00"));
             node.changeAttribute("ui.size", size);
             //#ffff00
         } else if ((input >= 10 && input < 20)) {
             reminder = (input - 10);// 0 1 2 3 4 5 6 7 8 9 
             size = reminder * 4 + 20;
-
+            
             node.changeAttribute("ui.color", Color.decode("#ffae42"));
             node.changeAttribute("ui.size", size);
             //#ffae42 
@@ -313,7 +314,7 @@ public class MainPlatform extends javax.swing.JFrame {
             //#0d98ba      
         }
     }
-
+    
     public static void initialize() {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -325,21 +326,21 @@ public class MainPlatform extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
-
+                    
                 }
             }
         } catch (ClassNotFoundException ex) {
             java.util.logging.Logger.getLogger(MainPlatform.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-
+            
         } catch (InstantiationException ex) {
             java.util.logging.Logger.getLogger(MainPlatform.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-
+            
         } catch (IllegalAccessException ex) {
             java.util.logging.Logger.getLogger(MainPlatform.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-
+            
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(MainPlatform.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
@@ -931,7 +932,7 @@ public class MainPlatform extends javax.swing.JFrame {
 
     private void Start(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Start
         alogrethm = (String) jComboBox2.getSelectedItem();
-
+        
         if (ON_OFF) {
             if (alogrethm == "Degree Centrality") {
                 clear_the_table();
@@ -954,7 +955,7 @@ public class MainPlatform extends javax.swing.JFrame {
                     color_generator(degree, graph.getNode(Integer.toString(betweennessCentralityGraph.getNode(i).getID())));
                     add_in_table_new_row(betweennessCentralityGraph.getNode(i).getID(), betweennessCentralityGraph.getNode(i).getCentrality());
                 }
-
+                
             } else if (alogrethm == "Closeness Centrality") {
                 clear_the_table();
                 closenessCentralityGraph = new ClosenessCentrality(implemented_graph);
@@ -975,7 +976,7 @@ public class MainPlatform extends javax.swing.JFrame {
                 clear_the_table();
                 algorithm_on = false;
             }
-
+            
         }
     }//GEN-LAST:event_Start
 
@@ -1013,7 +1014,10 @@ public class MainPlatform extends javax.swing.JFrame {
         String src = old_edge.getNode0().getId();
         String des = old_edge.getNode1().getId();
         int src_index = Integer.parseInt(src);
-
+        Node_Imp _node = new Node_Imp(false);
+        _node.setID(src_index);
+        src_index = implemented_graph.get_node_index(_node);
+        
         for (int i = 0; i < implemented_graph.getNode(src_index).getNoChildren(); i++) {
             int id = implemented_graph.getNode(src_index).getChildren_byIndex(i).getChild().getID();
             if (id == Integer.parseInt(des)) {
@@ -1024,6 +1028,10 @@ public class MainPlatform extends javax.swing.JFrame {
         des = old_edge.getNode0().getId();
         src = old_edge.getNode1().getId();
         src_index = Integer.parseInt(src);
+        _node = new Node_Imp(false);
+        _node.setID(src_index);
+        src_index = implemented_graph.get_node_index(_node);
+        
         for (int i = 0; i < implemented_graph.getNode(src_index).getNoChildren(); i++) {
             int id = implemented_graph.getNode(src_index).getChildren_byIndex(i).getChild().getID();
             if (id == Integer.parseInt(des)) {
@@ -1031,7 +1039,9 @@ public class MainPlatform extends javax.swing.JFrame {
                 break;
             }
         }
-
+        
+        jTextField1.setText("");
+        jTextField2.setText("");
         //====================================================================//
     }//GEN-LAST:event_jTextField2ActionPerformed
 

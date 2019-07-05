@@ -142,7 +142,15 @@ public class Clicks extends Thread implements ViewerListener {
                         edge_connect_first_time = true;
                         //============================ add edge ======================//
                         int src = Integer.parseInt(edge_node_first);
+                        Node_Imp _node = new Node_Imp(false);
+                        _node.setID(src);
+                        src = implemented_graph.get_node_index(_node);
+
                         int dest = Integer.parseInt(edge_node_second);
+                        _node = new Node_Imp(false);
+                        _node.setID(dest);
+                        dest = implemented_graph.get_node_index(_node);
+
                         double wt = 1;
 
                         Edge_Imp edg;
@@ -173,6 +181,9 @@ public class Clicks extends Thread implements ViewerListener {
                         String src = edge.getNode0().getId();
                         String des = edge.getNode1().getId();
                         int src_index = Integer.parseInt(src);
+                        Node_Imp _node = new Node_Imp(false);
+                        _node.setID(src_index);
+                        src_index = implemented_graph.get_node_index(_node);
 
                         for (int i = 0; i < implemented_graph.getNode(src_index).getNoChildren(); i++) {
                             int idd = implemented_graph.getNode(src_index).getChildren_byIndex(i).getChild().getID();
@@ -185,6 +196,9 @@ public class Clicks extends Thread implements ViewerListener {
                         des = edge.getNode0().getId();
                         src = edge.getNode1().getId();
                         src_index = Integer.parseInt(src);
+                        _node = new Node_Imp(false);
+                        _node.setID(src_index);
+                        src_index = implemented_graph.get_node_index(_node);
                         for (int i = 0; i < implemented_graph.getNode(src_index).getNoChildren(); i++) {
                             int idd = implemented_graph.getNode(src_index).getChildren_byIndex(i).getChild().getID();
                             if (idd == Integer.parseInt(edge.getNode0().getId())) {
@@ -197,7 +211,12 @@ public class Clicks extends Thread implements ViewerListener {
                         //================================================//
                     }
                     graph.removeNode(id);
-                    Node_Imp remove_node = implemented_graph.getNode(Integer.parseInt(id));
+
+                    Node_Imp _node = new Node_Imp(false);
+                    _node.setID(Integer.parseInt(id));
+                    int i = implemented_graph.get_node_index(_node);
+                    Node_Imp remove_node = implemented_graph.getNode(i);
+
                     implemented_graph.removeNode(remove_node);
                 }
             }
@@ -221,6 +240,9 @@ public class Clicks extends Thread implements ViewerListener {
                             String src = edge.getNode0().getId();
                             String des = edge.getNode1().getId();
                             int src_index = Integer.parseInt(src);
+                            Node_Imp _node = new Node_Imp(false);
+                            _node.setID(src_index);
+                            src_index = implemented_graph.get_node_index(_node);
 
                             for (int i = 0; i < implemented_graph.getNode(src_index).getNoChildren(); i++) {
                                 int idd = implemented_graph.getNode(src_index).getChildren_byIndex(i).getChild().getID();
@@ -234,6 +256,10 @@ public class Clicks extends Thread implements ViewerListener {
                             des = edge.getNode0().getId();
                             src = edge.getNode1().getId();
                             src_index = Integer.parseInt(src);
+                            _node = new Node_Imp(false);
+                            _node.setID(src_index);
+                            src_index = implemented_graph.get_node_index(_node);
+
                             for (int i = 0; i < implemented_graph.getNode(src_index).getNoChildren(); i++) {
                                 int idd = implemented_graph.getNode(src_index).getChildren_byIndex(i).getChild().getID();
                                 if (idd == Integer.parseInt(edge.getNode0().getId())) {
