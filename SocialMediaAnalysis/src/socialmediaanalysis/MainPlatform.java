@@ -1,5 +1,6 @@
 package socialmediaanalysis;
 
+import static com.sun.xml.internal.fastinfoset.alphabet.BuiltInRestrictedAlphabets.table;
 import datastructure.Edge_Imp;
 import datastructure.Graph_Imp;
 import java.awt.Color;
@@ -10,12 +11,11 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableModel;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
@@ -23,6 +23,7 @@ import org.graphstream.graph.implementations.MultiGraph;
 import org.graphstream.ui.swingViewer.ViewPanel;
 import org.graphstream.ui.view.View;
 import org.graphstream.ui.view.Viewer;
+import static socialmediaanalysis.Clicks.old_edge;
 import socialmediaanalysisalgorithms.BetweennessCentrality;
 import socialmediaanalysisalgorithms.ClosenessCentrality;
 import socialmediaanalysisalgorithms.DegreeCentrality;
@@ -41,14 +42,13 @@ public class MainPlatform extends javax.swing.JFrame {
     private View view;
     private Clicks ct;
     //=====modify==========//
-    
-    
+
     //==================================//
     public static boolean request_change;
     public static String mode;
     public static boolean ON_OFF = false;
     public static boolean algorithm_on;
-    public static int last_id=-1;
+    public static int last_id = -1;
     public static String selected_edge;
     public String alogrethm;
 
@@ -82,16 +82,29 @@ public class MainPlatform extends javax.swing.JFrame {
     }
 
     public void darw_node_id__edge_weight() {
-        
+
         for (org.graphstream.graph.Node node : graph) {
             node.addAttribute("ui.label", node.getId());
-           last_id++;
+            last_id++;
         }
-        
+
         for (Edge edge : graph.getEachEdge()) {
-            
+
             edge.addAttribute("ui.label", implemented_graph.getNode(Integer.valueOf(edge.getNode0().getId())).getChildren_byID(Integer.valueOf(edge.getNode1().getId())).getWeight());
         }
+    }
+
+    public void clear_the_table() {
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        int rowCount = model.getRowCount();
+        for (int i = rowCount - 1; i >= 0; i--) {
+            model.removeRow(i);
+        }
+    }
+
+    public void add_in_table_new_row(int _id, double cent) {
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.addRow(new String[]{Integer.toString(_id), Double.toString(cent)});
     }
 
     /**
@@ -117,15 +130,17 @@ public class MainPlatform extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jTextField2 = new javax.swing.JTextField();
         jTextField1 = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
         jToggleButton1 = new javax.swing.JToggleButton();
         jLabel3 = new javax.swing.JLabel();
         jComboBox2 = new javax.swing.JComboBox<>();
         jButton12 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
+        jToggleButton2 = new javax.swing.JToggleButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(0, 255, 255));
@@ -136,6 +151,7 @@ public class MainPlatform extends javax.swing.JFrame {
         jPanel2.setBackground(new java.awt.Color(0, 0, 51));
 
         jButton3.setBackground(new java.awt.Color(38, 35, 114));
+        jButton3.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jButton3.setForeground(new java.awt.Color(255, 255, 255));
         jButton3.setText("-");
         jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -157,6 +173,7 @@ public class MainPlatform extends javax.swing.JFrame {
         });
 
         jButton2.setBackground(new java.awt.Color(38, 35, 114));
+        jButton2.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jButton2.setForeground(new java.awt.Color(255, 255, 255));
         jButton2.setText("+");
         jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -197,13 +214,16 @@ public class MainPlatform extends javax.swing.JFrame {
         jButton6.setForeground(new java.awt.Color(255, 255, 255));
         jButton6.setText("Screenshot");
         jButton6.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton6.setMaximumSize(new java.awt.Dimension(144, 32));
+        jButton6.setMinimumSize(new java.awt.Dimension(144, 32));
+        jButton6.setPreferredSize(new java.awt.Dimension(144, 32));
         jButton6.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 screenshot(evt);
             }
         });
 
-        jPanel1.setBackground(java.awt.Color.darkGray);
+        jPanel1.setBackground(new java.awt.Color(0, 0, 51));
 
         jLabel1.setBackground(new java.awt.Color(255, 255, 255));
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
@@ -235,17 +255,18 @@ public class MainPlatform extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 13, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(16, 16, 16)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel2)
-                .addGap(22, 22, 22))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(16, 16, 16)
+                        .addComponent(jLabel1)
+                        .addGap(32, 32, 32)
+                        .addComponent(jLabel2))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -261,11 +282,6 @@ public class MainPlatform extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jLabel4.setBackground(new java.awt.Color(200, 255, 123));
-        jLabel4.setFont(new java.awt.Font("Dialog", 1, 48)); // NOI18N
-        jLabel4.setForeground(java.awt.Color.darkGray);
-        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/socialmediaanalysis/poster,840x830,f8f8f8-pad,750x1000,f8f8f8.jpg"))); // NOI18N
-
         jComboBox1.setBackground(new java.awt.Color(38, 35, 114));
         jComboBox1.setForeground(new java.awt.Color(255, 255, 255));
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -280,6 +296,8 @@ public class MainPlatform extends javax.swing.JFrame {
         jToggleButton1.setForeground(new java.awt.Color(255, 255, 255));
         jToggleButton1.setText("View Weights");
         jToggleButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jToggleButton1.setMaximumSize(new java.awt.Dimension(144, 32));
+        jToggleButton1.setMinimumSize(new java.awt.Dimension(144, 32));
         jToggleButton1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 viewWeights(evt);
@@ -313,102 +331,134 @@ public class MainPlatform extends javax.swing.JFrame {
             }
         });
 
-        jButton5.setBackground(new java.awt.Color(38, 35, 114));
-        jButton5.setForeground(new java.awt.Color(255, 255, 255));
-        jButton5.setText("3D");
-        jButton5.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton5.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                _3D(evt);
-            }
-        });
-
-        jButton4.setBackground(new java.awt.Color(38, 35, 114));
-        jButton4.setForeground(new java.awt.Color(255, 255, 255));
-        jButton4.setText("2D");
-        jButton4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton4.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                _2D(evt);
-            }
-        });
-
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Algorithm");
+
+        jToggleButton2.setBackground(new java.awt.Color(38, 35, 114));
+        jToggleButton2.setForeground(new java.awt.Color(255, 255, 255));
+        jToggleButton2.setText("Manual Layout");
+        jToggleButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jToggleButton2.setMaximumSize(new java.awt.Dimension(144, 32));
+        jToggleButton2.setMinimumSize(new java.awt.Dimension(144, 32));
+        jToggleButton2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                change_layout(evt);
+            }
+        });
+        jToggleButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jToggleButton2ActionPerformed(evt);
+            }
+        });
+
+        jTable1.setBackground(new java.awt.Color(0, 0, 102));
+        jTable1.setBorder(new javax.swing.border.MatteBorder(null));
+        jTable1.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        jTable1.setForeground(new java.awt.Color(255, 153, 0));
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Node ID", "Centrality"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jTable1.setGridColor(new java.awt.Color(102, 204, 0));
+        jTable1.setIntercellSpacing(new java.awt.Dimension(2, 1));
+        jTable1.setSelectionBackground(new java.awt.Color(204, 0, 0));
+        jTable1.setSelectionForeground(new java.awt.Color(255, 255, 0));
+        jScrollPane1.setViewportView(jTable1);
+
+        jLabel6.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel6.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel6.setText("Algorethm Centrality ");
+
+        jLabel4.setBackground(new java.awt.Color(200, 255, 123));
+        jLabel4.setFont(new java.awt.Font("Dialog", 1, 48)); // NOI18N
+        jLabel4.setForeground(java.awt.Color.darkGray);
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/socialmediaanalysis/poster,840x830,f8f8f8-pad,750x1000,f8f8f8.jpg"))); // NOI18N
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(53, 53, 53)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jToggleButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jButton8)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(20, 20, 20))
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(33, 33, 33)
-                        .addComponent(jLabel3))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(29, 29, 29)
-                        .addComponent(jLabel5))
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel4))
+                                .addGap(27, 27, 27)
+                                .addComponent(jLabel3))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton12, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE)))))
-                .addContainerGap())
+                                .addComponent(jButton12, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(23, 23, 23)
+                                .addComponent(jLabel5))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel4)))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 348, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(43, 43, 43))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 364, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(27, 27, 27))))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(17, Short.MAX_VALUE)
+                .addGap(20, 20, 20)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton3)
+                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton7)
-                    .addComponent(jButton2)
-                    .addComponent(jButton1))
-                .addGap(18, 18, 18)
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(52, 52, 52)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jToggleButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(4, 4, 4)
@@ -417,26 +467,211 @@ public class MainPlatform extends javax.swing.JFrame {
                     .addComponent(jButton12, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(28, 28, 28)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(5, 5, 5)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 402, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(12, 12, 12))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jToggleButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jToggleButton2ActionPerformed
+
+    private void change_layout(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_change_layout
+        // TODO add your handling code here:
+        if (ON_OFF) {
+            if (jToggleButton2.isSelected()) {
+                request_change = true;
+                viewer.disableAutoLayout();
+                request_change = false;
+            } else {
+                request_change = true;
+                viewer.enableAutoLayout();
+                request_change = false;
+            }
+        }
+    }//GEN-LAST:event_change_layout
+
+    private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton12ActionPerformed
+
+    private void Start(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Start
+        // TODO add your handling code here:
+        alogrethm = (String) jComboBox2.getSelectedItem();
+
+        if (ON_OFF) {
+            //degreeCentralityGraph = new DegreeCentrality(implemented_graph);
+            // degreeCentralityGraph.calculation();
+            //    closenessCentralityGraph = new ClosenessCentrality(implemented_graph);
+            //  closenessCentralityGraph.calculation();
+            //betweennessCentralityGraph = new BetweennessCentrality(implemented_graph);
+            //betweennessCentralityGraph.calculation();
+            jLabel6.setText(alogrethm);
+            if (alogrethm == "Degree Centrality") {
+
+                clear_the_table();
+                degreeCentralityGraph = new DegreeCentrality(implemented_graph);
+                degreeCentralityGraph.calculation();
+                double maxDegree = degreeCentralityGraph.getMaxCentrality();
+                for (int i = 0; i < implemented_graph.getNoVertices(); i++) {
+
+                    double degree = (degreeCentralityGraph.getNode(i).getCentrality() / (double) maxDegree) * 100;
+
+                    color_generator(degree, graph.getNode(Integer.toString(degreeCentralityGraph.getNode(i).getID())));
+                    add_in_table_new_row(degreeCentralityGraph.getNode(i).getID(), degreeCentralityGraph.getNode(i).getCentrality());
+                    System.out.println(degree);
+
+                }
+
+            }//degree
+            else if (alogrethm == "Betweenness Centrality") {
+                clear_the_table();
+                betweennessCentralityGraph = new BetweennessCentrality(implemented_graph);
+                betweennessCentralityGraph.calculation();
+                double maxDegree = betweennessCentralityGraph.getMaxCentrality();
+                for (int i = 0; i < implemented_graph.getNoVertices(); i++) {
+
+                    double degree = (betweennessCentralityGraph.getNode(i).getCentrality() / (double) maxDegree) * 100;
+
+                    color_generator(degree, graph.getNode(Integer.toString(betweennessCentralityGraph.getNode(i).getID())));
+
+                    add_in_table_new_row(betweennessCentralityGraph.getNode(i).getID(), betweennessCentralityGraph.getNode(i).getCentrality());
+                    System.out.println(degree);
+
+                }
+
+            } else if (alogrethm == "Closeness Centrality") {
+                clear_the_table();
+                closenessCentralityGraph = new ClosenessCentrality(implemented_graph);
+                closenessCentralityGraph.calculation();
+                double maxDegree = closenessCentralityGraph.getMaxCentrality();
+                for (int i = 0; i < implemented_graph.getNoVertices(); i++) {
+
+                    double degree = (closenessCentralityGraph.getNode(i).getCentrality() / (double) maxDegree) * 100;
+
+                    color_generator(degree, graph.getNode(Integer.toString(closenessCentralityGraph.getNode(i).getID())));
+
+                    add_in_table_new_row(closenessCentralityGraph.getNode(i).getID(), closenessCentralityGraph.getNode(i).getCentrality());
+                    System.out.println(degree);
+
+                }
+            }
+
+        }
+    }//GEN-LAST:event_Start
+
+    private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox2ActionPerformed
+
+    private void viewWeights(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_viewWeights
+        if (ON_OFF) {
+            if (jToggleButton1.isSelected()) {
+                graph.setAttribute("ui.stylesheet", "edge { "
+                        + "text-visibility-mode:normal;"
+                        + "}");
+            } else {
+                graph.setAttribute("ui.stylesheet", "edge { "
+                        + "text-visibility-mode:hidden;"
+                        + "}");
+            }
+        }
+    }//GEN-LAST:event_viewWeights
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        mode = (String) jComboBox1.getSelectedItem();
+        if (mode == "Change Weight") {
+            jPanel1.setVisible(true);
+        } else {
+            jPanel1.setVisible(false);
+        }
+    }//GEN-LAST:event_jComboBox1ActionPerformed
+
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField1ActionPerformed
+
+    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
+        // TODO add your handling code here:
+        // change weight
+        double new_weight;
+        System.out.println(selected_edge);
+        new_weight = Double.parseDouble(jTextField2.getText());
+        graph.getEdge(selected_edge).setAttribute("ui.label", new_weight);//request change in the main graph
+        graph.getEdge(selected_edge).removeAttribute("ui.class");
+        //========================change weight===============================//
+
+        String src = old_edge.getNode0().getId();
+        String des = old_edge.getNode1().getId();
+        int src_index = Integer.parseInt(src);
+
+        for (int i = 0; i < implemented_graph.getNode(src_index).getNoChildren(); i++) {
+            int id = implemented_graph.getNode(src_index).getChildren_byIndex(i).getChild().getID();
+            if (id == Integer.parseInt(old_edge.getNode1().getId())) {
+                implemented_graph.getNode(src_index).getChildren_byIndex(i).setWeight(new_weight);
+                break;
+            }
+        }
+        des = old_edge.getNode0().getId();
+        src = old_edge.getNode1().getId();
+        src_index = Integer.parseInt(src);
+        for (int i = 0; i < implemented_graph.getNode(src_index).getNoChildren(); i++) {
+            int id = implemented_graph.getNode(src_index).getChildren_byIndex(i).getChild().getID();
+            if (id == Integer.parseInt(old_edge.getNode0().getId())) {
+                implemented_graph.getNode(src_index).getChildren_byIndex(i).setWeight(new_weight);
+                break;
+            }
+        }
+
+        //====================================================================//
+    }//GEN-LAST:event_jTextField2ActionPerformed
+
+    private void screenshot(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_screenshot
+        if (ON_OFF) {
+            int r = jFileChooser2.showSaveDialog(null);
+            if (r == JFileChooser.APPROVE_OPTION) {
+                String path = jFileChooser2.getSelectedFile().getAbsolutePath();
+                path += ".png";
+                graph.addAttribute("ui.screenshot", path);
+            }
+        }
+    }//GEN-LAST:event_screenshot
+
+    private void loadGraphFromFile(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loadGraphFromFile
+        try {
+            loadFromFile();
+            ON_OFF = true;
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(MainPlatform.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_loadGraphFromFile
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     private void graphFrameClose(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_graphFrameClose
         if (ON_OFF) {
@@ -454,54 +689,6 @@ public class MainPlatform extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_ZoomIn
 
-    private void ZoomOut(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ZoomOut
-        if (ON_OFF) {
-            view.getCamera().setViewPercent(view.getCamera().getViewPercent() + 0.1);
-        }
-    }//GEN-LAST:event_ZoomOut
-
-    private void _3D(java.awt.event.MouseEvent evt) {//GEN-FIRST:event__3D
-
-        if (ON_OFF) {
-            request_change = true;
-            viewer.enableAutoLayout();
-            request_change = false;
-        }
-    }//GEN-LAST:event__3D
-
-    private void _2D(java.awt.event.MouseEvent evt) {//GEN-FIRST:event__2D
-        if (ON_OFF) {
-            request_change = true;
-            viewer.disableAutoLayout();
-            request_change = false;
-        }
-    }//GEN-LAST:event__2D
-
-    private void viewWeights(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_viewWeights
-        if (ON_OFF) {
-            if (jToggleButton1.isSelected()) {
-                graph.setAttribute("ui.stylesheet", "edge { "
-                        + "text-visibility-mode:normal;"
-                        + "}");
-            } else {
-                graph.setAttribute("ui.stylesheet", "edge { "
-                        + "text-visibility-mode:hidden;"
-                        + "}");
-            }
-        }
-    }//GEN-LAST:event_viewWeights
-
-    private void screenshot(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_screenshot
-        if (ON_OFF) {
-            int r = jFileChooser2.showSaveDialog(null);
-            if (r == JFileChooser.APPROVE_OPTION) {
-                String path = jFileChooser2.getSelectedFile().getAbsolutePath();
-                path += ".png";
-                graph.addAttribute("ui.screenshot", path);
-            }
-        }
-    }//GEN-LAST:event_screenshot
-
     private void zoomFit(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_zoomFit
         if (ON_OFF) {
             view.getCamera().setViewPercent(1);
@@ -513,93 +700,13 @@ public class MainPlatform extends javax.swing.JFrame {
             }
         }
         // algroerth_on = false;
-
     }//GEN-LAST:event_zoomFit
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-        mode = (String) jComboBox1.getSelectedItem();
-        if (mode =="Change Weight")
-        {
-             jPanel1.setVisible(true);
-        }
-        else
-             {
-             jPanel1.setVisible(false);
-        }
-            
-    }//GEN-LAST:event_jComboBox1ActionPerformed
-
-    private void loadGraphFromFile(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loadGraphFromFile
-        try {
-            loadFromFile();
-            ON_OFF = true;
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(MainPlatform.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_loadGraphFromFile
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox2ActionPerformed
-
-    private void Start(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Start
-        // TODO add your handling code here:
-        alogrethm = (String) jComboBox2.getSelectedItem();
+    private void ZoomOut(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ZoomOut
         if (ON_OFF) {
-            if (alogrethm == "Degree Centrality") {
-                double maxDegree = degreeCentralityGraph.getMaxCentrality();
-                for (org.graphstream.graph.Node node : graph) {
-
-                    double degree = (degreeCentralityGraph.getNode(Integer.valueOf(node.getId())).getCentrality() / (double) maxDegree) * 100;
-
-                    System.out.println(degree);
-                    color_generator(degree, node);
-                }
-            }//degree
-            else if (alogrethm == "Betweenness Centrality") {
-                double maxDegree = betweennessCentralityGraph.getMaxCentrality();
-                for (org.graphstream.graph.Node node : graph) {
-                    double degree = (betweennessCentralityGraph.getNode(Integer.valueOf(node.getId())).getCentrality() / (double) maxDegree) * 100;
-                    color_generator(degree, node);
-                    System.out.println(degree);
-                }
-
-            } else if (alogrethm == "Closeness Centrality") {
-
-                double maxDegree = closenessCentralityGraph.getMaxCentrality();
-                for (org.graphstream.graph.Node node : graph) {
-                    double degree = (closenessCentralityGraph.getNode(Integer.valueOf(node.getId())).getCentrality() / (double) maxDegree) * 100;
-                    System.out.println(degree);
-
-                    color_generator(degree, node);
-                }
-            }
-
+            view.getCamera().setViewPercent(view.getCamera().getViewPercent() + 0.1);
         }
-
-    }//GEN-LAST:event_Start
-
-    private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton12ActionPerformed
-
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
-
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
-        // TODO add your handling code here:
-       
-        double new_weight;
-        System.out.println(selected_edge);
-        new_weight = Double.parseDouble(jTextField2.getText());
-        graph.getEdge(selected_edge).setAttribute("ui.label", new_weight);//request change in the main graph
-        graph.getEdge(selected_edge).removeAttribute("ui.class");
-    }//GEN-LAST:event_jTextField2ActionPerformed
+    }//GEN-LAST:event_ZoomOut
 
     private void loadFromFile() throws FileNotFoundException {
         int r = jFileChooser1.showOpenDialog(null);
@@ -649,12 +756,12 @@ public class MainPlatform extends javax.swing.JFrame {
             scanner.close();
             darw_node_id__edge_weight();
 
-            degreeCentralityGraph = new DegreeCentrality(implemented_graph);
-            degreeCentralityGraph.calculation();
-            closenessCentralityGraph = new ClosenessCentrality(implemented_graph);
-            closenessCentralityGraph.calculation();
-            betweennessCentralityGraph = new BetweennessCentrality(implemented_graph);
-            betweennessCentralityGraph.calculation();
+            //degreeCentralityGraph = new DegreeCentrality(implemented_graph);
+            // degreeCentralityGraph.calculation();
+            //    closenessCentralityGraph = new ClosenessCentrality(implemented_graph);
+            //  closenessCentralityGraph.calculation();
+            //betweennessCentralityGraph = new BetweennessCentrality(implemented_graph);
+            //betweennessCentralityGraph.calculation();
         }
     }
 
@@ -859,8 +966,6 @@ public class MainPlatform extends javax.swing.JFrame {
     private javax.swing.JButton jButton12;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
@@ -873,10 +978,14 @@ public class MainPlatform extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTable1;
     public static javax.swing.JTextField jTextField1;
     public static javax.swing.JTextField jTextField2;
     private javax.swing.JToggleButton jToggleButton1;
+    private javax.swing.JToggleButton jToggleButton2;
     // End of variables declaration//GEN-END:variables
 }

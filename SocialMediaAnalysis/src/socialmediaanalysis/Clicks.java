@@ -1,5 +1,7 @@
 package socialmediaanalysis;
 
+import datastructure.Edge_Imp;
+import datastructure.Node_Imp;
 import java.awt.Color;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -13,6 +15,7 @@ import static socialmediaanalysis.MainPlatform.viewer;
 import static socialmediaanalysis.MainPlatform.request_change;
 import static socialmediaanalysis.MainPlatform.algorithm_on;
 import static socialmediaanalysis.MainPlatform.color_generator;
+import static socialmediaanalysis.MainPlatform.implemented_graph;
 import static socialmediaanalysis.MainPlatform.jTextField1;
 import static socialmediaanalysis.MainPlatform.last_id;
 import static socialmediaanalysis.MainPlatform.selected_edge;
@@ -24,7 +27,7 @@ public class Clicks extends Thread implements ViewerListener {
     private boolean loop = true;
 
     private String mark_id_new;
-    private Edge old_edge;
+    public static Edge old_edge;
     private String mark_id_old;
     private String edge_node_first = null;
     private String edge_node_second = null;
@@ -56,10 +59,7 @@ public class Clicks extends Thread implements ViewerListener {
 
     @Override
     public void buttonPushed(String id) {
-        
-    
-        
-        
+
         if (mode == "Node Edges") {
             mark_id_new = id;
             if (mark_id_new == mark_id_old) {
@@ -107,6 +107,12 @@ public class Clicks extends Thread implements ViewerListener {
                 last_id++;
                 graph.addNode(x);
                 graph.getNode(x).addAttribute("ui.label", graph.getNode(x).getId());
+                //======================add node=========================//
+                Node_Imp _node = new Node_Imp(true);
+                _node.setID(last_id);
+                implemented_graph.addNode(_node);
+
+                //===================================================//
             }
 
         }//esle if node add
@@ -136,6 +142,19 @@ public class Clicks extends Thread implements ViewerListener {
                         graph.addEdge(edge_node_first + edge_node_second, edge_node_first, edge_node_second);
                         graph.getEdge(edge_node_first + edge_node_second).addAttribute("ui.label", 1);
                         edge_connect_first_time = true;
+                        //============================ add edge ======================//
+                        int src = Integer.parseInt(edge_node_first);
+                        int dest = Integer.parseInt(edge_node_second);
+                        double wt = 1;
+
+                        Edge_Imp edg;
+
+                        edg = new Edge_Imp(implemented_graph.getNode(src), wt);
+                        implemented_graph.getNode(dest).addChild(edg);
+                        edg = new Edge_Imp(implemented_graph.getNode(dest), wt);
+                        implemented_graph.getNode(src).addChild(edg);
+
+                        //=================================================================//
                     }
 
                     graph.getNode(edge_node_first).removeAttribute("ui.class");
@@ -152,13 +171,41 @@ public class Clicks extends Thread implements ViewerListener {
 
                 } else {
 
-                    for (Edge edge : graph.getEachEdge()) {
-                        if (edge.getNode0() == graph.getNode(id) || edge.getNode1() == graph.getNode(id)) {
+                    //==========modify remove  node =============//
+                    for (Edge edge : graph.getNode(id).getEachEdge()) {
 
-                            graph.removeEdge(edge);
+                        String src = edge.getNode0().getId();
+                        String des = edge.getNode1().getId();
+                        int src_index = Integer.parseInt(src);
+
+                        for (int i = 0; i < implemented_graph.getNode(src_index).getNoChildren(); i++) {
+                            int idd = implemented_graph.getNode(src_index).getChildren_byIndex(i).getChild().getID();
+                            if (idd == Integer.parseInt(edge.getNode1().getId())) {
+                                Edge_Imp remove_edge = implemented_graph.getNode(src_index).getChildren_byIndex(i);
+                                implemented_graph.getNode(src_index).removeChild(remove_edge);
+                                break;
+                            }
                         }
+                        des = edge.getNode0().getId();
+                        src = edge.getNode1().getId();
+                        src_index = Integer.parseInt(src);
+                        for (int i = 0; i < implemented_graph.getNode(src_index).getNoChildren(); i++) {
+                            int idd = implemented_graph.getNode(src_index).getChildren_byIndex(i).getChild().getID();
+                            if (idd == Integer.parseInt(edge.getNode0().getId())) {
+                                Edge_Imp remove_edge = implemented_graph.getNode(src_index).getChildren_byIndex(i);
+                                implemented_graph.getNode(src_index).removeChild(remove_edge);
+
+                                break;
+                            }
+                        }
+
+                        //================================================//
                     }
                     graph.removeNode(id);
+                    Node_Imp remove_node = implemented_graph.getNode(Integer.parseInt(id));
+                    implemented_graph.removeNode(remove_node);
+                    System.out.println(implemented_graph.getNoVertices());
+                    implemented_graph.print();
                 }
             }
         }//else if remove node
@@ -177,7 +224,34 @@ public class Clicks extends Thread implements ViewerListener {
                         if (edge.getNode0() == graph.getNode(edge_node_second) && edge.getNode1() == graph.getNode(edge_node_first)
                                 || edge.getNode0() == graph.getNode(edge_node_first) && edge.getNode1() == graph.getNode(edge_node_second)) {
                             graph.removeEdge(edge);
+                            //==========remove edge =============//
+                            String src = edge.getNode0().getId();
+                            String des = edge.getNode1().getId();
+                            int src_index = Integer.parseInt(src);
 
+                            for (int i = 0; i < implemented_graph.getNode(src_index).getNoChildren(); i++) {
+                                int idd = implemented_graph.getNode(src_index).getChildren_byIndex(i).getChild().getID();
+                                if (idd == Integer.parseInt(edge.getNode1().getId())) {
+                                    Edge_Imp remove_edge = implemented_graph.getNode(src_index).getChildren_byIndex(i);
+                                    implemented_graph.getNode(src_index).removeChild(remove_edge);
+
+                                    break;
+                                }
+                            }
+                            des = edge.getNode0().getId();
+                            src = edge.getNode1().getId();
+                            src_index = Integer.parseInt(src);
+                            for (int i = 0; i < implemented_graph.getNode(src_index).getNoChildren(); i++) {
+                                int idd = implemented_graph.getNode(src_index).getChildren_byIndex(i).getChild().getID();
+                                if (idd == Integer.parseInt(edge.getNode0().getId())) {
+                                    Edge_Imp remove_edge = implemented_graph.getNode(src_index).getChildren_byIndex(i);
+                                    implemented_graph.getNode(src_index).removeChild(remove_edge);
+
+                                    break;
+                                }
+                            }
+
+                            //================================================//
                             break;
                         }
                     }
@@ -191,7 +265,7 @@ public class Clicks extends Thread implements ViewerListener {
             if (algorithm_on) {
 
             } else {
-             
+
                 if (edge_connect_first_time) {
 
                     edge_node_first = id;
@@ -209,13 +283,11 @@ public class Clicks extends Thread implements ViewerListener {
                                 || edge.getNode0() == graph.getNode(edge_node_first) && edge.getNode1() == graph.getNode(edge_node_second)) {
 
                             selected_edge = edge.getId();
-                            // System.out.println(selected_edge);
 
                             double v = edge.getNumber("ui.label");
                             System.out.println(v);
                             jTextField1.setText(Double.toString(v));
 
-                            //        old_weight_text.setText("jbjb");
                             edge.setAttribute("ui.class", "marked");
                             old_edge = edge;
                             break;
@@ -239,6 +311,27 @@ public class Clicks extends Thread implements ViewerListener {
 
     }
 
+    /*
+        int src;
+            int dest;
+            double wt;
+            Edge_Imp edg;
+
+            for (int i = 0; i < no_edges; i++) {
+                if (scanner.hasNextLine()) {
+                    src = scanner.nextInt();
+                    dest = scanner.nextInt();
+                    wt = scanner.nextDouble();
+
+                    edg = new Edge_Imp(implemented_graph.getNode(src), wt);
+                    implemented_graph.getNode(dest).addChild(edg);
+                    edg = new Edge_Imp(implemented_graph.getNode(dest), wt);
+                    implemented_graph.getNode(src).addChild(edg);
+
+                    graph.addEdge(Integer.toString(i), Integer.toString(src), Integer.toString(dest));
+                }
+            }
+     */
     @Override
     public void buttonReleased(String id) {
     }

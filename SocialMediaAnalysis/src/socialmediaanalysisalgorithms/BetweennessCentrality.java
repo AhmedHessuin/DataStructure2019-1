@@ -130,11 +130,13 @@ public class BetweennessCentrality extends Graph_Imp implements CentralityAnalys
 
         //========================================================================================//
         // first time fill need optmization later//
-        Marked_List[input.getID()] = true;
-        out_put[input.getID()] = new MyPair(0.0, 1);// first time 
+        Marked_List[get_node_index(input)] = true;
+        out_put[get_node_index(input)] = new MyPair(0.0, 1);// first time 
 
         for (int i = 0; i < input.getNoChildren(); i++) {
-            P_Queue.add(new Dijkestra_Data_Type(input.getChildren_byIndex(i).getWeight(), input.getChildren_byIndex(i).getChild().getID(), input.getID()));
+            P_Queue.add(new Dijkestra_Data_Type(input.getChildren_byIndex(i).getWeight(),
+                    get_node_index(input.getChildren_byIndex(i).getChild()),
+                    get_node_index(input)));
         }
 
         // operation section //
@@ -157,8 +159,8 @@ public class BetweennessCentrality extends Graph_Imp implements CentralityAnalys
 
                     P_Queue.add(new Dijkestra_Data_Type(
                             getNode(Next_Mark).getChildren_byIndex(i).getWeight() + Next_Weight,
-                            getNode(Next_Mark).getChildren_byIndex(i).getChild().getID(),
-                            getNode(Next_Mark).getID()));
+                           get_node_index( getNode(Next_Mark).getChildren_byIndex(i).getChild()),
+                            get_node_index(getNode(Next_Mark))));
 
                     //}
                 }
@@ -191,10 +193,10 @@ public class BetweennessCentrality extends Graph_Imp implements CentralityAnalys
     //==========================main method===================================//
     public double YOU_PASS_THROW_ME(Node_Imp wanted) {
         //=======================data section ================================//
-        MyPair[] wanted_shortest_path = src_shortest_path[wanted.getID()];
+        MyPair[] wanted_shortest_path = src_shortest_path[get_node_index(wanted)];
         double out = 0.0;
         boolean[][] marked = new boolean[getNoVertices()][getNoVertices()];
-        int wanted_id = wanted.getID();
+        int wanted_id =get_node_index(wanted);
         //====================================================================//
 
         for (int i = 0; i < getNoVertices(); i++) {
